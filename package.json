@@ -1,0 +1,21 @@
+{
+  "name": "generator-fordlee404",
+  "version": "0.0.0",
+  "description": "A personal yeoman generator for webapp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@bitbucket.org:fordlee404/generator-fordlee404.git"
+  },
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "author": "Ford Lee",
+  "license": "MIT",
+  "dependencies": {
+    "yeoman-generator": "~0.18.6"
+  }
+}
