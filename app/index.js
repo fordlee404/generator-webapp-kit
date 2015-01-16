@@ -4,10 +4,12 @@ var chalk = require('chalk');
 var yosay = require('yosay');
 
 module.exports = yeoman.generators.Base.extend({
+  // Your initialization methods (checking current project state, getting configs, etc)
   initializing: function () {
     this.pkg = require('../package.json');
   },
 
+  // Where you prompt users for options (where you'd call this.prompt())
   prompting: function () {
     var done = this.async();
 
@@ -30,6 +32,13 @@ module.exports = yeoman.generators.Base.extend({
     }.bind(this));
   },
 
+  // Saving configurations and configure the project (creating .editorconfig files and other metadata files)
+  // configuring: function(){},
+
+  // If the method name doesn't match a priority, it is pushed in the default group
+  // default: function(){},
+
+  // Where you write the generator specific files (routes, controllers, etc)
   writing: {
     app: function () {
       this.fs.copy(
@@ -54,9 +63,16 @@ module.exports = yeoman.generators.Base.extend({
     }
   },
 
+  // Where conflicts are handled (used internally)
+  // conflicts: function(){},
+
+  // Where installation are run (npm, bower)
   install: function () {
     this.installDependencies({
       skipInstall: this.options['skip-install']
     });
   }
+
+  // Called last, cleanup, say good bye, etc
+  // end: function(){}
 });
