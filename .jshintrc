@@ -1,7 +1,7 @@
 {
   "node": true,
   "esnext": true,
-  "bitwise": true,
+  "bitwise": false,
   "camelcase": true,
   "curly": true,
   "eqeqeq": true,
@@ -9,8 +9,8 @@
   "indent": 2,
   "latedef": true,
   "newcap": true,
-  "noarg": true,
-  "quotmark": "single",
+  "noarg": false,
+  "quotmark": true,
   "undef": true,
   "unused": true,
   "strict": true
