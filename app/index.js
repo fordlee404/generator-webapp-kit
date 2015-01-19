@@ -53,7 +53,7 @@ module.exports = yeoman.generators.Base.extend({
       this.prompt(prompt, function(props){
         this.config.set(props);
 
-        done()
+        done();
       }.bind(this));
     },
 
@@ -69,7 +69,7 @@ module.exports = yeoman.generators.Base.extend({
       this.prompt(prompt, function(props){
         this.config.set(props);
 
-        done()
+        done();
       }.bind(this));
     },
 
@@ -86,7 +86,49 @@ module.exports = yeoman.generators.Base.extend({
       this.prompt(prompt, function(props){
         this.config.set(props);
 
-        done()
+        done();
+      }.bind(this));
+    },
+
+    plugins: function(){
+      var done = this.async();
+
+      var prompt = [{
+        type: 'checkbox',
+        name: 'plugins',
+        message: 'Select plugins: ',
+        choices: [
+          {
+            name: 'Bootstrap',
+            value: 'bootstrap'
+          },
+          {
+            name: 'Pure.css',
+            value: 'pure'
+          },
+          {
+            name: 'Normalize.css',
+            value: 'normalize.css'
+          },
+          {
+            name: 'jQuery',
+            value: 'jquery'
+          },
+          {
+            name: 'RequireJS',
+            value: 'requirejs'
+          },
+          {
+            name: 'Modernizr',
+            value: 'modernizr'
+          }
+        ]
+      }];
+
+      this.prompt(prompt, function(props){
+        this.config.set(props);
+
+        done();
       }.bind(this));
     }
   },
@@ -198,18 +240,18 @@ module.exports = yeoman.generators.Base.extend({
         '#CSS开发目录'
       );
     }
-  }
+  },
 
   // Where conflicts are handled (used internally)
   // conflicts: function(){},
 
   // Where installation are run (npm, bower)
-  /*
-  install: function () {
-    this.installDependencies({
-      skipInstall: this.options['skip-install']
-    });
-  }*/
+  install: {
+    plugins: function(){
+      var pluginsList = this.config.get('plugins');
+      this.bowerInstall(pluginsList, { 'saveDev': true });
+    }
+  }
 
   // Called last, cleanup, say good bye, etc
   // end: function(){}
