@@ -92,14 +92,8 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   // Saving configurations and configure the project (creating .editorconfig files and other metadata files)
-  // configuring: function(){},
-
-  // If the method name doesn't match a priority, it is pushed in the default group
-  // default
-
-  // Where you write the generator specific files (routes, controllers, etc)
-  writing: {
-    app: function () {
+  configuring: {
+    packageJSON: function(){
       this.fs.copyTpl(
         this.templatePath('_package.json'),
         this.destinationPath('package.json'),
@@ -110,14 +104,24 @@ module.exports = yeoman.generators.Base.extend({
           license: this.config.get('license')
         }
       );
-      /*
-      this.fs.copy(
-        this.templatePath('_bower.json'),
-        this.destinationPath('bower.json')
-      );*/
     },
+    bowerJSON: function(){
+      this.fs.copyTpl(
+        this.templatePath('_bower.json'),
+        this.destinationPath('bower.json'),
+        {
+          appName: this.config.get('appName')
+        }
+      );
+    }
+  }
 
-    /*
+  // If the method name doesn't match a priority, it is pushed in the default group
+  // default
+
+  // Where you write the generator specific files (routes, controllers, etc)
+  /*
+  writing: {
     projectfiles: function () {
       this.fs.copy(
         this.templatePath('editorconfig'),
@@ -127,8 +131,8 @@ module.exports = yeoman.generators.Base.extend({
         this.templatePath('jshintrc'),
         this.destinationPath('.jshintrc')
       );
-    }*/
-  },
+    }
+  },*/
 
   // Where conflicts are handled (used internally)
   // conflicts: function(){},
