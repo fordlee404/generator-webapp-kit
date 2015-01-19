@@ -105,13 +105,17 @@ module.exports = yeoman.generators.Base.extend({
         }
       );
     },
-    bowerJSON: function(){
+    bowerFiles: function(){
       this.fs.copyTpl(
         this.templatePath('_bower.json'),
         this.destinationPath('bower.json'),
         {
           appName: this.config.get('appName')
         }
+      );
+      this.fs.copy(
+        this.templatePath('bowerrc'),
+        this.destinationPath('.bowerrc')
       );
     },
     editorconfigFile: function(){
