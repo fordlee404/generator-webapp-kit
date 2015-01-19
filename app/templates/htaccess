@@ -1,0 +1,9 @@
+# Apache config
+<FilesMatch ".(eot|ttf|otf|woff)">
+  Header set Access-Control-Allow-Origin "*"
+</FilesMatch>
+
+# nginx config
+#if ($filename ~* ^.*?\.(eot)|(ttf)|(woff)$){
+# add_header Access-Control-Allow-Origin *;
+#}
