@@ -113,6 +113,12 @@ module.exports = yeoman.generators.Base.extend({
           appName: this.config.get('appName')
         }
       );
+    },
+    editorconfigFile: function(){
+      this.fs.copy(
+        this.templatePath('editorconfig'),
+        this.destinationPath('.editorconfig')
+      );
     }
   }
 
