@@ -136,25 +136,23 @@ module.exports = yeoman.generators.Base.extend({
         this.destinationPath('.gitignore')
       );
     }
-  }
+  },
 
   // If the method name doesn't match a priority, it is pushed in the default group
   // default
 
   // Where you write the generator specific files (routes, controllers, etc)
-  /*
   writing: {
-    projectfiles: function () {
-      this.fs.copy(
-        this.templatePath('editorconfig'),
-        this.destinationPath('.editorconfig')
-      );
-      this.fs.copy(
-        this.templatePath('jshintrc'),
-        this.destinationPath('.jshintrc')
+    readme: function () {
+      this.fs.copyTpl(
+        this.templatePath('_Readme.md'),
+        this.destinationPath('Readme.md'),{
+          appName: this.config.get('appName'),
+          description: this.config.get('description')
+        }
       );
     }
-  },*/
+  }
 
   // Where conflicts are handled (used internally)
   // conflicts: function(){},
