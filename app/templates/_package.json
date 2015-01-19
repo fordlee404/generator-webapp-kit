@@ -1,5 +1,7 @@
 {
-  "name": "package",
+  "name": "<%= appName %>",
   "version": "0.0.0",
-  "dependencies": {}
+  "authors": "<%= authors %>",
+  "description" : "<%= description %>",
+  "license": "<%= license %>"
 }
