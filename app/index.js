@@ -151,6 +151,52 @@ module.exports = yeoman.generators.Base.extend({
           description: this.config.get('description')
         }
       );
+    },
+    folders: function(){
+      this.fs.write(
+        this.destinationPath('/srcHTML/Readme.md'),
+        '#HTML开发目录'
+      );
+      this.fs.write(
+        this.destinationPath('/HTML/Readme.md'),
+        '#编译后HTML目录'
+      );
+      this.fs.write(
+        this.destinationPath('/coffeescript/Readme.md'),
+        '#Coffeescript开发目录'
+      );
+      this.fs.write(
+        this.destinationPath('/fake-response/Readme.md'),
+        '#模拟响应目录'
+      );
+      this.fs.write(
+        this.destinationPath('/images/Readme.md'),
+        '#图片目录'
+      );
+      this.fs.write(
+        this.destinationPath('/javascripts/Readme.md'),
+        '#Javascript目录'
+      );
+      this.fs.write(
+        this.destinationPath('/plugins/Readme.md'),
+        '#插件目录'
+      );
+      this.fs.write(
+        this.destinationPath('/psd/Readme.md'),
+        '#设计PSD目录'
+      );
+      this.fs.write(
+        this.destinationPath('/sass/Readme.md'),
+        '#Sass开发目录'
+      );
+      this.fs.write(
+        this.destinationPath('/less/Readme.md'),
+        '#Less开发目录'
+      );
+      this.fs.write(
+        this.destinationPath('/stylesheets/Readme.md'),
+        '#CSS开发目录'
+      );
     }
   }
 
