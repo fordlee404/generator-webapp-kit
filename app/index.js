@@ -107,6 +107,10 @@ module.exports = yeoman.generators.Base.extend({
             value: 'pure'
           },
           {
+            name: 'Foundation',
+            value: 'foundation'
+          },
+          {
             name: 'Normalize.css',
             value: 'normalize.css'
           },
@@ -115,12 +119,24 @@ module.exports = yeoman.generators.Base.extend({
             value: 'jquery'
           },
           {
+            name: 'Zepto',
+            value: 'zeptojs'
+          },
+          {
             name: 'RequireJS',
             value: 'requirejs'
           },
           {
             name: 'Modernizr',
             value: 'modernizr'
+          },
+          {
+            name: 'AngularJS',
+            value: 'angular'
+          },
+          {
+            name: 'Polymer',
+            value: 'polymer'
           }
         ]
       }];
