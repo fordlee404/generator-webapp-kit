@@ -210,6 +210,12 @@ module.exports = yeoman.generators.Base.extend({
         }
       );
     },
+    gruntfile: function(){
+      this.fs.copy(
+        this.templatePath('_Gruntfile.js'),
+        this.destinationPath('Gruntfile.js')
+      );
+    },
     folders: function(){
       this.fs.write(
         this.destinationPath('/srcHTML/Readme.md'),
