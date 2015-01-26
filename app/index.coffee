@@ -3,17 +3,17 @@ yeoman = require("yeoman-generator")
 chalk = require("chalk")
 yosay = require("yosay")
 module.exports = yeoman.generators.Base.extend(
-  
+
   # Your initialization methods (checking current project state, getting configs, etc)
   initializing: ->
     @pkg = require("../package.json")
     return
 
-  
+
   # Where you prompt users for options (where you'd call this.prompt())
   prompting:
     welcome: ->
-      
+
       # Have Yeoman greet the user.
       @log yosay("Welcome to the fantastic " + chalk.red("Fordlee404") + " generator!")
       return
@@ -136,7 +136,7 @@ module.exports = yeoman.generators.Base.extend(
       ).bind(this)
       return
 
-  
+
   # Saving configurations and configure the project (creating .editorconfig files and other metadata files)
   configuring:
     packageJSON: ->
@@ -167,10 +167,10 @@ module.exports = yeoman.generators.Base.extend(
       @fs.copy @templatePath("gitignore"), @destinationPath(".gitignore")
       return
 
-  
+
   # If the method name doesn't match a priority, it is pushed in the default group
   # default
-  
+
   # Where you write the generator specific files (routes, controllers, etc)
   writing:
     readme: ->
@@ -181,19 +181,32 @@ module.exports = yeoman.generators.Base.extend(
       return
 
     gruntfile: ->
-      
       # Web Server
+      connectConfig = "{
+        dev: {
+          options: {
+            port: 1024,
+            hostname: '*',
+            livereload: true
+          }
+        }
+      }"
+      @gruntfile.insertConfig "connect", connectConfig
       @gruntfile.loadNpmTasks "grunt-contrib-connect"
       @gruntfile.registerTask "server", "connect"
-      
+
       # Watch
-      watchConfig = "{reload: {files: ['javascripts/**/*.css','stylesheets/**/*.js','HTML/**/*.html'],options: {livereload: true}}}"
+      watchConfig = "{
+        reload: {
+          files: ['javascripts/**/*.css','stylesheets/**/*.js','HTML/**/*.html'],
+          options: {
+            livereload: true
+          }
+        }
+      }"
       @gruntfile.insertConfig "watch", watchConfig
       @gruntfile.loadNpmTasks "grunt-contrib-watch"
-      @gruntfile.registerTask "server", [
-        "connect"
-        "watch"
-      ]
+      @gruntfile.registerTask "server", ["connect","watch"]
       return
 
     folders: ->
@@ -210,17 +223,16 @@ module.exports = yeoman.generators.Base.extend(
       @fs.write @destinationPath("/stylesheets/Readme.md"), "#CSS开发目录"
       return
 
-  
+
   # Where conflicts are handled (used internally)
   # conflicts: function(){},
-  
+
   # Where installation are run (npm, bower)
   install:
     tools: ->
       list = [
         "grunt"
         "grunt-contrib-connect"
-        "connect-php"
         "grunt-contrib-watch"
       ]
       @npmInstall list,

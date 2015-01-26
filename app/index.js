@@ -165,10 +165,12 @@ module.exports = yeoman.generators.Base.extend({
       });
     },
     gruntfile: function() {
-      var watchConfig;
+      var connectConfig, watchConfig;
+      connectConfig = "{ dev: { options: { port: 1024, hostname: '*', livereload: true } } }";
+      this.gruntfile.insertConfig("connect", connectConfig);
       this.gruntfile.loadNpmTasks("grunt-contrib-connect");
       this.gruntfile.registerTask("server", "connect");
-      watchConfig = "{reload: {files: ['javascripts/**/*.css','stylesheets/**/*.js','HTML/**/*.html'],options: {livereload: true}}}";
+      watchConfig = "{ reload: { files: ['javascripts/**/*.css','stylesheets/**/*.js','HTML/**/*.html'], options: { livereload: true } } }";
       this.gruntfile.insertConfig("watch", watchConfig);
       this.gruntfile.loadNpmTasks("grunt-contrib-watch");
       this.gruntfile.registerTask("server", ["connect", "watch"]);
@@ -190,7 +192,7 @@ module.exports = yeoman.generators.Base.extend({
   install: {
     tools: function() {
       var list;
-      list = ["grunt", "grunt-contrib-connect", "connect-php", "grunt-contrib-watch"];
+      list = ["grunt", "grunt-contrib-connect", "grunt-contrib-watch"];
       this.npmInstall(list, {
         saveDev: true
       });
