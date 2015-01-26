@@ -211,10 +211,9 @@ module.exports = yeoman.generators.Base.extend({
       );
     },
     gruntfile: function(){
-      this.fs.copy(
-        this.templatePath('_Gruntfile.js'),
-        this.destinationPath('Gruntfile.js')
-      );
+      // Web Server
+      this.gruntfile.loadNpmTasks('grunt-contrib-connect');
+      this.gruntfile.registerTask('server','connect');
     },
     folders: function(){
       this.fs.write(
@@ -269,9 +268,17 @@ module.exports = yeoman.generators.Base.extend({
 
   // Where installation are run (npm, bower)
   install: {
+    tools: function(){
+      var list = [
+        'grunt',
+        'grunt-contrib-connect',
+        'connect-php'
+      ]
+      this.npmInstall(list, {'saveDev': true});
+    },
     plugins: function(){
       var pluginsList = this.config.get('plugins');
-      this.bowerInstall(pluginsList, { 'saveDev': true });
+      this.bowerInstall(pluginsList, { 'save': true });
     }
   }
 
