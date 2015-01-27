@@ -213,6 +213,7 @@ module.exports = yeoman.generators.Base.extend {
         'connect-php'
         'grunt-contrib-clean'
         'grunt-contrib-compass'
+        'grunt-contrib-cssmin'
       ]
       @npmInstall list,
         saveDev: true

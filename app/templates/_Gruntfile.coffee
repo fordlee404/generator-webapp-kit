@@ -36,14 +36,28 @@ module.exports=(grunt)->
       compile:
         options:
           config: 'config.rb'
+    cssmin:
+      options:
+        keepSpecialComments: 0
+      dev:
+        files:
+          'dist/plugins/css/core.min.css': []
+          'dist/stylesheets/common/app.min.css': ['stylesheets/common/**/*.css']
+          'dist/stylesheets/pages/pages.min.css': ['stylesheets/pages/**/*.css']
+      production:
+        files:
+          'dist/<%= pkg.version %>/plugins/css/core.min.css': []
+          'dist/<%= pkg.version %>/stylesheets/common/app.min.css': ['stylesheets/common/**/*.css']
+          'dist/<%= pkg.version %>/stylesheets/pages/pages.min.css': ['stylesheets/pages/**/*.css']
   }
   # Loading Grunt plugins and tasks
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-contrib-connect'
   grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-contrib-compass'
+  grunt.loadNpmTasks 'grunt-contrib-cssmin'
   # Custom tasks
   grunt.registerTask 'server', ['connect','watch']
   grunt.registerTask 'default',['server']
-  grunt.registerTask 'release',['clean','compass']
-  grunt.registerTask 'production',['clean','compass']
+  grunt.registerTask 'release',['clean','compass','cssmin:dev']
+  grunt.registerTask 'production',['clean','compass','cssmin:production']
