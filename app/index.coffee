@@ -215,6 +215,7 @@ module.exports = yeoman.generators.Base.extend {
         'grunt-contrib-compass'
         'grunt-contrib-cssmin'
         'grunt-contrib-coffee'
+        'grunt-contrib-jshint'
       ]
       @npmInstall list,
         saveDev: true

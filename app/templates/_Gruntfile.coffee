@@ -63,6 +63,13 @@ module.exports=(grunt)->
             ext: '.js'
           }
         ]
+    jshint:
+      all:
+        options:
+          jshintrc: true
+        files: {
+          src: ['javascripts/**/*.js']
+        }
   }
   # Loading Grunt plugins and tasks
   grunt.loadNpmTasks 'grunt-contrib-watch'
@@ -71,8 +78,9 @@ module.exports=(grunt)->
   grunt.loadNpmTasks 'grunt-contrib-compass'
   grunt.loadNpmTasks 'grunt-contrib-cssmin'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
+  grunt.loadNpmTasks 'grunt-contrib-jshint'
   # Custom tasks
   grunt.registerTask 'server', ['connect','watch']
   grunt.registerTask 'default',['server']
-  grunt.registerTask 'release',['clean','compass','cssmin:dev','coffee']
-  grunt.registerTask 'production',['clean','compass','cssmin:production','coffee']
+  grunt.registerTask 'release',['clean','compass','cssmin:dev','coffee','jshint']
+  grunt.registerTask 'production',['clean','compass','cssmin:production','coffee','jshint']
