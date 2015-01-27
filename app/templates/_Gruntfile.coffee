@@ -86,6 +86,27 @@ module.exports=(grunt)->
       production:
         options:
           dir: 'dist/<%= pkg.version %>/javascripts/pages/'
+    imagemin:
+      options:
+        optimizationLevel: 0
+      dev:
+        files: [
+          {
+            expand: true
+            cwd: 'images/'
+            src: '**/*.{png,jpg,gif,svg}'
+            dest: 'dist/images/'
+          }
+        ]
+      production:
+        files: [
+          {
+            expand: true
+            cwd: 'images/'
+            src: '**/*.{png,jpg,gif,svg}'
+            dest: 'dist/<%= pkg.version %>/images/'
+          }
+        ]
   }
   # Loading Grunt plugins and tasks
   grunt.loadNpmTasks 'grunt-contrib-watch'
@@ -96,8 +117,9 @@ module.exports=(grunt)->
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-jshint'
   grunt.loadNpmTasks 'grunt-contrib-requirejs'
+  grunt.loadNpmTasks 'grunt-contrib-imagemin'
   # Custom tasks
   grunt.registerTask 'server', ['connect','watch']
   grunt.registerTask 'default',['server']
-  grunt.registerTask 'release',['clean','compass','cssmin:dev','coffee','jshint','requirejs:dev']
-  grunt.registerTask 'production',['clean','compass','cssmin:production','coffee','jshint','requirejs:production']
+  grunt.registerTask 'release',['clean','compass','cssmin:dev','coffee','jshint','requirejs:dev','imagemin:dev']
+  grunt.registerTask 'production',['clean','compass','cssmin:production','coffee','jshint','requirejs:production','imagemin:production']

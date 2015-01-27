@@ -217,6 +217,7 @@ module.exports = yeoman.generators.Base.extend {
         'grunt-contrib-coffee'
         'grunt-contrib-jshint'
         'grunt-contrib-requirejs'
+        'grunt-contrib-imagemin'
       ]
       @npmInstall list,
         saveDev: true
