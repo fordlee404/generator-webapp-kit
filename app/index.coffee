@@ -212,6 +212,14 @@ module.exports = yeoman.generators.Base.extend {
         'grunt-contrib-watch'
         'connect-php'
         'grunt-contrib-clean'
+        'grunt-contrib-compass'
+        'grunt-contrib-cssmin'
+        'grunt-contrib-coffee'
+        'grunt-contrib-jshint'
+        'grunt-contrib-requirejs'
+        'grunt-contrib-imagemin'
+        'grunt-contrib-copy'
+        'grunt-include-replace'
       ]
       @npmInstall list,
         saveDev: true
