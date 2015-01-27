@@ -165,15 +165,7 @@ module.exports = yeoman.generators.Base.extend({
       });
     },
     gruntfile: function() {
-      var connectConfig, watchConfig;
-      connectConfig = '{ dev: { options: { port: 1024, hostname: "*", livereload: true } } }';
-      this.gruntfile.insertConfig('connect', connectConfig);
-      this.gruntfile.loadNpmTasks('grunt-contrib-connect');
-      this.gruntfile.registerTask('server', 'connect');
-      watchConfig = '{ reload: { files: ["javascripts/**/*.css","stylesheets/**/*.js","HTML/**/*.html"], options: { livereload: true } } }';
-      this.gruntfile.insertConfig('watch', watchConfig);
-      this.gruntfile.loadNpmTasks('grunt-contrib-watch');
-      this.gruntfile.registerTask('server', ['connect', 'watch']);
+      this.fs.copy(this.templatePath('_Gruntfile.coffee'), this.destinationPath('Gruntfile.coffee'));
     },
     folders: function() {
       this.fs.write(this.destinationPath('/srcHTML/Readme.md'), '#HTML开发目录');

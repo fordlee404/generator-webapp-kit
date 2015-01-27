@@ -181,32 +181,8 @@ module.exports = yeoman.generators.Base.extend {
       return
 
     gruntfile: ->
-      # Web Server
-      connectConfig = '{
-        dev: {
-          options: {
-            port: 1024,
-            hostname: "*",
-            livereload: true
-          }
-        }
-      }'
-      @gruntfile.insertConfig 'connect', connectConfig
-      @gruntfile.loadNpmTasks 'grunt-contrib-connect'
-      @gruntfile.registerTask 'server', 'connect'
+      @fs.copy @templatePath('_Gruntfile.coffee'),@destinationPath('Gruntfile.coffee')
 
-      # Watch
-      watchConfig = '{
-        reload: {
-          files: ["javascripts/**/*.css","stylesheets/**/*.js","HTML/**/*.html"],
-          options: {
-            livereload: true
-          }
-        }
-      }'
-      @gruntfile.insertConfig 'watch', watchConfig
-      @gruntfile.loadNpmTasks 'grunt-contrib-watch'
-      @gruntfile.registerTask 'server', ['connect','watch']
       return
 
     folders: ->
