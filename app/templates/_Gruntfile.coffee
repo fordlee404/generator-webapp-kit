@@ -132,6 +132,20 @@ module.exports=(grunt)->
             dest: 'dist/<%= pkg.version %>/images/favicons/favicon.ico'
           }
         ]
+    includereplace:
+      dev:
+        options:
+          includesDir: 'srcHTML'
+          globals:
+            ASSETS: '../..'
+        files:[
+          {
+            expand: true
+            dest: 'HTML/'
+            cwd: 'srcHTML/'
+            src: ['**/*']
+          }
+        ]
   }
   # Loading Grunt plugins and tasks
   grunt.loadNpmTasks 'grunt-contrib-watch'
@@ -144,6 +158,7 @@ module.exports=(grunt)->
   grunt.loadNpmTasks 'grunt-contrib-requirejs'
   grunt.loadNpmTasks 'grunt-contrib-imagemin'
   grunt.loadNpmTasks 'grunt-contrib-copy'
+  grunt.loadNpmTasks 'grunt-include-replace'
   # Custom tasks
   grunt.registerTask 'server', ['connect','watch']
   grunt.registerTask 'default',['server']
