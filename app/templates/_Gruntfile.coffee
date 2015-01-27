@@ -31,10 +31,14 @@ module.exports=(grunt)->
 
             middlewares.push(connect.directory(directory))
             return middlewares
+    clean: ['dist/','build/']
   }
   # Loading Grunt plugins and tasks
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-contrib-connect'
+  grunt.loadNpmTasks 'grunt-contrib-clean'
   # Custom tasks
   grunt.registerTask 'server', ['connect','watch']
   grunt.registerTask 'default',['server']
+  grunt.registerTask 'release',['clean']
+  grunt.registerTask 'production',['clean']
