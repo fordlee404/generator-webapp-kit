@@ -6,9 +6,21 @@ module.exports=(grunt)->
     pkg: grunt.file.readJSON 'package.json'
     watch:
       reload:
-        files: ['assets/**/*.css','assets/**/*.js','HTML/**/*.html']
+        files: ['stylesheets/**/*.css','javascripts/**/*.js','HTML/**/*.html']
         options:
           livereload: true
+      HTML:
+        files: ['srcHTML/**/*.html']
+        tasks: ['includereplace:dev']
+      sasscompile:
+        files: ['sass/**/*.scss','sass/**/*.sass']
+        tasks: ['compass:compile']
+      coffeecompile:
+        files: ['coffeescript/**/*.coffee']
+        tasks: ['coffee:compile']
+      javascript:
+        files: ['javascripts/**/*.js']
+        tasks: ['jshint:all']
     connect:
       dev:
         options:
