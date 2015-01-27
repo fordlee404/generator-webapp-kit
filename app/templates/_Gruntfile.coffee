@@ -32,13 +32,18 @@ module.exports=(grunt)->
             middlewares.push(connect.directory(directory))
             return middlewares
     clean: ['dist/','build/']
+    compass:
+      compile:
+        options:
+          config: 'config.rb'
   }
   # Loading Grunt plugins and tasks
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-contrib-connect'
   grunt.loadNpmTasks 'grunt-contrib-clean'
+  grunt.loadNpmTasks 'grunt-contrib-compass'
   # Custom tasks
   grunt.registerTask 'server', ['connect','watch']
   grunt.registerTask 'default',['server']
-  grunt.registerTask 'release',['clean']
-  grunt.registerTask 'production',['clean']
+  grunt.registerTask 'release',['clean','compass']
+  grunt.registerTask 'production',['clean','compass']

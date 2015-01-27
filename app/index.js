@@ -184,7 +184,7 @@ module.exports = yeoman.generators.Base.extend({
   install: {
     tools: function() {
       var list;
-      list = ['grunt', 'grunt-contrib-connect', 'grunt-contrib-watch', 'connect-php', 'grunt-contrib-clean'];
+      list = ['grunt', 'grunt-contrib-connect', 'grunt-contrib-watch', 'connect-php', 'grunt-contrib-clean', 'grunt-contrib-compass'];
       this.npmInstall(list, {
         saveDev: true
       });
