@@ -218,6 +218,7 @@ module.exports = yeoman.generators.Base.extend {
         'grunt-contrib-jshint'
         'grunt-contrib-requirejs'
         'grunt-contrib-imagemin'
+        'grunt-contrib-copy'
       ]
       @npmInstall list,
         saveDev: true

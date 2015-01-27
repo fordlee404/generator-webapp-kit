@@ -107,6 +107,31 @@ module.exports=(grunt)->
             dest: 'dist/<%= pkg.version %>/images/'
           }
         ]
+    copy:
+      dev:
+        files: [
+          # favicons
+          {
+            src: ['images/favicons/browserconfig.xml']
+            dest: 'dist/images/favicons/browserconfig.xml'
+          }
+          {
+            src: ['images/favicons/favicon.ico']
+            dest: 'dist/images/favicons/favicon.ico'
+          }
+        ]
+      production:
+        files: [
+          # favicons
+          {
+            src: ['images/favicons/browserconfig.xml']
+            dest: 'dist/<%= pkg.version %>/images/favicons/browserconfig.xml'
+          }
+          {
+            src: ['images/favicons/favicon.ico']
+            dest: 'dist/<%= pkg.version %>/images/favicons/favicon.ico'
+          }
+        ]
   }
   # Loading Grunt plugins and tasks
   grunt.loadNpmTasks 'grunt-contrib-watch'
@@ -118,8 +143,9 @@ module.exports=(grunt)->
   grunt.loadNpmTasks 'grunt-contrib-jshint'
   grunt.loadNpmTasks 'grunt-contrib-requirejs'
   grunt.loadNpmTasks 'grunt-contrib-imagemin'
+  grunt.loadNpmTasks 'grunt-contrib-copy'
   # Custom tasks
   grunt.registerTask 'server', ['connect','watch']
   grunt.registerTask 'default',['server']
-  grunt.registerTask 'release',['clean','compass','cssmin:dev','coffee','jshint','requirejs:dev','imagemin:dev']
-  grunt.registerTask 'production',['clean','compass','cssmin:production','coffee','jshint','requirejs:production','imagemin:production']
+  grunt.registerTask 'release',['clean','compass','cssmin:dev','coffee','jshint','requirejs:dev','imagemin:dev','copy:dev']
+  grunt.registerTask 'production',['clean','compass','cssmin:production','coffee','jshint','requirejs:production','imagemin:production','copy:production']
