@@ -49,6 +49,20 @@ module.exports=(grunt)->
           'dist/<%= pkg.version %>/plugins/css/core.min.css': []
           'dist/<%= pkg.version %>/stylesheets/common/app.min.css': ['stylesheets/common/**/*.css']
           'dist/<%= pkg.version %>/stylesheets/pages/pages.min.css': ['stylesheets/pages/**/*.css']
+    coffee:
+      compile:
+        options:
+          bare: true
+          join: false
+        files: [
+          {
+            expand: true
+            cwd: 'coffeescript/'
+            src: '**/*.coffee'
+            dest: 'javascripts/'
+            ext: '.js'
+          }
+        ]
   }
   # Loading Grunt plugins and tasks
   grunt.loadNpmTasks 'grunt-contrib-watch'
@@ -56,8 +70,9 @@ module.exports=(grunt)->
   grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-contrib-compass'
   grunt.loadNpmTasks 'grunt-contrib-cssmin'
+  grunt.loadNpmTasks 'grunt-contrib-coffee'
   # Custom tasks
   grunt.registerTask 'server', ['connect','watch']
   grunt.registerTask 'default',['server']
-  grunt.registerTask 'release',['clean','compass','cssmin:dev']
-  grunt.registerTask 'production',['clean','compass','cssmin:production']
+  grunt.registerTask 'release',['clean','compass','cssmin:dev','coffee']
+  grunt.registerTask 'production',['clean','compass','cssmin:production','coffee']
