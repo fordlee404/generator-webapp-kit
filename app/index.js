@@ -155,6 +155,9 @@ module.exports = yeoman.generators.Base.extend({
     },
     gitFile: function() {
       this.fs.copy(this.templatePath('gitignore'), this.destinationPath('.gitignore'));
+    },
+    compassConfig: function() {
+      return this.fs.copy(this.templatePath('_config.rb'), this.destinationPath('config.rb'));
     }
   },
   writing: {

@@ -167,6 +167,9 @@ module.exports = yeoman.generators.Base.extend {
       @fs.copy @templatePath('gitignore'), @destinationPath('.gitignore')
       return
 
+    compassConfig: ->
+      @fs.copy @templatePath('_config.rb'),@destinationPath('config.rb')
+
 
   # If the method name doesn't match a priority, it is pushed in the default group
   # default
