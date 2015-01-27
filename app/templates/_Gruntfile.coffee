@@ -70,6 +70,22 @@ module.exports=(grunt)->
         files: {
           src: ['javascripts/**/*.js']
         }
+    requirejs:
+      options:
+        baseUrl: 'javascripts/pages/'
+        mainConfigFile: 'javascripts/pages/app.js'
+        keepBuildDir: true
+        modules: [
+          {
+            name: 'app'
+          }
+        ]
+      dev:
+        options:
+          dir: 'dist/javascripts/pages/'
+      production:
+        options:
+          dir: 'dist/<%= pkg.version %>/javascripts/pages/'
   }
   # Loading Grunt plugins and tasks
   grunt.loadNpmTasks 'grunt-contrib-watch'
@@ -79,8 +95,9 @@ module.exports=(grunt)->
   grunt.loadNpmTasks 'grunt-contrib-cssmin'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-jshint'
+  grunt.loadNpmTasks 'grunt-contrib-requirejs'
   # Custom tasks
   grunt.registerTask 'server', ['connect','watch']
   grunt.registerTask 'default',['server']
-  grunt.registerTask 'release',['clean','compass','cssmin:dev','coffee','jshint']
-  grunt.registerTask 'production',['clean','compass','cssmin:production','coffee','jshint']
+  grunt.registerTask 'release',['clean','compass','cssmin:dev','coffee','jshint','requirejs:dev']
+  grunt.registerTask 'production',['clean','compass','cssmin:production','coffee','jshint','requirejs:production']
