@@ -202,6 +202,11 @@ module.exports = yeoman.generators.Base.extend {
       @fs.write @destinationPath('/stylesheets/Readme.md'), '#CSS开发目录'
       return
 
+    htmlTemplate: ->
+      @fs.copy @templatePath('_template.html'),@destinationPath('/HTML/template.html')
+
+      return
+
 
   # Where conflicts are handled (used internally)
   # conflicts: function(){},

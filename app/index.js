@@ -182,6 +182,9 @@ module.exports = yeoman.generators.Base.extend({
       this.fs.write(this.destinationPath('/sass/Readme.md'), '#Sass开发目录');
       this.fs.write(this.destinationPath('/less/Readme.md'), '#Less开发目录');
       this.fs.write(this.destinationPath('/stylesheets/Readme.md'), '#CSS开发目录');
+    },
+    htmlTemplate: function() {
+      this.fs.copy(this.templatePath('_template.html'), this.destinationPath('/HTML/template.html'));
     }
   },
   install: {
