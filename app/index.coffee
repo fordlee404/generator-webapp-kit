@@ -216,6 +216,189 @@ module.exports = yeoman.generators.Base.extend {
 
       # connect
       @gruntfile.insertVariable 'phpMiddleware',"require('connect-php')"
+      _connect = '{
+        dev: {
+          options: {
+            port: 1024,
+            hostname: "*",
+            livereload: true,
+            middleware: function(connect, options) {
+              var directory, middlewares;
+              middlewares = [];
+              directory = options.directory || options.base[options.base.length - 1];
+              if (!Array.isArray(options.base)) {
+                options.base = [options.base];
+              }
+              middlewares.push(phpMiddleware(directory));
+              options.base.forEach(function(base) {
+                return middlewares.push(connect["static"](base));
+              });
+              middlewares.push(connect.directory(directory));
+              return middlewares;
+            }
+          }
+        }
+      }'
+      @gruntfile.insertConfig 'connect',_connect
+      @gruntfile.loadNpmTasks 'grunt-contrib-connect'
+
+      # clean
+      _clean = "['dist/', 'build/']"
+      @gruntfile.insertConfig 'clean',_clean
+      @gruntfile.loadNpmTasks 'grunt-contrib-clean'
+
+      # compass
+      _compass = '{
+        compile: {
+          options: {
+            config: "config.rb"
+          }
+        }
+      }'
+      @gruntfile.insertConfig 'compass',_compass
+      @gruntfile.loadNpmTasks 'grunt-contrib-compass'
+
+      # cssmin
+      _cssmin = "{
+        options: {
+          keepSpecialComments: 0
+        },
+        dev: {
+          files: {
+            'dist/plugins/css/core.min.css': [],
+            'dist/stylesheets/common/app.min.css': ['stylesheets/common/**/*.css'],
+            'dist/stylesheets/pages/pages.min.css': ['stylesheets/pages/**/*.css']
+          }
+        },
+        production: {
+          files: {
+            'dist/<%= pkg.version %>/plugins/css/core.min.css': [],
+            'dist/<%= pkg.version %>/stylesheets/common/app.min.css': ['stylesheets/common/**/*.css'],
+            'dist/<%= pkg.version %>/stylesheets/pages/pages.min.css': ['stylesheets/pages/**/*.css']
+          }
+        }
+      }"
+      @gruntfile.insertConfig 'cssmin',_cssmin
+      @gruntfile.loadNpmTasks 'grunt-contrib-cssmin'
+
+      # Coffeescript
+      _coffee = "{
+        compile: {
+          options: {
+            bare: true,
+            join: false
+          },
+          files: [
+            {
+              expand: true,
+              cwd: 'coffeescript/',
+              src: '**/*.coffee',
+              dest: 'javascripts/',
+              ext: '.js'
+            }
+          ]
+        }
+      }"
+      @gruntfile.insertConfig 'coffee',_coffee
+      @gruntfile.loadNpmTasks 'grunt-contrib-coffee'
+
+      #jshint
+      _jshint = "{
+        all: {
+          options: {
+            jshintrc: true
+          },
+          files: {
+            src: ['javascripts/**/*.js']
+          }
+        }
+      }"
+      @gruntfile.insertConfig 'jshint',_jshint
+      @gruntfile.loadNpmTasks 'grunt-contrib-jshint'
+
+      # imagemin
+      _imagemin = "{
+        options: {
+          optimizationLevel: 0
+        },
+        dev: {
+          files: [
+            {
+              expand: true,
+              cwd: 'images/',
+              src: '**/*.{png,jpg,gif,svg}',
+              dest: 'dist/images/'
+            }
+          ]
+        },
+        production: {
+          files: [
+            {
+              expand: true,
+              cwd: 'images/',
+              src: '**/*.{png,jpg,gif,svg}',
+              dest: 'dist/<%= pkg.version %>/images/'
+            }
+          ]
+        }
+      }"
+      @gruntfile.insertConfig 'imagemin',_imagemin
+      @gruntfile.loadNpmTasks 'grunt-contrib-imagemin'
+
+      # copy
+      _copy = "{
+        dev: {
+          files: [
+            {
+              src: ['images/favicons/browserconfig.xml'],
+              dest: 'dist/images/favicons/browserconfig.xml'
+            }, {
+              src: ['images/favicons/favicon.ico'],
+              dest: 'dist/images/favicons/favicon.ico'
+            }
+          ]
+        },
+        production: {
+          files: [
+            {
+              src: ['images/favicons/browserconfig.xml'],
+              dest: 'dist/<%= pkg.version %>/images/favicons/browserconfig.xml'
+            }, {
+              src: ['images/favicons/favicon.ico'],
+              dest: 'dist/<%= pkg.version %>/images/favicons/favicon.ico'
+            }
+          ]
+        }
+      }"
+      @gruntfile.insertConfig 'copy',_copy
+      @gruntfile.loadNpmTasks 'grunt-contrib-copy'
+
+      # include replace
+      _includereplace = "{
+        dev: {
+          options: {
+            includesDir: 'srcHTML',
+            globals: {
+              ASSETS: '../..'
+            }
+          },
+          files: [
+            {
+              expand: true,
+              dest: 'HTML/',
+              cwd: 'srcHTML/',
+              src: ['**/*']
+            }
+          ]
+        }
+      }"
+      @gruntfile.insertConfig 'includereplace',_includereplace
+      @gruntfile.loadNpmTasks 'grunt-include-replace'
+
+      @gruntfile.registerTask 'server',['connect', 'watch']
+      @gruntfile.registerTask 'default',['server']
+      @gruntfile.registerTask 'release',['clean', 'compass', 'cssmin:dev', 'coffee', 'jshint', 'requirejs:dev', 'imagemin:dev', 'copy:dev']
+      @gruntfile.registerTask 'production',['clean', 'compass', 'cssmin:production', 'coffee', 'jshint', 'requirejs:production', 'imagemin:production', 'copy:production']
 
       return
 
