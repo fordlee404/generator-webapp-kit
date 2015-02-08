@@ -1,0 +1,6 @@
+language: node_js
+node_js:
+  - '0.10'
+before_install:
+  - currentfolder=${PWD##*/}
+  - if [ "$currentfolder" != 'generator-fordlee404' ]; then cd .. && eval "mv $currentfolder generator-fordlee404" && cd generator-fordlee404; fi
