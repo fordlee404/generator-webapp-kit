@@ -2,6 +2,12 @@
 yeoman = require 'yeoman-generator'
 chalk = require 'chalk'
 yosay = require 'yosay'
+
+inArray = (value,array)->
+  for val in array
+    return true if val is value
+  return false
+
 module.exports = yeoman.generators.Base.extend {
 
   # Your initialization methods (checking current project state, getting configs, etc)
@@ -395,10 +401,44 @@ module.exports = yeoman.generators.Base.extend {
       @gruntfile.insertConfig 'includereplace',_includereplace
       @gruntfile.loadNpmTasks 'grunt-include-replace'
 
+      hasRequirejs = inArray 'requirejs',@config.get('plugins')
+
+      if hasRequirejs
+        # requirejs
+        _requirejs = "{
+          options: {
+            baseUrl: 'javascripts/pages/',
+            mainConfigFile: 'javascripts/pages/app.js',
+            keepBuildDir: true,
+            modules: [
+              {
+                name: 'app'
+              }
+            ]
+          },
+          dev: {
+            options: {
+              dir: 'dist/javascripts/pages/'
+            }
+          },
+          production: {
+            options: {
+              dir: 'dist/<%= pkg.version %>/javascripts/pages/'
+            }
+          }
+        }"
+        @gruntfile.insertConfig 'requirejs',_requirejs
+        @gruntfile.loadNpmTasks 'grunt-contrib-requirejs'
+
       @gruntfile.registerTask 'server',['connect', 'watch']
       @gruntfile.registerTask 'default',['server']
-      @gruntfile.registerTask 'release',['clean', 'compass', 'cssmin:dev', 'coffee', 'jshint', 'requirejs:dev', 'imagemin:dev', 'copy:dev']
-      @gruntfile.registerTask 'production',['clean', 'compass', 'cssmin:production', 'coffee', 'jshint', 'requirejs:production', 'imagemin:production', 'copy:production']
+
+      if hasRequirejs
+        @gruntfile.registerTask 'release',['clean', 'compass', 'cssmin:dev', 'coffee', 'jshint', 'requirejs:dev', 'imagemin:dev', 'copy:dev']
+        @gruntfile.registerTask 'production',['clean', 'compass', 'cssmin:production', 'coffee', 'jshint', 'requirejs:production', 'imagemin:production', 'copy:production']
+      else
+        @gruntfile.registerTask 'release',['clean', 'compass', 'cssmin:dev', 'coffee', 'jshint', 'imagemin:dev', 'copy:dev']
+        @gruntfile.registerTask 'production',['clean', 'compass', 'cssmin:production', 'coffee', 'jshint', 'imagemin:production', 'copy:production']
 
       return
 
@@ -438,11 +478,13 @@ module.exports = yeoman.generators.Base.extend {
         'grunt-contrib-cssmin'
         'grunt-contrib-coffee'
         'grunt-contrib-jshint'
-        'grunt-contrib-requirejs'
         'grunt-contrib-imagemin'
         'grunt-contrib-copy'
         'grunt-include-replace'
       ]
+      if inArray 'requirejs',@config.get('plugins')
+        list.push 'grunt-contrib-requirejs'
+
       @npmInstall list,
         saveDev: true
 
