@@ -184,8 +184,6 @@ module.exports = yeoman.generators.Base.extend {
       return
 
     gruntfile: ->
-      @fs.copy @templatePath('_Gruntfile.coffee'),@destinationPath('Gruntfile.coffee')
-
       return
 
     folders: ->
@@ -214,24 +212,6 @@ module.exports = yeoman.generators.Base.extend {
   # Where installation are run (npm, bower)
   install:
     tools: ->
-      list = [
-        'grunt'
-        'grunt-contrib-connect'
-        'grunt-contrib-watch'
-        'connect-php'
-        'grunt-contrib-clean'
-        'grunt-contrib-compass'
-        'grunt-contrib-cssmin'
-        'grunt-contrib-coffee'
-        'grunt-contrib-jshint'
-        'grunt-contrib-requirejs'
-        'grunt-contrib-imagemin'
-        'grunt-contrib-copy'
-        'grunt-include-replace'
-      ]
-      @npmInstall list,
-        saveDev: true
-
       return
 
     plugins: ->

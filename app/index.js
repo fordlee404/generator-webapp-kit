@@ -167,9 +167,7 @@ module.exports = yeoman.generators.Base.extend({
         description: this.config.get('description')
       });
     },
-    gruntfile: function() {
-      this.fs.copy(this.templatePath('_Gruntfile.coffee'), this.destinationPath('Gruntfile.coffee'));
-    },
+    gruntfile: function() {},
     folders: function() {
       this.fs.write(this.destinationPath('/srcHTML/Readme.md'), '#HTML开发目录');
       this.fs.write(this.destinationPath('/HTML/Readme.md'), '#编译后HTML目录');
@@ -188,13 +186,7 @@ module.exports = yeoman.generators.Base.extend({
     }
   },
   install: {
-    tools: function() {
-      var list;
-      list = ['grunt', 'grunt-contrib-connect', 'grunt-contrib-watch', 'connect-php', 'grunt-contrib-clean', 'grunt-contrib-compass', 'grunt-contrib-cssmin', 'grunt-contrib-coffee', 'grunt-contrib-jshint', 'grunt-contrib-requirejs', 'grunt-contrib-imagemin', 'grunt-contrib-copy', 'grunt-include-replace'];
-      this.npmInstall(list, {
-        saveDev: true
-      });
-    },
+    tools: function() {},
     plugins: function() {
       var pluginsList;
       pluginsList = this.config.get('plugins');
