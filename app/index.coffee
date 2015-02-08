@@ -2,7 +2,6 @@
 yeoman = require 'yeoman-generator'
 chalk = require 'chalk'
 yosay = require 'yosay'
-GruntfileEditor = require 'gruntfile-editor'
 module.exports = yeoman.generators.Base.extend {
 
   # Your initialization methods (checking current project state, getting configs, etc)
@@ -137,63 +136,6 @@ module.exports = yeoman.generators.Base.extend {
       ).bind(this)
       return
 
-    grunt: ->
-      done = @async()
-      prompt = [
-        type: 'checkbox'
-        name: 'grunt'
-        message: 'Select grunt task: '
-        choices: [
-          {
-            name: 'grunt-contrib-watch'
-            value: 'grunt-contrib-watch'
-          }
-          {
-            name: 'grunt-contrib-clean'
-            value: 'grunt-contrib-clean'
-          }
-          {
-            name: 'grunt-contrib-compass'
-            value: 'grunt-contrib-compass'
-          }
-          {
-            name: 'grunt-contrib-cssmin'
-            value: 'grunt-contrib-cssmin'
-          }
-          {
-            name: 'grunt-contrib-coffee'
-            value: 'grunt-contrib-coffee'
-          }
-          {
-            name: 'grunt-contrib-jshint'
-            value: 'grunt-contrib-jshint'
-          }
-          {
-            name: 'grunt-contrib-requirejs'
-            value: 'grunt-contrib-requirejs'
-          }
-          {
-            name: 'grunt-contrib-imagemin'
-            value: 'grunt-contrib-imagemin'
-          }
-          {
-            name: 'grunt-contrib-copy'
-            value: 'grunt-contrib-copy'
-          }
-          {
-            name: 'grunt-include-replace'
-            value: 'grunt-include-replace'
-          }
-        ]
-      ]
-      @prompt prompt, ((props) ->
-        @config.set props
-        done()
-        return
-      ).bind(this)
-      return
-
-
   # Saving configurations and configure the project (creating .editorconfig files and other metadata files)
   configuring:
     packageJSON: ->
@@ -241,38 +183,39 @@ module.exports = yeoman.generators.Base.extend {
       return
 
     gruntfile: ->
-      tasks = @config.get 'grunt'
-      gruntfileEditor = new GruntfileEditor @fs.read @templatePath '_Gruntfile.js'
-      for task in tasks
-        switch task
-          when 'grunt-contrib-watch'
-            _watch = "{
-              reload: {
-                files: ['stylesheets/**/*.css', 'javascripts/**/*.js', 'HTML/**/*.html'],
-                options: {
-                  livereload: true
-                }
-              },
-              HTML: {
-                files: ['srcHTML/**/*.html'],
-                tasks: ['includereplace:dev']
-              },
-              sasscompile: {
-                files: ['sass/**/*.scss', 'sass/**/*.sass'],
-                tasks: ['compass:compile']
-              },
-              coffeecompile: {
-                files: ['coffeescript/**/*.coffee'],
-                tasks: ['coffee:compile']
-              },
-              javascript: {
-                files: ['javascripts/**/*.js'],
-                tasks: ['jshint:all']
-              }
-            }"
-            gruntfileEditor.insertConfig "watch",_watch
+      # package.json
+      @gruntfile.insertConfig 'pkg',"grunt.file.readJSON('package.json')"
 
-      @fs.write @destinationPath('Gruntfile.js'),gruntfileEditor.toString()
+      # watch
+      _watch = "{
+        reload: {
+          files: ['stylesheets/**/*.css', 'javascripts/**/*.js', 'HTML/**/*.html'],
+          options: {
+            livereload: true
+          }
+        },
+        HTML: {
+          files: ['srcHTML/**/*.html'],
+          tasks: ['includereplace:dev']
+        },
+        sasscompile: {
+          files: ['sass/**/*.scss', 'sass/**/*.sass'],
+          tasks: ['compass:compile']
+        },
+        coffeecompile: {
+          files: ['coffeescript/**/*.coffee'],
+          tasks: ['coffee:compile']
+        },
+        javascript: {
+          files: ['javascripts/**/*.js'],
+          tasks: ['jshint:all']
+        }
+      }"
+      @gruntfile.insertConfig "watch",_watch
+      @gruntfile.loadNpmTasks 'grunt-contrib-watch'
+
+      # connect
+      @gruntfile.insertVariable 'phpMiddleware',"require('connect-php')"
 
       return
 
@@ -302,9 +245,24 @@ module.exports = yeoman.generators.Base.extend {
   # Where installation are run (npm, bower)
   install:
     grunt: ->
-      tasks = @config.get 'grunt'
-      @npmInstall tasks,
-        save: true
+      list = [
+        'grunt'
+        'grunt-contrib-connect'
+        'grunt-contrib-watch'
+        'connect-php'
+        'grunt-contrib-clean'
+        'grunt-contrib-compass'
+        'grunt-contrib-cssmin'
+        'grunt-contrib-coffee'
+        'grunt-contrib-jshint'
+        'grunt-contrib-requirejs'
+        'grunt-contrib-imagemin'
+        'grunt-contrib-copy'
+        'grunt-include-replace'
+      ]
+      @npmInstall list,
+        saveDev: true
+
       return
 
     plugins: ->

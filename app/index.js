@@ -1,13 +1,11 @@
 'use strict';
-var GruntfileEditor, chalk, yeoman, yosay;
+var chalk, yeoman, yosay;
 
 yeoman = require('yeoman-generator');
 
 chalk = require('chalk');
 
 yosay = require('yosay');
-
-GruntfileEditor = require('gruntfile-editor');
 
 module.exports = yeoman.generators.Base.extend({
   initializing: function() {
@@ -132,54 +130,6 @@ module.exports = yeoman.generators.Base.extend({
         this.config.set(props);
         done();
       }).bind(this));
-    },
-    grunt: function() {
-      var done, prompt;
-      done = this.async();
-      prompt = [
-        {
-          type: 'checkbox',
-          name: 'grunt',
-          message: 'Select grunt task: ',
-          choices: [
-            {
-              name: 'grunt-contrib-watch',
-              value: 'grunt-contrib-watch'
-            }, {
-              name: 'grunt-contrib-clean',
-              value: 'grunt-contrib-clean'
-            }, {
-              name: 'grunt-contrib-compass',
-              value: 'grunt-contrib-compass'
-            }, {
-              name: 'grunt-contrib-cssmin',
-              value: 'grunt-contrib-cssmin'
-            }, {
-              name: 'grunt-contrib-coffee',
-              value: 'grunt-contrib-coffee'
-            }, {
-              name: 'grunt-contrib-jshint',
-              value: 'grunt-contrib-jshint'
-            }, {
-              name: 'grunt-contrib-requirejs',
-              value: 'grunt-contrib-requirejs'
-            }, {
-              name: 'grunt-contrib-imagemin',
-              value: 'grunt-contrib-imagemin'
-            }, {
-              name: 'grunt-contrib-copy',
-              value: 'grunt-contrib-copy'
-            }, {
-              name: 'grunt-include-replace',
-              value: 'grunt-include-replace'
-            }
-          ]
-        }
-      ];
-      this.prompt(prompt, (function(props) {
-        this.config.set(props);
-        done();
-      }).bind(this));
     }
   },
   configuring: {
@@ -218,18 +168,12 @@ module.exports = yeoman.generators.Base.extend({
       });
     },
     gruntfile: function() {
-      var gruntfileEditor, task, tasks, _i, _len, _watch;
-      tasks = this.config.get('grunt');
-      gruntfileEditor = new GruntfileEditor(this.fs.read(this.templatePath('_Gruntfile.js')));
-      for (_i = 0, _len = tasks.length; _i < _len; _i++) {
-        task = tasks[_i];
-        switch (task) {
-          case 'grunt-contrib-watch':
-            _watch = "{ reload: { files: ['stylesheets/**/*.css', 'javascripts/**/*.js', 'HTML/**/*.html'], options: { livereload: true } }, HTML: { files: ['srcHTML/**/*.html'], tasks: ['includereplace:dev'] }, sasscompile: { files: ['sass/**/*.scss', 'sass/**/*.sass'], tasks: ['compass:compile'] }, coffeecompile: { files: ['coffeescript/**/*.coffee'], tasks: ['coffee:compile'] }, javascript: { files: ['javascripts/**/*.js'], tasks: ['jshint:all'] } }";
-            gruntfileEditor.insertConfig("watch", _watch);
-        }
-      }
-      this.fs.write(this.destinationPath('Gruntfile.js'), gruntfileEditor.toString());
+      var _watch;
+      this.gruntfile.insertConfig('pkg', "grunt.file.readJSON('package.json')");
+      _watch = "{ reload: { files: ['stylesheets/**/*.css', 'javascripts/**/*.js', 'HTML/**/*.html'], options: { livereload: true } }, HTML: { files: ['srcHTML/**/*.html'], tasks: ['includereplace:dev'] }, sasscompile: { files: ['sass/**/*.scss', 'sass/**/*.sass'], tasks: ['compass:compile'] }, coffeecompile: { files: ['coffeescript/**/*.coffee'], tasks: ['coffee:compile'] }, javascript: { files: ['javascripts/**/*.js'], tasks: ['jshint:all'] } }";
+      this.gruntfile.insertConfig("watch", _watch);
+      this.gruntfile.loadNpmTasks('grunt-contrib-watch');
+      this.gruntfile.insertVariable('phpMiddleware', "require('connect-php')");
     },
     folders: function() {
       this.fs.write(this.destinationPath('/srcHTML/Readme.md'), '#HTML开发目录');
@@ -250,10 +194,10 @@ module.exports = yeoman.generators.Base.extend({
   },
   install: {
     grunt: function() {
-      var tasks;
-      tasks = this.config.get('grunt');
-      this.npmInstall(tasks, {
-        save: true
+      var list;
+      list = ['grunt', 'grunt-contrib-connect', 'grunt-contrib-watch', 'connect-php', 'grunt-contrib-clean', 'grunt-contrib-compass', 'grunt-contrib-cssmin', 'grunt-contrib-coffee', 'grunt-contrib-jshint', 'grunt-contrib-requirejs', 'grunt-contrib-imagemin', 'grunt-contrib-copy', 'grunt-include-replace'];
+      this.npmInstall(list, {
+        saveDev: true
       });
     },
     plugins: function() {
