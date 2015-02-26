@@ -179,7 +179,7 @@ module.exports = yeoman.generators.Base.extend({
       });
     },
     gruntfile: function() {
-      var hasRequirejs, _clean, _coffee, _compass, _connect, _copy, _cssmin, _imagemin, _includereplace, _jshint, _requirejs, _watch;
+      var hasRequirejs, _clean, _coffee, _compass, _connect, _copy, _cssmin, _imagemin, _includereplace, _jshint, _requirejs, _usemin, _watch;
       this.gruntfile.insertConfig('pkg', "grunt.file.readJSON('package.json')");
       _watch = "{ reload: { files: ['stylesheets/**/*.css', 'javascripts/**/*.js', 'HTML/**/*.html'], options: { livereload: true } }, HTML: { files: ['srcHTML/**/*.html'], tasks: ['includereplace:dev'] }, sasscompile: { files: ['sass/**/*.scss', 'sass/**/*.sass'], tasks: ['compass:compile'] }, coffeecompile: { files: ['coffeescript/**/*.coffee'], tasks: ['coffee:compile'] }, javascript: { files: ['javascripts/**/*.js'], tasks: ['jshint:all'] } }";
       this.gruntfile.insertConfig("watch", _watch);
@@ -212,6 +212,9 @@ module.exports = yeoman.generators.Base.extend({
       _includereplace = "{ dev: { options: { includesDir: 'srcHTML', globals: { ASSETS: '../..' } }, files: [ { expand: true, dest: 'HTML/', cwd: 'srcHTML/', src: ['**/*'] } ] } }";
       this.gruntfile.insertConfig('includereplace', _includereplace);
       this.gruntfile.loadNpmTasks('grunt-include-replace');
+      _usemin = "{ html: [] }";
+      this.gruntfile.insertConfig('usemin', _usemin);
+      this.gruntfile.loadNpmTasks('grunt-usemin');
       hasRequirejs = inArray('requirejs', this.config.get('plugins'));
       if (hasRequirejs) {
         _requirejs = "{ options: { baseUrl: 'javascripts/pages/', mainConfigFile: 'javascripts/pages/app.js', keepBuildDir: true, modules: [ { name: 'app' } ] }, dev: { options: { dir: 'dist/javascripts/pages/' } }, production: { options: { dir: 'dist/<%= pkg.version %>/javascripts/pages/' } } }";
@@ -222,10 +225,10 @@ module.exports = yeoman.generators.Base.extend({
       this.gruntfile.registerTask('default', ['server']);
       if (hasRequirejs) {
         this.gruntfile.registerTask('release', ['clean', 'compass', 'cssmin:dev', 'coffee', 'jshint', 'requirejs:dev', 'imagemin:dev', 'copy:dev']);
-        this.gruntfile.registerTask('production', ['clean', 'compass', 'cssmin:production', 'coffee', 'jshint', 'requirejs:production', 'imagemin:production', 'copy:production']);
+        this.gruntfile.registerTask('production', ['clean', 'compass', 'cssmin:production', 'coffee', 'jshint', 'requirejs:production', 'imagemin:production', 'copy:production', 'usemin']);
       } else {
         this.gruntfile.registerTask('release', ['clean', 'compass', 'cssmin:dev', 'coffee', 'jshint', 'imagemin:dev', 'copy:dev']);
-        this.gruntfile.registerTask('production', ['clean', 'compass', 'cssmin:production', 'coffee', 'jshint', 'imagemin:production', 'copy:production']);
+        this.gruntfile.registerTask('production', ['clean', 'compass', 'cssmin:production', 'coffee', 'jshint', 'imagemin:production', 'copy:production', 'usemin']);
       }
     },
     folders: function() {

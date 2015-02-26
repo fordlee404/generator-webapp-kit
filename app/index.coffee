@@ -401,6 +401,13 @@ module.exports = yeoman.generators.Base.extend {
       @gruntfile.insertConfig 'includereplace',_includereplace
       @gruntfile.loadNpmTasks 'grunt-include-replace'
 
+      # usemin
+      _usemin = "{
+        html: []
+      }"
+      @gruntfile.insertConfig 'usemin',_usemin
+      @gruntfile.loadNpmTasks 'grunt-usemin'
+
       hasRequirejs = inArray 'requirejs',@config.get('plugins')
 
       if hasRequirejs
@@ -435,10 +442,10 @@ module.exports = yeoman.generators.Base.extend {
 
       if hasRequirejs
         @gruntfile.registerTask 'release',['clean', 'compass', 'cssmin:dev', 'coffee', 'jshint', 'requirejs:dev', 'imagemin:dev', 'copy:dev']
-        @gruntfile.registerTask 'production',['clean', 'compass', 'cssmin:production', 'coffee', 'jshint', 'requirejs:production', 'imagemin:production', 'copy:production']
+        @gruntfile.registerTask 'production',['clean', 'compass', 'cssmin:production', 'coffee', 'jshint', 'requirejs:production', 'imagemin:production', 'copy:production', 'usemin']
       else
         @gruntfile.registerTask 'release',['clean', 'compass', 'cssmin:dev', 'coffee', 'jshint', 'imagemin:dev', 'copy:dev']
-        @gruntfile.registerTask 'production',['clean', 'compass', 'cssmin:production', 'coffee', 'jshint', 'imagemin:production', 'copy:production']
+        @gruntfile.registerTask 'production',['clean', 'compass', 'cssmin:production', 'coffee', 'jshint', 'imagemin:production', 'copy:production', 'usemin']
 
       return
 
