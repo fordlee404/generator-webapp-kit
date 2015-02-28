@@ -492,6 +492,7 @@ module.exports = yeoman.generators.Base.extend {
         'grunt-contrib-imagemin'
         'grunt-contrib-copy'
         'grunt-include-replace'
+        'grunt-usemin'
       ]
       if inArray 'requirejs',@config.get('plugins')
         list.push 'grunt-contrib-requirejs'
