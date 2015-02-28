@@ -122,6 +122,10 @@ module.exports = yeoman.generators.Base.extend {
             value: 'requirejs'
           }
           {
+            name: 'Vue.js'
+            value: 'vue'
+          }
+          {
             name: 'Modernizr'
             value: 'modernizr'
           }
