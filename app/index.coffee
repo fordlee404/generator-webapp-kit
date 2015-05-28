@@ -32,10 +32,7 @@ module.exports = yeoman.generators.Base.extend {
         type: 'input'
         name: 'appName'
         message: 'What is your app name'
-        default: ->
-          rootArr = root.split '/'
-          len = rootArr.length
-          rootArr[len - 1]
+        default: @appname
       ]
       @prompt prompts, ((props) ->
         @config.set props
