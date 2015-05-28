@@ -197,8 +197,10 @@ module.exports = yeoman.generators.Base.extend {
       return
 
     gruntfile: ->
+      GruntfileEditor = require 'gruntfile-editor'
+      gruntfile = new GruntfileEditor()
       # package.json
-      @gruntfile.insertConfig 'pkg',"grunt.file.readJSON('package.json')"
+      gruntfile.insertConfig 'pkg',"grunt.file.readJSON('package.json')"
 
       # watch
       _watch = "{
@@ -225,11 +227,11 @@ module.exports = yeoman.generators.Base.extend {
           tasks: ['jshint:all']
         }
       }"
-      @gruntfile.insertConfig "watch",_watch
-      @gruntfile.loadNpmTasks 'grunt-contrib-watch'
+      gruntfile.insertConfig "watch",_watch
+      gruntfile.loadNpmTasks 'grunt-contrib-watch'
 
       # connect
-      @gruntfile.insertVariable 'phpMiddleware',"require('connect-php')"
+      gruntfile.insertVariable 'phpMiddleware',"require('connect-php')"
       _connect = '{
         dev: {
           options: {
@@ -253,13 +255,13 @@ module.exports = yeoman.generators.Base.extend {
           }
         }
       }'
-      @gruntfile.insertConfig 'connect',_connect
-      @gruntfile.loadNpmTasks 'grunt-contrib-connect'
+      gruntfile.insertConfig 'connect',_connect
+      gruntfile.loadNpmTasks 'grunt-contrib-connect'
 
       # clean
       _clean = "['dist/', 'build/']"
-      @gruntfile.insertConfig 'clean',_clean
-      @gruntfile.loadNpmTasks 'grunt-contrib-clean'
+      gruntfile.insertConfig 'clean',_clean
+      gruntfile.loadNpmTasks 'grunt-contrib-clean'
 
       # compass
       _compass = '{
@@ -269,8 +271,8 @@ module.exports = yeoman.generators.Base.extend {
           }
         }
       }'
-      @gruntfile.insertConfig 'compass',_compass
-      @gruntfile.loadNpmTasks 'grunt-contrib-compass'
+      gruntfile.insertConfig 'compass',_compass
+      gruntfile.loadNpmTasks 'grunt-contrib-compass'
 
       # cssmin
       _cssmin = "{
@@ -292,8 +294,8 @@ module.exports = yeoman.generators.Base.extend {
           }
         }
       }"
-      @gruntfile.insertConfig 'cssmin',_cssmin
-      @gruntfile.loadNpmTasks 'grunt-contrib-cssmin'
+      gruntfile.insertConfig 'cssmin',_cssmin
+      gruntfile.loadNpmTasks 'grunt-contrib-cssmin'
 
       # Coffeescript
       _coffee = "{
@@ -313,8 +315,8 @@ module.exports = yeoman.generators.Base.extend {
           ]
         }
       }"
-      @gruntfile.insertConfig 'coffee',_coffee
-      @gruntfile.loadNpmTasks 'grunt-contrib-coffee'
+      gruntfile.insertConfig 'coffee',_coffee
+      gruntfile.loadNpmTasks 'grunt-contrib-coffee'
 
       #jshint
       _jshint = "{
@@ -327,8 +329,8 @@ module.exports = yeoman.generators.Base.extend {
           }
         }
       }"
-      @gruntfile.insertConfig 'jshint',_jshint
-      @gruntfile.loadNpmTasks 'grunt-contrib-jshint'
+      gruntfile.insertConfig 'jshint',_jshint
+      gruntfile.loadNpmTasks 'grunt-contrib-jshint'
 
       # imagemin
       _imagemin = "{
@@ -356,8 +358,8 @@ module.exports = yeoman.generators.Base.extend {
           ]
         }
       }"
-      @gruntfile.insertConfig 'imagemin',_imagemin
-      @gruntfile.loadNpmTasks 'grunt-contrib-imagemin'
+      gruntfile.insertConfig 'imagemin',_imagemin
+      gruntfile.loadNpmTasks 'grunt-contrib-imagemin'
 
       # copy
       _copy = "{
@@ -384,8 +386,8 @@ module.exports = yeoman.generators.Base.extend {
           ]
         }
       }"
-      @gruntfile.insertConfig 'copy',_copy
-      @gruntfile.loadNpmTasks 'grunt-contrib-copy'
+      gruntfile.insertConfig 'copy',_copy
+      gruntfile.loadNpmTasks 'grunt-contrib-copy'
 
       # include replace
       _includereplace = "{
@@ -406,15 +408,15 @@ module.exports = yeoman.generators.Base.extend {
           ]
         }
       }"
-      @gruntfile.insertConfig 'includereplace',_includereplace
-      @gruntfile.loadNpmTasks 'grunt-include-replace'
+      gruntfile.insertConfig 'includereplace',_includereplace
+      gruntfile.loadNpmTasks 'grunt-include-replace'
 
       # usemin
       _usemin = "{
         html: []
       }"
-      @gruntfile.insertConfig 'usemin',_usemin
-      @gruntfile.loadNpmTasks 'grunt-usemin'
+      gruntfile.insertConfig 'usemin',_usemin
+      gruntfile.loadNpmTasks 'grunt-usemin'
 
       hasRequirejs = inArray 'requirejs',@config.get('plugins')
 
@@ -442,18 +444,18 @@ module.exports = yeoman.generators.Base.extend {
             }
           }
         }"
-        @gruntfile.insertConfig 'requirejs',_requirejs
-        @gruntfile.loadNpmTasks 'grunt-contrib-requirejs'
+        gruntfile.insertConfig 'requirejs',_requirejs
+        gruntfile.loadNpmTasks 'grunt-contrib-requirejs'
 
-      @gruntfile.registerTask 'server',['connect', 'watch']
-      @gruntfile.registerTask 'default',['server']
+      gruntfile.registerTask 'server',['connect', 'watch']
+      gruntfile.registerTask 'default',['server']
 
       if hasRequirejs
-        @gruntfile.registerTask 'release',['clean', 'compass', 'cssmin:dev', 'coffee', 'jshint', 'requirejs:dev', 'imagemin:dev', 'copy:dev']
-        @gruntfile.registerTask 'production',['clean', 'compass', 'cssmin:production', 'coffee', 'jshint', 'requirejs:production', 'imagemin:production', 'copy:production', 'usemin']
+        gruntfile.registerTask 'release',['clean', 'compass', 'cssmin:dev', 'coffee', 'jshint', 'requirejs:dev', 'imagemin:dev', 'copy:dev']
+        gruntfile.registerTask 'production',['clean', 'compass', 'cssmin:production', 'coffee', 'jshint', 'requirejs:production', 'imagemin:production', 'copy:production', 'usemin']
       else
-        @gruntfile.registerTask 'release',['clean', 'compass', 'cssmin:dev', 'coffee', 'jshint', 'imagemin:dev', 'copy:dev']
-        @gruntfile.registerTask 'production',['clean', 'compass', 'cssmin:production', 'coffee', 'jshint', 'imagemin:production', 'copy:production', 'usemin']
+        gruntfile.registerTask 'release',['clean', 'compass', 'cssmin:dev', 'coffee', 'jshint', 'imagemin:dev', 'copy:dev']
+        gruntfile.registerTask 'production',['clean', 'compass', 'cssmin:production', 'coffee', 'jshint', 'imagemin:production', 'copy:production', 'usemin']
 
       return
 
