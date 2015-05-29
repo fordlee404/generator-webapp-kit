@@ -2,6 +2,7 @@
 yeoman = require 'yeoman-generator'
 chalk = require 'chalk'
 yosay = require 'yosay'
+fs = require 'fs'
 
 inArray = (value,array)->
   for val in array
@@ -456,6 +457,9 @@ module.exports = yeoman.generators.Base.extend {
       else
         gruntfile.registerTask 'release',['clean', 'compass', 'cssmin:dev', 'coffee', 'jshint', 'imagemin:dev', 'copy:dev']
         gruntfile.registerTask 'production',['clean', 'compass', 'cssmin:production', 'coffee', 'jshint', 'imagemin:production', 'copy:production', 'usemin']
+
+      fs.writeFileSync 'Gruntfile.js',gruntfile.toString()
+      console.log '   '+chalk.green('create')+' Gruntfile.js'
 
       return
 

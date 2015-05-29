@@ -1,11 +1,13 @@
 'use strict';
-var chalk, inArray, yeoman, yosay;
+var chalk, fs, inArray, yeoman, yosay;
 
 yeoman = require('yeoman-generator');
 
 chalk = require('chalk');
 
 yosay = require('yosay');
+
+fs = require('fs');
 
 inArray = function(value, array) {
   var val, _i, _len;
@@ -238,6 +240,8 @@ module.exports = yeoman.generators.Base.extend({
         gruntfile.registerTask('release', ['clean', 'compass', 'cssmin:dev', 'coffee', 'jshint', 'imagemin:dev', 'copy:dev']);
         gruntfile.registerTask('production', ['clean', 'compass', 'cssmin:production', 'coffee', 'jshint', 'imagemin:production', 'copy:production', 'usemin']);
       }
+      fs.writeFileSync('Gruntfile.js', gruntfile.toString());
+      console.log('   ' + chalk.green('create') + ' Gruntfile.js');
     },
     folders: function() {
       this.fs.write(this.destinationPath('/srcHTML/Readme.md'), '#HTML开发目录');
