@@ -129,12 +129,6 @@ module.exports = yeoman.generators.Base.extend({
               name: 'Zepto',
               value: 'zeptojs'
             }, {
-              name: 'RequireJS',
-              value: 'requirejs'
-            }, {
-              name: 'Browserify',
-              value: 'browserify'
-            }, {
               name: 'Modernizr',
               value: 'modernizr'
             }
