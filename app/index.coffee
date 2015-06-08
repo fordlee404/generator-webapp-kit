@@ -9,6 +9,10 @@ inArray = (value,array)->
     return true if val is value
   return false
 
+sortPrompts=(a,b)->
+  return 1 if a.name>b.name
+  return -1 if b.name>a.name
+  return 0
 module.exports = yeoman.generators.Base.extend {
 
   # Your initialization methods (checking current project state, getting configs, etc)
@@ -127,7 +131,7 @@ module.exports = yeoman.generators.Base.extend {
             name: 'Modernizr'
             value: 'modernizr'
           }
-        ]
+        ].sort sortPrompts
       ]
       @prompt prompt, ((props) ->
         @config.set props

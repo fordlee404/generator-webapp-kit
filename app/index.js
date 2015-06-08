@@ -1,5 +1,5 @@
 'use strict';
-var chalk, fs, inArray, yeoman, yosay;
+var chalk, fs, inArray, sortPrompts, yeoman, yosay;
 
 yeoman = require('yeoman-generator');
 
@@ -18,6 +18,16 @@ inArray = function(value, array) {
     }
   }
   return false;
+};
+
+sortPrompts = function(a, b) {
+  if (a.name > b.name) {
+    return 1;
+  }
+  if (b.name > a.name) {
+    return -1;
+  }
+  return 0;
 };
 
 module.exports = yeoman.generators.Base.extend({
@@ -128,7 +138,7 @@ module.exports = yeoman.generators.Base.extend({
               name: 'Modernizr',
               value: 'modernizr'
             }
-          ]
+          ].sort(sortPrompts)
         }
       ];
       this.prompt(prompt, (function(props) {
