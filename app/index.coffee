@@ -124,20 +124,8 @@ module.exports = yeoman.generators.Base.extend {
             value: 'browserify'
           }
           {
-            name: 'Vue.js'
-            value: 'vue'
-          }
-          {
             name: 'Modernizr'
             value: 'modernizr'
-          }
-          {
-            name: 'AngularJS'
-            value: 'angular'
-          }
-          {
-            name: 'Polymer'
-            value: 'polymer'
           }
         ]
       ]

@@ -37,12 +37,7 @@ module.exports = yeoman.generators.Base.extend({
           type: 'input',
           name: 'appName',
           message: 'What is your app name',
-          "default": function() {
-            var len, rootArr;
-            rootArr = root.split('/');
-            len = rootArr.length;
-            return rootArr[len - 1];
-          }
+          "default": this.appname
         }
       ];
       this.prompt(prompts, (function(props) {
@@ -130,17 +125,8 @@ module.exports = yeoman.generators.Base.extend({
               name: 'Browserify',
               value: 'browserify'
             }, {
-              name: 'Vue.js',
-              value: 'vue'
-            }, {
               name: 'Modernizr',
               value: 'modernizr'
-            }, {
-              name: 'AngularJS',
-              value: 'angular'
-            }, {
-              name: 'Polymer',
-              value: 'polymer'
             }
           ]
         }
