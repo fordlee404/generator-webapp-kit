@@ -160,6 +160,7 @@ module.exports = yeoman.generators.Base.extend {
 
     gitFile: ->
       @fs.copy @templatePath('gitignore'), @destinationPath('.gitignore')
+      @fs.copy @templatePath('gitattributes'), @destinationPath('.gitattributes')
       return
 
     compassConfig: ->
