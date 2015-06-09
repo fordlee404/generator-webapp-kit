@@ -166,6 +166,39 @@ module.exports = yeoman.generators.Base.extend {
     compassConfig: ->
       @fs.copy @templatePath('_config.rb'),@destinationPath('config.rb')
 
+    pluginsConfig: ->
+      plugins=@config.get('plugins')
+      webpackAlias=[]
+      cssminCore=[]
+
+      if plugins.jquery
+        webpackAlias.push 'jquery':'plugins/jquery/jquery.min.js'
+
+      if plugins.zepto
+        webpackAlias.push 'zepto':'plugins/zepto/zepto.min.js'
+
+      if plugins.bootstrap
+        cssminCore.push 'plugins/bootstrap/dist/css/bootstrap.css'
+        webpackAlias.push 'bootstrap':'plugins/bootstrap/dist/js/bootstrap.min.js'
+
+      if plugins.pure
+        cssminCore.push 'plugins/pure/pure.css'
+
+      if plugins['normalize.css']
+        cssminCore.push 'plugins/normalize.css/normalize.css'
+
+      if plugins.foundation
+        cssminCore.push 'plugins/foundation/css/foundation.css'
+        webpackAlias.push 'foundation':'plugins/foundation/js/foundation/foundation.js'
+
+      if plugins.modernizr
+        webpackAlias.push 'modernizr':'plugins/modernizr/modernizr.js'
+
+      @config.set 'webpackAlias',webpackAlias
+      @config.set 'cssminCore',cssminCore
+
+
+
 
   # If the method name doesn't match a priority, it is pushed in the default group
   # default
@@ -260,7 +293,7 @@ module.exports = yeoman.generators.Base.extend {
         },
         dev: {
           files: {
-            'dist/plugins/css/core.min.css': [],
+            'dist/plugins/css/core.min.css': ['#{@config.get('cssminCore').join(',')}'],
             'dist/stylesheets/common/app.min.css': ['stylesheets/common/**/*.css'],
             'dist/stylesheets/pages/pages.min.css': ['stylesheets/pages/**/*.css']
           }
@@ -448,6 +481,9 @@ module.exports = yeoman.generators.Base.extend {
       console.log '   '+chalk.green('create')+' Gruntfile.js'
 
       return
+    webpackAlias:->
+      webpackAlias=@config.get 'webpackAlias'
+      @fs.write @destinationPath('.webpack_entry.json'), JSON.stringify(webpackAlias)
 
     folders: ->
       @fs.write @destinationPath('/srcHTML/Readme.md'), '#HTML开发目录'
@@ -459,7 +495,6 @@ module.exports = yeoman.generators.Base.extend {
       @fs.write @destinationPath('/plugins/Readme.md'), '#插件目录'
       @fs.write @destinationPath('/psd/Readme.md'), '#设计PSD目录'
       @fs.write @destinationPath('/sass/Readme.md'), '#Sass开发目录'
-      @fs.write @destinationPath('/less/Readme.md'), '#Less开发目录'
       @fs.write @destinationPath('/stylesheets/Readme.md'), '#CSS开发目录'
       return
 

@@ -168,6 +168,47 @@ module.exports = yeoman.generators.Base.extend({
     },
     compassConfig: function() {
       return this.fs.copy(this.templatePath('_config.rb'), this.destinationPath('config.rb'));
+    },
+    pluginsConfig: function() {
+      var cssminCore, plugins, webpackAlias;
+      plugins = this.config.get('plugins');
+      webpackAlias = [];
+      cssminCore = [];
+      if (plugins.jquery) {
+        webpackAlias.push({
+          'jquery': 'plugins/jquery/jquery.min.js'
+        });
+      }
+      if (plugins.zepto) {
+        webpackAlias.push({
+          'zepto': 'plugins/zepto/zepto.min.js'
+        });
+      }
+      if (plugins.bootstrap) {
+        cssminCore.push('plugins/bootstrap/dist/css/bootstrap.css');
+        webpackAlias.push({
+          'bootstrap': 'plugins/bootstrap/dist/js/bootstrap.min.js'
+        });
+      }
+      if (plugins.pure) {
+        cssminCore.push('plugins/pure/pure.css');
+      }
+      if (plugins['normalize.css']) {
+        cssminCore.push('plugins/normalize.css/normalize.css');
+      }
+      if (plugins.foundation) {
+        cssminCore.push('plugins/foundation/css/foundation.css');
+        webpackAlias.push({
+          'foundation': 'plugins/foundation/js/foundation/foundation.js'
+        });
+      }
+      if (plugins.modernizr) {
+        webpackAlias.push({
+          'modernizr': 'plugins/modernizr/modernizr.js'
+        });
+      }
+      this.config.set('webpackAlias', webpackAlias);
+      return this.config.set('cssminCore', cssminCore);
     }
   },
   writing: {
@@ -228,6 +269,11 @@ module.exports = yeoman.generators.Base.extend({
       }
       fs.writeFileSync('Gruntfile.js', gruntfile.toString());
       console.log('   ' + chalk.green('create') + ' Gruntfile.js');
+    },
+    webpackAlias: function() {
+      var webpackAlias;
+      webpackAlias = this.config.get('webpackAlias');
+      return this.fs.write(this.destinationPath('.webpack_entry.json'), JSON.stringify(webpackAlias));
     },
     folders: function() {
       this.fs.write(this.destinationPath('/srcHTML/Readme.md'), '#HTML开发目录');
