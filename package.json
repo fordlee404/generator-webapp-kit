@@ -1,10 +1,10 @@
 {
-  "name": "generator-fordlee404",
+  "name": "generator-webapp-kit",
   "version": "0.0.0",
   "description": "Yeoman generator",
   "license": "MIT",
   "main": "app/index.js",
-  "repository": "git@github.com:fordlee404/generator-fordlee404.git",
+  "repository": "fordlee404/generator-webapp-kit.git",
   "author": {
     "name": "Ford Lee",
     "email": "fordlee404@gmail.com",

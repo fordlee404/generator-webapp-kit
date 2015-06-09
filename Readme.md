@@ -1,4 +1,4 @@
-# generator-fordlee404 [![Build Status](https://secure.travis-ci.org/fordlee404/generator-fordlee404.png?branch=master)](https://travis-ci.org/fordlee404/generator-fordlee404)
+# generator-webapp-kit [![Build Status](https://secure.travis-ci.org/fordlee404/generator-webapp-kit.png?branch=master)](https://travis-ci.org/fordlee404/generator-webapp-kit)
 
 > [Yeoman](http://yeoman.io) generator
 
@@ -23,16 +23,16 @@ npm install -g yo
 
 Yeoman travels light. He didn't pack any generators when he moved in. You can think of a generator like a plug-in. You get to choose what type of application you wish to create, such as a Backbone application or even a Chrome extension.
 
-To install generator-fordlee404 from npm, run:
+To install generator-webapp-kit from npm, run:
 
 ```bash
-npm install -g generator-fordlee404
+npm install -g generator-webapp-kit
 ```
 
 Finally, initiate the generator:
 
 ```bash
-yo fordlee404
+yo webapp-kit
 ```
 
 ### Getting To Know Yeoman
