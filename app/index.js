@@ -62,7 +62,8 @@ module.exports = yeoman.generators.Base.extend({
         {
           type: 'input',
           name: 'authors',
-          message: 'Author: '
+          message: 'Author: ',
+          store: true
         }
       ];
       this.prompt(prompt, (function(props) {

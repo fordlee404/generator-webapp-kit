@@ -51,6 +51,7 @@ module.exports = yeoman.generators.Base.extend {
         type: 'input'
         name: 'authors'
         message: 'Author: '
+        store:true
       ]
       @prompt prompt, ((props) ->
         @config.set props
