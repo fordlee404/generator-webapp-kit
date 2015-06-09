@@ -178,32 +178,27 @@ module.exports = yeoman.generators.Base.extend({
       });
     },
     gruntfile: function() {
-      var GruntfileEditor, gruntfile, hasRequirejs, _clean, _coffee, _compass, _connect, _copy, _cssmin, _imagemin, _includereplace, _jshint, _requirejs, _usemin, _watch;
+      var GruntfileEditor, gruntfile, hasRequirejs, _clean, _compass, _connect, _copy, _cssmin, _imagemin, _includereplace, _requirejs, _usemin, _watch, _webpack;
       GruntfileEditor = require('gruntfile-editor');
       gruntfile = new GruntfileEditor();
       gruntfile.insertConfig('pkg', "grunt.file.readJSON('package.json')");
-      _watch = "{ reload: { files: ['stylesheets/**/*.css', 'javascripts/**/*.js', 'HTML/**/*.html'], options: { livereload: true } }, HTML: { files: ['srcHTML/**/*.html'], tasks: ['includereplace:dev'] }, sasscompile: { files: ['sass/**/*.scss', 'sass/**/*.sass'], tasks: ['compass:compile'] }, coffeecompile: { files: ['coffeescript/**/*.coffee'], tasks: ['coffee:compile'] }, javascript: { files: ['javascripts/**/*.js'], tasks: ['jshint:all'] } }";
+      _watch = "{ reload: { files: ['stylesheets/**/*.css', 'packed-scripts/**/*.js', 'HTML/**/*.html'], options: { livereload: true } }, HTML: { files: ['srcHTML/**/*.html'], tasks: ['includereplace:dev'] }, sasscompile: { files: ['sass/**/*.scss', 'sass/**/*.sass'], tasks: ['compass:compile'] }, coffeecompile: { files: ['coffeescript/**/*.coffee'], tasks: ['coffee:compile'] } }";
       gruntfile.insertConfig("watch", _watch);
       gruntfile.loadNpmTasks('grunt-contrib-watch');
       gruntfile.insertVariable('phpMiddleware', "require('connect-php')");
       _connect = '{ dev: { options: { port: 1024, hostname: "*", livereload: true, middleware: function(connect, options) { var directory, middlewares; middlewares = []; directory = options.directory || options.base[options.base.length - 1]; if (!Array.isArray(options.base)) { options.base = [options.base]; } middlewares.push(phpMiddleware(directory)); options.base.forEach(function(base) { return middlewares.push(connect["static"](base)); }); middlewares.push(connect.directory(directory)); return middlewares; } } } }';
       gruntfile.insertConfig('connect', _connect);
       gruntfile.loadNpmTasks('grunt-contrib-connect');
-      _clean = "['dist/', 'build/']";
+      _clean = "['dist/', 'packed-scripts/']";
       gruntfile.insertConfig('clean', _clean);
       gruntfile.loadNpmTasks('grunt-contrib-clean');
       _compass = '{ compile: { options: { config: "config.rb" } } }';
       gruntfile.insertConfig('compass', _compass);
       gruntfile.loadNpmTasks('grunt-contrib-compass');
-      _cssmin = "{ options: { keepSpecialComments: 0 }, dev: { files: { 'dist/plugins/css/core.min.css': [], 'dist/stylesheets/common/app.min.css': ['stylesheets/common/**/*.css'], 'dist/stylesheets/pages/pages.min.css': ['stylesheets/pages/**/*.css'] } }, production: { files: { 'dist/<%= pkg.version %>/plugins/css/core.min.css': [], 'dist/<%= pkg.version %>/stylesheets/common/app.min.css': ['stylesheets/common/**/*.css'], 'dist/<%= pkg.version %>/stylesheets/pages/pages.min.css': ['stylesheets/pages/**/*.css'] } } }";
+      _cssmin = "{ options: { keepSpecialComments: 0 }, dev: { files: { 'dist/plugins/css/core.min.css': ['" + (this.config.get('cssminCore').join(',')) + "'], 'dist/stylesheets/common/app.min.css': ['stylesheets/common/**/*.css'], 'dist/stylesheets/pages/pages.min.css': ['stylesheets/pages/**/*.css'] } }, production: { files: { 'dist/<%= pkg.version %>/plugins/css/core.min.css': [], 'dist/<%= pkg.version %>/stylesheets/common/app.min.css': ['stylesheets/common/**/*.css'], 'dist/<%= pkg.version %>/stylesheets/pages/pages.min.css': ['stylesheets/pages/**/*.css'] } } }";
       gruntfile.insertConfig('cssmin', _cssmin);
       gruntfile.loadNpmTasks('grunt-contrib-cssmin');
-      _coffee = "{ compile: { options: { bare: true, join: false }, files: [ { expand: true, cwd: 'coffeescript/', src: '**/*.coffee', dest: 'javascripts/', ext: '.js' } ] } }";
-      gruntfile.insertConfig('coffee', _coffee);
-      gruntfile.loadNpmTasks('grunt-contrib-coffee');
-      _jshint = "{ all: { options: { jshintrc: true }, files: { src: ['javascripts/**/*.js'] } } }";
-      gruntfile.insertConfig('jshint', _jshint);
-      gruntfile.loadNpmTasks('grunt-contrib-jshint');
+      _webpack = "{ options: { context: resolve('./scripts'), entry: require('./.webpack_entry.json'), resolve: { root: [ resolve('./scripts'), resolve('./plugins') ], alias: { zeptoCore:resolve('./plugins/zeptojs/src/zepto.js'), zeptoTouch:resolve('./plugins/zeptojs/src/touch.js'), zeptoEvent:resolve('./plugins/zeptojs/src/event.js'), zeptoAjax:resolve('./plugins/zeptojs/src/ajax.js') } }, module:{ loaders: [ { test: /\.coffee$/, loader: 'coffee-loader' //需要使用 coffee-react 的loader }, { test: /\.js?$/, exclude: /(node_modules|bower_components)/, loader: 'babel' }, { test: /\.jsx?$/, exclude: /(node_modules|bower_components)/, loader: 'babel' }, { test: /\.(coffee\.md|litcoffee)$/, loader: 'coffee-loader?literate' } ] } } }";
       _imagemin = "{ options: { optimizationLevel: 0 }, dev: { files: [ { expand: true, cwd: 'images/', src: '**/*.{png,jpg,gif,svg}', dest: 'dist/images/' } ] }, production: { files: [ { expand: true, cwd: 'images/', src: '**/*.{png,jpg,gif,svg}', dest: 'dist/<%= pkg.version %>/images/' } ] } }";
       gruntfile.insertConfig('imagemin', _imagemin);
       gruntfile.loadNpmTasks('grunt-contrib-imagemin');
@@ -237,14 +232,13 @@ module.exports = yeoman.generators.Base.extend({
     folders: function() {
       this.fs.write(this.destinationPath('/srcHTML/Readme.md'), '#HTML开发目录');
       this.fs.write(this.destinationPath('/HTML/Readme.md'), '#编译后HTML目录');
-      this.fs.write(this.destinationPath('/coffeescript/Readme.md'), '#Coffeescript开发目录');
+      this.fs.write(this.destinationPath('/javascripts/Readme.md'), '#脚本开发目录');
       this.fs.write(this.destinationPath('/fake-response/Readme.md'), '#模拟响应目录');
       this.fs.write(this.destinationPath('/images/Readme.md'), '#图片目录');
-      this.fs.write(this.destinationPath('/javascripts/Readme.md'), '#Javascript目录');
+      this.fs.write(this.destinationPath('/packed-scripts/Readme.md'), '#Webpack 打包');
       this.fs.write(this.destinationPath('/plugins/Readme.md'), '#插件目录');
       this.fs.write(this.destinationPath('/psd/Readme.md'), '#设计PSD目录');
       this.fs.write(this.destinationPath('/sass/Readme.md'), '#Sass开发目录');
-      this.fs.write(this.destinationPath('/less/Readme.md'), '#Less开发目录');
       this.fs.write(this.destinationPath('/stylesheets/Readme.md'), '#CSS开发目录');
     },
     htmlTemplate: function() {

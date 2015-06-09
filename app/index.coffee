@@ -188,7 +188,7 @@ module.exports = yeoman.generators.Base.extend {
       # watch
       _watch = "{
         reload: {
-          files: ['stylesheets/**/*.css', 'javascripts/**/*.js', 'HTML/**/*.html'],
+          files: ['stylesheets/**/*.css', 'packed-scripts/**/*.js', 'HTML/**/*.html'],
           options: {
             livereload: true
           }
@@ -204,10 +204,6 @@ module.exports = yeoman.generators.Base.extend {
         coffeecompile: {
           files: ['coffeescript/**/*.coffee'],
           tasks: ['coffee:compile']
-        },
-        javascript: {
-          files: ['javascripts/**/*.js'],
-          tasks: ['jshint:all']
         }
       }"
       gruntfile.insertConfig "watch",_watch
@@ -242,7 +238,7 @@ module.exports = yeoman.generators.Base.extend {
       gruntfile.loadNpmTasks 'grunt-contrib-connect'
 
       # clean
-      _clean = "['dist/', 'build/']"
+      _clean = "['dist/', 'packed-scripts/']"
       gruntfile.insertConfig 'clean',_clean
       gruntfile.loadNpmTasks 'grunt-contrib-clean'
 
@@ -280,40 +276,48 @@ module.exports = yeoman.generators.Base.extend {
       gruntfile.insertConfig 'cssmin',_cssmin
       gruntfile.loadNpmTasks 'grunt-contrib-cssmin'
 
-      # Coffeescript
-      _coffee = "{
-        compile: {
-          options: {
-            bare: true,
-            join: false
-          },
-          files: [
-            {
-              expand: true,
-              cwd: 'coffeescript/',
-              src: '**/*.coffee',
-              dest: 'javascripts/',
-              ext: '.js'
-            }
-          ]
-        }
-      }"
-      gruntfile.insertConfig 'coffee',_coffee
-      gruntfile.loadNpmTasks 'grunt-contrib-coffee'
+      # Webpack
 
-      #jshint
-      _jshint = "{
-        all: {
-          options: {
-            jshintrc: true
+      _webpack = "{
+        options: {
+          context: resolve('./scripts'),
+          entry: require('./.webpack_entry.json'),
+          resolve: {
+            root: [
+              resolve('./scripts'),
+              resolve('./plugins')
+            ],
+            alias: {
+              zeptoCore:resolve('./plugins/zeptojs/src/zepto.js'),
+              zeptoTouch:resolve('./plugins/zeptojs/src/touch.js'),
+              zeptoEvent:resolve('./plugins/zeptojs/src/event.js'),
+              zeptoAjax:resolve('./plugins/zeptojs/src/ajax.js')
+            }
           },
-          files: {
-            src: ['javascripts/**/*.js']
+          module:{
+            loaders: [
+              {
+                test: /\.coffee$/,
+                loader: 'coffee-loader' //需要使用 coffee-react 的loader
+              },
+              {
+                test: /\.js?$/,
+                exclude: /(node_modules|bower_components)/,
+                loader: 'babel'
+              },
+              {
+                test: /\.jsx?$/,
+                exclude: /(node_modules|bower_components)/,
+                loader: 'babel'
+              },
+              {
+                test: /\.(coffee\.md|litcoffee)$/,
+                loader: 'coffee-loader?literate'
+              }
+            ]
           }
         }
       }"
-      gruntfile.insertConfig 'jshint',_jshint
-      gruntfile.loadNpmTasks 'grunt-contrib-jshint'
 
       # imagemin
       _imagemin = "{
@@ -448,10 +452,10 @@ module.exports = yeoman.generators.Base.extend {
     folders: ->
       @fs.write @destinationPath('/srcHTML/Readme.md'), '#HTML开发目录'
       @fs.write @destinationPath('/HTML/Readme.md'), '#编译后HTML目录'
-      @fs.write @destinationPath('/coffeescript/Readme.md'), '#Coffeescript开发目录'
+      @fs.write @destinationPath('/javascripts/Readme.md'), '#脚本开发目录'
       @fs.write @destinationPath('/fake-response/Readme.md'), '#模拟响应目录'
       @fs.write @destinationPath('/images/Readme.md'), '#图片目录'
-      @fs.write @destinationPath('/javascripts/Readme.md'), '#Javascript目录'
+      @fs.write @destinationPath('/packed-scripts/Readme.md'), '#Webpack 打包'
       @fs.write @destinationPath('/plugins/Readme.md'), '#插件目录'
       @fs.write @destinationPath('/psd/Readme.md'), '#设计PSD目录'
       @fs.write @destinationPath('/sass/Readme.md'), '#Sass开发目录'
