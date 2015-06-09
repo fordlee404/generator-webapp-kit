@@ -11,7 +11,7 @@
     "url": "https://github.com/fordlee404"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=0.10.20"
   },
   "scripts": {
     "test": "mocha"
