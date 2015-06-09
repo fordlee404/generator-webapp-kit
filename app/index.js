@@ -224,8 +224,10 @@ module.exports = yeoman.generators.Base.extend({
       var GruntfileEditor, gruntfile, _clean, _compass, _connect, _copy, _cssmin, _imagemin, _includereplace, _usemin, _watch, _webpack;
       GruntfileEditor = require('gruntfile-editor');
       gruntfile = new GruntfileEditor();
+      gruntfile.insertVariable('resolve', 'require(\'path\').resolve');
+      gruntfile.insertVariable('webpack', 'require(\'webpack\')');
       gruntfile.insertConfig('pkg', "grunt.file.readJSON('package.json')");
-      _watch = "{ reload: { files: ['stylesheets/**/*.css', 'packed-scripts/**/*.js', 'HTML/**/*.html'], options: { livereload: true } }, HTML: { files: ['srcHTML/**/*.html'], tasks: ['includereplace:dev'] }, sasscompile: { files: ['sass/**/*.scss', 'sass/**/*.sass'], tasks: ['compass:compile'] }, coffeecompile: { files: ['coffeescript/**/*.coffee'], tasks: ['coffee:compile'] } }";
+      _watch = "{ reload: { files: ['stylesheets/**/*.css', 'javascripts/**/*.js','javascripts/**/*.coffee','javascripts/**/*.jsx','HTML/**/*.html'], options: { livereload: true } }, HTML: { files: ['srcHTML/**/*.html'], tasks: ['includereplace:dev'] }, sasscompile: { files: ['sass/**/*.scss', 'sass/**/*.sass'], tasks: ['compass:compile'] }, javascript: { files: ['javascripts/**/*.js','javascripts/**/*.coffee','javascripts/**/*.jsx'], tasks: ['webpack:dev'] } }";
       gruntfile.insertConfig("watch", _watch);
       gruntfile.loadNpmTasks('grunt-contrib-watch');
       gruntfile.insertVariable('phpMiddleware', "require('connect-php')");
@@ -241,8 +243,8 @@ module.exports = yeoman.generators.Base.extend({
       _cssmin = "{ options: { keepSpecialComments: 0 }, dev: { files: { 'dist/plugins/css/core.min.css': ['" + (this.config.get('cssminCore').join(',')) + "'], 'dist/stylesheets/common/app.min.css': ['stylesheets/common/**/*.css'], 'dist/stylesheets/pages/pages.min.css': ['stylesheets/pages/**/*.css'] } }, production: { files: { 'dist/<%= pkg.version %>/plugins/css/core.min.css': [], 'dist/<%= pkg.version %>/stylesheets/common/app.min.css': ['stylesheets/common/**/*.css'], 'dist/<%= pkg.version %>/stylesheets/pages/pages.min.css': ['stylesheets/pages/**/*.css'] } } }";
       gruntfile.insertConfig('cssmin', _cssmin);
       gruntfile.loadNpmTasks('grunt-contrib-cssmin');
-      _webpack = "{ options: { context: resolve('./scripts'), entry: require('./.webpack_entry.json'), resolve: { root: [ resolve('./scripts'), resolve('./plugins') ], alias: { zeptoCore:resolve('./plugins/zeptojs/src/zepto.js'), zeptoTouch:resolve('./plugins/zeptojs/src/touch.js'), zeptoEvent:resolve('./plugins/zeptojs/src/event.js'), zeptoAjax:resolve('./plugins/zeptojs/src/ajax.js') } }, module:{ loaders: [ { test: /\.coffee$/, loader: 'coffee-loader' //需要使用 coffee-react 的loader }, { test: /\.js?$/, exclude: /(node_modules|bower_components)/, loader: 'babel' }, { test: /\.jsx?$/, exclude: /(node_modules|bower_components)/, loader: 'babel' }, { test: /\.(coffee\.md|litcoffee)$/, loader: 'coffee-loader?literate' } ] } } }";
-      gruntfile.insertConfig('webpack', _copy);
+      _webpack = "{ options: { context: resolve('./javascripts'), entry: grunt.file.readJSON('./.webpack_entry.json'), resolve: { root: [ resolve('./scripts'), resolve('./plugins'), resolve('./'), ], alias: grunt.file.readJSON('./.webpack_alias.json') }, module:{ loaders: [ { test: /\.coffee$/, loader: 'coffee-loader' }, { test: /\.js?$/, exclude: /(node_modules|bower_components)/, loader: 'babel' }, { test: /\.jsx?$/, exclude: /(node_modules|bower_components)/, loader: 'babel' }, { test: /\.(coffee\.md|litcoffee)$/, loader: 'coffee-loader?literate' } ] } }, dev: { devtool: 'inline-source-map', watch:true, output: { path: resolve('./packed-scripts'), filename: '[name].js' }, plugins: [ new webpack.optimize.CommonsChunkPlugin('commons.js') ] }, production:{ output: { path: resolve('./packed-scripts'), filename: '[name].js' }, plugins: [ new webpack.optimize.UglifyJsPlugin(), new webpack.optimize.OccurenceOrderPlugin(), new webpack.optimize.CommonsChunkPlugin('commons.js') ] } }";
+      gruntfile.insertConfig('webpack', _webpack);
       gruntfile.loadNpmTasks('grunt-webpack');
       _imagemin = "{ options: { optimizationLevel: 0 }, dev: { files: [ { expand: true, cwd: 'images/', src: '**/*.{png,jpg,gif,svg}', dest: 'dist/images/' } ] }, production: { files: [ { expand: true, cwd: 'images/', src: '**/*.{png,jpg,gif,svg}', dest: 'dist/<%= pkg.version %>/images/' } ] } }";
       gruntfile.insertConfig('imagemin', _imagemin);
@@ -256,15 +258,15 @@ module.exports = yeoman.generators.Base.extend({
       _usemin = "{ html: [] }";
       gruntfile.insertConfig('usemin', _usemin);
       gruntfile.loadNpmTasks('grunt-usemin');
-      gruntfile.registerTask('release', ['clean', 'compass', 'cssmin:dev', 'coffee', 'jshint', 'imagemin:dev', 'copy:dev']);
-      gruntfile.registerTask('production', ['clean', 'compass', 'cssmin:production', 'coffee', 'jshint', 'imagemin:production', 'copy:production', 'usemin']);
+      gruntfile.registerTask('production', ['clean', 'compass', 'cssmin:production', 'imagemin:production', 'copy:production', 'usemin']);
       fs.writeFileSync('Gruntfile.js', gruntfile.toString());
       console.log('   ' + chalk.green('create') + ' Gruntfile.js');
     },
-    webpackAlias: function() {
+    webpack: function() {
       var webpackAlias;
       webpackAlias = this.config.get('webpackAlias');
-      return this.fs.write(this.destinationPath('.webpack_entry.json'), JSON.stringify(webpackAlias));
+      this.fs.write(this.destinationPath('/.webpack_alias.json'), JSON.stringify(webpackAlias, null, '    '));
+      return this.fs.write(this.destinationPath('/.webpack_entry.json'), '{}');
     },
     folders: function() {
       this.fs.write(this.destinationPath('/srcHTML/Readme.md'), '#HTML开发目录');
@@ -289,9 +291,6 @@ module.exports = yeoman.generators.Base.extend({
       if (inArray('requirejs', this.config.get('plugins'))) {
         list.push('grunt-contrib-requirejs');
       }
-      this.npmInstall(list, {
-        saveDev: true
-      });
     },
     plugins: function() {
       var pluginsList;

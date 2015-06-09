@@ -7,6 +7,7 @@ module.exports=(grunt)->
           join: false
         files:
           'app/index.js': 'app/index.coffee'
+          'new_page/index.js': 'new_page/index.coffee'
     watch:
       coffee:
         files: ['**/*.coffee'],

@@ -222,13 +222,16 @@ module.exports = yeoman.generators.Base.extend {
     gruntfile: ->
       GruntfileEditor = require 'gruntfile-editor'
       gruntfile = new GruntfileEditor()
+
+      gruntfile.insertVariable  'resolve', 'require(\'path\').resolve'
+      gruntfile.insertVariable  'webpack', 'require(\'webpack\')'
       # package.json
       gruntfile.insertConfig 'pkg',"grunt.file.readJSON('package.json')"
 
       # watch
       _watch = "{
         reload: {
-          files: ['stylesheets/**/*.css', 'packed-scripts/**/*.js', 'HTML/**/*.html'],
+          files: ['stylesheets/**/*.css', 'javascripts/**/*.js','javascripts/**/*.coffee','javascripts/**/*.jsx','HTML/**/*.html'],
           options: {
             livereload: true
           }
@@ -241,9 +244,9 @@ module.exports = yeoman.generators.Base.extend {
           files: ['sass/**/*.scss', 'sass/**/*.sass'],
           tasks: ['compass:compile']
         },
-        coffeecompile: {
-          files: ['coffeescript/**/*.coffee'],
-          tasks: ['coffee:compile']
+        javascript: {
+          files: ['javascripts/**/*.js','javascripts/**/*.coffee','javascripts/**/*.jsx'],
+          tasks: ['webpack:dev']
         }
       }"
       gruntfile.insertConfig "watch",_watch
@@ -320,25 +323,21 @@ module.exports = yeoman.generators.Base.extend {
 
       _webpack = "{
         options: {
-          context: resolve('./scripts'),
-          entry: require('./.webpack_entry.json'),
+          context: resolve('./javascripts'),
+          entry: grunt.file.readJSON('./.webpack_entry.json'),
           resolve: {
             root: [
               resolve('./scripts'),
-              resolve('./plugins')
+              resolve('./plugins'),
+              resolve('./'),
             ],
-            alias: {
-              zeptoCore:resolve('./plugins/zeptojs/src/zepto.js'),
-              zeptoTouch:resolve('./plugins/zeptojs/src/touch.js'),
-              zeptoEvent:resolve('./plugins/zeptojs/src/event.js'),
-              zeptoAjax:resolve('./plugins/zeptojs/src/ajax.js')
-            }
+            alias: grunt.file.readJSON('./.webpack_alias.json')
           },
           module:{
             loaders: [
               {
                 test: /\.coffee$/,
-                loader: 'coffee-loader' //需要使用 coffee-react 的loader
+                loader: 'coffee-loader'
               },
               {
                 test: /\.js?$/,
@@ -356,10 +355,32 @@ module.exports = yeoman.generators.Base.extend {
               }
             ]
           }
+        },
+        dev: {
+          devtool: 'inline-source-map',
+          watch:true,
+          output: {
+            path: resolve('./packed-scripts'),
+            filename: '[name].js'
+          },
+          plugins: [
+            new webpack.optimize.CommonsChunkPlugin('commons.js')
+          ]
+        },
+        production:{
+          output: {
+            path: resolve('./packed-scripts'),
+            filename: '[name].js'
+          },
+          plugins: [
+            new webpack.optimize.UglifyJsPlugin(),
+            new webpack.optimize.OccurenceOrderPlugin(),
+            new webpack.optimize.CommonsChunkPlugin('commons.js')
+          ]
         }
       }"
 
-      gruntfile.insertConfig 'webpack',_copy
+      gruntfile.insertConfig 'webpack', _webpack
       gruntfile.loadNpmTasks 'grunt-webpack'
 
       # imagemin
@@ -448,16 +469,16 @@ module.exports = yeoman.generators.Base.extend {
       gruntfile.insertConfig 'usemin',_usemin
       gruntfile.loadNpmTasks 'grunt-usemin'
 
-      gruntfile.registerTask 'release',['clean', 'compass', 'cssmin:dev', 'coffee', 'jshint', 'imagemin:dev', 'copy:dev']
-      gruntfile.registerTask 'production',['clean', 'compass', 'cssmin:production', 'coffee', 'jshint', 'imagemin:production', 'copy:production', 'usemin']
+      gruntfile.registerTask 'production',['clean', 'compass', 'cssmin:production','imagemin:production', 'copy:production', 'usemin']
 
       fs.writeFileSync 'Gruntfile.js',gruntfile.toString()
       console.log '   '+chalk.green('create')+' Gruntfile.js'
 
       return
-    webpackAlias:->
+    webpack:->
       webpackAlias=@config.get 'webpackAlias'
-      @fs.write @destinationPath('.webpack_entry.json'), JSON.stringify(webpackAlias)
+      @fs.write @destinationPath('/.webpack_alias.json'), JSON.stringify(webpackAlias,null,'    ')
+      @fs.write @destinationPath('/.webpack_entry.json'), '{}'
 
     folders: ->
       @fs.write @destinationPath('/srcHTML/Readme.md'), '#HTML开发目录'
@@ -504,8 +525,8 @@ module.exports = yeoman.generators.Base.extend {
       if inArray 'requirejs',@config.get('plugins')
         list.push 'grunt-contrib-requirejs'
 
-      @npmInstall list,
-        saveDev: true
+      # @npmInstall list,
+      #   saveDev: true
 
       return
 
