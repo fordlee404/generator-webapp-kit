@@ -167,7 +167,10 @@ module.exports = yeoman.generators.Base.extend {
       @fs.copy @templatePath('_config.rb'),@destinationPath('config.rb')
 
     pluginsConfig: ->
-      plugins=@config.get('plugins')
+      plugins=do =>
+        ret={}
+        ret[pluginName]=pluginName for pluginName in @config.get('plugins')
+        ret
       webpackAlias=[]
       cssminCore=[]
 
@@ -196,6 +199,7 @@ module.exports = yeoman.generators.Base.extend {
 
       @config.set 'webpackAlias',webpackAlias
       @config.set 'cssminCore',cssminCore
+
 
 
 

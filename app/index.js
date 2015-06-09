@@ -171,7 +171,18 @@ module.exports = yeoman.generators.Base.extend({
     },
     pluginsConfig: function() {
       var cssminCore, plugins, webpackAlias;
-      plugins = this.config.get('plugins');
+      plugins = (function(_this) {
+        return function() {
+          var pluginName, ret, _i, _len, _ref;
+          ret = {};
+          _ref = _this.config.get('plugins');
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            pluginName = _ref[_i];
+            ret[pluginName] = pluginName;
+          }
+          return ret;
+        };
+      })(this)();
       webpackAlias = [];
       cssminCore = [];
       if (plugins.jquery) {
@@ -219,7 +230,7 @@ module.exports = yeoman.generators.Base.extend({
       });
     },
     gruntfile: function() {
-      var GruntfileEditor, gruntfile, hasRequirejs, _clean, _compass, _connect, _copy, _cssmin, _imagemin, _includereplace, _requirejs, _usemin, _watch, _webpack;
+      var GruntfileEditor, gruntfile, _clean, _compass, _connect, _copy, _cssmin, _imagemin, _includereplace, _usemin, _watch, _webpack;
       GruntfileEditor = require('gruntfile-editor');
       gruntfile = new GruntfileEditor();
       gruntfile.insertConfig('pkg', "grunt.file.readJSON('package.json')");
