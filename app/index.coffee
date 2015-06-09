@@ -22,7 +22,7 @@ module.exports = yeoman.generators.Base.extend {
     welcome: ->
 
       # Have Yeoman greet the user.
-      @log yosay 'Welcome to the fantastic '+chalk.red('Fordlee404')+' generator!'
+      @log yosay 'Welcome to the fantastic '+chalk.red('WebappKit')+' generator!'
       return
 
     name: ->
@@ -504,6 +504,7 @@ module.exports = yeoman.generators.Base.extend {
         'grunt-include-replace'
         'grunt-usemin'
       ]
+
       if inArray 'requirejs',@config.get('plugins')
         list.push 'grunt-contrib-requirejs'
 
@@ -518,6 +519,7 @@ module.exports = yeoman.generators.Base.extend {
         save: true
 
       return
+
 
   # Called last, cleanup, say good bye, etc
   # end: function(){}

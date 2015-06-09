@@ -1,6 +1,6 @@
 {
   "name": "generator-webapp-kit",
-  "version": "0.0.0",
+  "version": "1.1.0",
   "description": "Yeoman generator",
   "license": "MIT",
   "main": "app/index.js",
@@ -11,7 +11,7 @@
     "url": "https://github.com/fordlee404"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=0.10.20"
   },
   "scripts": {
     "test": "mocha"
