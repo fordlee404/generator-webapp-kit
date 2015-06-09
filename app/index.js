@@ -251,6 +251,8 @@ module.exports = yeoman.generators.Base.extend({
       gruntfile.insertConfig('cssmin', _cssmin);
       gruntfile.loadNpmTasks('grunt-contrib-cssmin');
       _webpack = "{ options: { context: resolve('./scripts'), entry: require('./.webpack_entry.json'), resolve: { root: [ resolve('./scripts'), resolve('./plugins') ], alias: { zeptoCore:resolve('./plugins/zeptojs/src/zepto.js'), zeptoTouch:resolve('./plugins/zeptojs/src/touch.js'), zeptoEvent:resolve('./plugins/zeptojs/src/event.js'), zeptoAjax:resolve('./plugins/zeptojs/src/ajax.js') } }, module:{ loaders: [ { test: /\.coffee$/, loader: 'coffee-loader' //需要使用 coffee-react 的loader }, { test: /\.js?$/, exclude: /(node_modules|bower_components)/, loader: 'babel' }, { test: /\.jsx?$/, exclude: /(node_modules|bower_components)/, loader: 'babel' }, { test: /\.(coffee\.md|litcoffee)$/, loader: 'coffee-loader?literate' } ] } } }";
+      gruntfile.insertConfig('webpack', _copy);
+      gruntfile.loadNpmTasks('grunt-webpack');
       _imagemin = "{ options: { optimizationLevel: 0 }, dev: { files: [ { expand: true, cwd: 'images/', src: '**/*.{png,jpg,gif,svg}', dest: 'dist/images/' } ] }, production: { files: [ { expand: true, cwd: 'images/', src: '**/*.{png,jpg,gif,svg}', dest: 'dist/<%= pkg.version %>/images/' } ] } }";
       gruntfile.insertConfig('imagemin', _imagemin);
       gruntfile.loadNpmTasks('grunt-contrib-imagemin');
@@ -263,21 +265,8 @@ module.exports = yeoman.generators.Base.extend({
       _usemin = "{ html: [] }";
       gruntfile.insertConfig('usemin', _usemin);
       gruntfile.loadNpmTasks('grunt-usemin');
-      hasRequirejs = inArray('requirejs', this.config.get('plugins'));
-      if (hasRequirejs) {
-        _requirejs = "{ options: { baseUrl: 'javascripts/pages/', mainConfigFile: 'javascripts/pages/app.js', keepBuildDir: true, modules: [ { name: 'app' } ] }, dev: { options: { dir: 'dist/javascripts/pages/' } }, production: { options: { dir: 'dist/<%= pkg.version %>/javascripts/pages/' } } }";
-        gruntfile.insertConfig('requirejs', _requirejs);
-        gruntfile.loadNpmTasks('grunt-contrib-requirejs');
-      }
-      gruntfile.registerTask('server', ['connect', 'watch']);
-      gruntfile.registerTask('default', ['server']);
-      if (hasRequirejs) {
-        gruntfile.registerTask('release', ['clean', 'compass', 'cssmin:dev', 'coffee', 'jshint', 'requirejs:dev', 'imagemin:dev', 'copy:dev']);
-        gruntfile.registerTask('production', ['clean', 'compass', 'cssmin:production', 'coffee', 'jshint', 'requirejs:production', 'imagemin:production', 'copy:production', 'usemin']);
-      } else {
-        gruntfile.registerTask('release', ['clean', 'compass', 'cssmin:dev', 'coffee', 'jshint', 'imagemin:dev', 'copy:dev']);
-        gruntfile.registerTask('production', ['clean', 'compass', 'cssmin:production', 'coffee', 'jshint', 'imagemin:production', 'copy:production', 'usemin']);
-      }
+      gruntfile.registerTask('release', ['clean', 'compass', 'cssmin:dev', 'coffee', 'jshint', 'imagemin:dev', 'copy:dev']);
+      gruntfile.registerTask('production', ['clean', 'compass', 'cssmin:production', 'coffee', 'jshint', 'imagemin:production', 'copy:production', 'usemin']);
       fs.writeFileSync('Gruntfile.js', gruntfile.toString());
       console.log('   ' + chalk.green('create') + ' Gruntfile.js');
     },
@@ -305,7 +294,7 @@ module.exports = yeoman.generators.Base.extend({
   install: {
     grunt: function() {
       var list;
-      list = ['grunt', 'grunt-contrib-connect', 'grunt-contrib-watch', 'connect-php', 'grunt-contrib-clean', 'grunt-contrib-compass', 'grunt-contrib-cssmin', 'grunt-contrib-coffee', 'grunt-contrib-jshint', 'grunt-contrib-imagemin', 'grunt-contrib-copy', 'grunt-include-replace', 'grunt-usemin'];
+      list = ['grunt', 'grunt-contrib-connect', 'grunt-contrib-watch', 'connect-php', 'grunt-contrib-clean', 'grunt-contrib-compass', 'grunt-contrib-cssmin', 'grunt-contrib-imagemin', 'grunt-contrib-copy', 'grunt-include-replace', 'grunt-webpack', 'babel-loader', 'coffee-loader', 'script-loader', 'grunt-usemin'];
       if (inArray('requirejs', this.config.get('plugins'))) {
         list.push('grunt-contrib-requirejs');
       }
