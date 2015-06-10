@@ -176,7 +176,9 @@ module.exports = yeoman.generators.Base.extend {
       cssminCore=[]
 
 
-
+      if plugins['normalize.css']
+        cssminCore.push 'plugins/normalize.css/normalize.css'
+        
       if plugins.jquery
         webpackAlias.jquery='plugins/jquery/jquery.min.js'
 
@@ -190,8 +192,6 @@ module.exports = yeoman.generators.Base.extend {
       if plugins.pure
         cssminCore.push 'plugins/pure/pure.css'
 
-      if plugins['normalize.css']
-        cssminCore.push 'plugins/normalize.css/normalize.css'
 
       if plugins.foundation
         cssminCore.push 'plugins/foundation/css/foundation.css'
@@ -303,7 +303,7 @@ module.exports = yeoman.generators.Base.extend {
         },
         dev: {
           files: {
-            'dist/plugins/css/core.min.css': ['#{@config.get('cssminCore').join(',')}'],
+            'dist/stylesheets/core.min.css': ['#{@config.get('cssminCore').join(',')}'],
             'dist/stylesheets/common/app.min.css': ['stylesheets/common/**/*.css'],
             'dist/stylesheets/pages/pages.min.css': ['stylesheets/pages/**/*.css']
           }
