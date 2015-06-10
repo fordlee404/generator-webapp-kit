@@ -303,7 +303,7 @@ module.exports = yeoman.generators.Base.extend {
         },
         dev: {
           files: {
-            'dist/plugins/css/core.min.css': ['#{@config.get('cssminCore').join(',')}'],
+            'dist/stylesheets/core.min.css': ['#{@config.get('cssminCore').join(',')}'],
             'dist/stylesheets/common/app.min.css': ['stylesheets/common/**/*.css'],
             'dist/stylesheets/pages/pages.min.css': ['stylesheets/pages/**/*.css']
           }
