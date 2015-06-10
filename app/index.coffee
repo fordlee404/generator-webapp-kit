@@ -309,7 +309,7 @@ module.exports = yeoman.generators.Base.extend {
         },
         production: {
           files: {
-            'dist/<%= pkg.version %>/plugins/css/core.min.css': [],
+            'dist/<%= pkg.version %>/plugins/css/core.min.css': ['#{@config.get('cssminCore').join(',')}'],
             'dist/<%= pkg.version %>/stylesheets/common/app.min.css': ['stylesheets/common/**/*.css'],
             'dist/<%= pkg.version %>/stylesheets/pages/pages.min.css': ['stylesheets/pages/**/*.css']
           }
@@ -319,7 +319,6 @@ module.exports = yeoman.generators.Base.extend {
       gruntfile.loadNpmTasks 'grunt-contrib-cssmin'
 
       # Webpack
-
       _webpack = "{
         options: {
           context: resolve('./javascripts'),
