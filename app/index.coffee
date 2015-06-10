@@ -31,7 +31,6 @@ module.exports = yeoman.generators.Base.extend {
 
     name: ->
       done = @async()
-      root = @destinationRoot()
       prompts = [
         type: 'input'
         name: 'appName'
@@ -178,7 +177,7 @@ module.exports = yeoman.generators.Base.extend {
 
       if plugins['normalize.css']
         cssminCore.push 'plugins/normalize.css/normalize.css'
-        
+
       if plugins.jquery
         webpackAlias.jquery='plugins/jquery/jquery.min.js'
 

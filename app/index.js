@@ -39,9 +39,8 @@ module.exports = yeoman.generators.Base.extend({
       this.log(yosay('Welcome to the fantastic ' + chalk.red('WebappKit') + ' generator!'));
     },
     name: function() {
-      var done, prompts, root;
+      var done, prompts;
       done = this.async();
-      root = this.destinationRoot();
       prompts = [
         {
           type: 'input',
