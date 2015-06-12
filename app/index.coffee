@@ -452,7 +452,7 @@ module.exports = yeoman.generators.Base.extend {
               expand: true,
               dest: 'HTML/',
               cwd: 'srcHTML/',
-              src: ['**/*']
+              src: ['**/*','!**/_*']
             }
           ]
         }
