@@ -251,7 +251,7 @@ module.exports = yeoman.generators.Base.extend({
       _copy = "{ dev: { files: [ { src: ['images/favicons/browserconfig.xml'], dest: 'dist/images/favicons/browserconfig.xml' }, { src: ['images/favicons/favicon.ico'], dest: 'dist/images/favicons/favicon.ico' } ] }, production: { files: [ { src: ['images/favicons/browserconfig.xml'], dest: 'dist/<%= pkg.version %>/images/favicons/browserconfig.xml' }, { src: ['images/favicons/favicon.ico'], dest: 'dist/<%= pkg.version %>/images/favicons/favicon.ico' } ] } }";
       gruntfile.insertConfig('copy', _copy);
       gruntfile.loadNpmTasks('grunt-contrib-copy');
-      _includereplace = "{ dev: { options: { includesDir: 'srcHTML', globals: { ASSETS: '../..' } }, files: [ { expand: true, dest: 'HTML/', cwd: 'srcHTML/', src: ['**/*'] } ] } }";
+      _includereplace = "{ dev: { options: { includesDir: 'srcHTML', globals: { ASSETS: '../..' } }, files: [ { expand: true, dest: 'HTML/', cwd: 'srcHTML/', src: ['**/*','!**/_*'] } ] } }";
       gruntfile.insertConfig('includereplace', _includereplace);
       gruntfile.loadNpmTasks('grunt-include-replace');
       _usemin = "{ html: [] }";
@@ -290,6 +290,9 @@ module.exports = yeoman.generators.Base.extend({
       if (inArray('requirejs', this.config.get('plugins'))) {
         list.push('grunt-contrib-requirejs');
       }
+      this.npmInstall(list, {
+        saveDev: true
+      });
     },
     plugins: function() {
       var pluginsList;

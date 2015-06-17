@@ -524,8 +524,8 @@ module.exports = yeoman.generators.Base.extend {
       if inArray 'requirejs',@config.get('plugins')
         list.push 'grunt-contrib-requirejs'
 
-      # @npmInstall list,
-      #   saveDev: true
+      @npmInstall list,
+        saveDev: true
 
       return
 
