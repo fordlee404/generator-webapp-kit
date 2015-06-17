@@ -287,13 +287,16 @@ module.exports = yeoman.generators.Base.extend({
   },
   install: {
     grunt: function() {
-      var list;
+      var list, _me;
+      _me = this;
       list = ['grunt', 'grunt-contrib-connect', 'grunt-contrib-watch', 'connect-php', 'grunt-contrib-clean', 'grunt-contrib-compass', 'grunt-contrib-cssmin', 'grunt-contrib-imagemin', 'grunt-contrib-copy', 'grunt-include-replace', 'grunt-webpack', 'babel-loader', 'coffee-loader', 'script-loader', 'grunt-usemin'];
       if (inArray('requirejs', this.config.get('plugins'))) {
         list.push('grunt-contrib-requirejs');
       }
       this.npmInstall(list, {
         saveDev: true
+      }, function() {
+        return _me.spawnCommand('grunt', ['includereplace']);
       });
     },
     plugins: function() {

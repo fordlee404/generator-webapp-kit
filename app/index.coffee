@@ -505,6 +505,7 @@ module.exports = yeoman.generators.Base.extend {
   # Where installation are run (npm, bower)
   install:
     grunt: ->
+      _me = @
       list = [
         'grunt'
         'grunt-contrib-connect'
@@ -528,6 +529,8 @@ module.exports = yeoman.generators.Base.extend {
 
       @npmInstall list,
         saveDev: true
+      ,->
+        _me.spawnCommand 'grunt',['includereplace']
 
       return
 
