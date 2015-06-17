@@ -281,6 +281,7 @@ module.exports = yeoman.generators.Base.extend({
     },
     htmlTemplate: function() {
       this.fs.copy(this.templatePath('_template.html'), this.destinationPath('/HTML/template.html'));
+      this.fs.copy(this.templatePath('__page-head.html'), this.destinationPath('/srcHTML/common/_page-head.html'));
     }
   },
   install: {
