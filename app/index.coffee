@@ -492,9 +492,9 @@ module.exports = yeoman.generators.Base.extend {
       return
 
     htmlTemplate: ->
-      @fs.copy @templatePath('_template.html'),@destinationPath('/HTML/template.html')
       @fs.copy @templatePath('__page-head.html'),@destinationPath('/srcHTML/common/_page-head.html')
       @fs.copy @templatePath('__page-foot.html'),@destinationPath('/srcHTML/common/_page-foot.html')
+      @fs.copy @templatePath('_index.html'),@destinationPath('/srcHTML/index.html')
 
       return
 

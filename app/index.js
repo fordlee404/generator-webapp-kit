@@ -280,9 +280,9 @@ module.exports = yeoman.generators.Base.extend({
       this.fs.write(this.destinationPath('/stylesheets/Readme.md'), '#CSS开发目录');
     },
     htmlTemplate: function() {
-      this.fs.copy(this.templatePath('_template.html'), this.destinationPath('/HTML/template.html'));
       this.fs.copy(this.templatePath('__page-head.html'), this.destinationPath('/srcHTML/common/_page-head.html'));
       this.fs.copy(this.templatePath('__page-foot.html'), this.destinationPath('/srcHTML/common/_page-foot.html'));
+      this.fs.copy(this.templatePath('_index.html'), this.destinationPath('/srcHTML/index.html'));
     }
   },
   install: {
