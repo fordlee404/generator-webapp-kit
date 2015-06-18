@@ -39,14 +39,17 @@ module.exports = yeoman.generators.Base.extend({
       this.log(yosay('Welcome to the fantastic ' + chalk.red('WebappKit') + ' generator!'));
     },
     name: function() {
-      var done, prompts;
+      var done, prompts, _appname;
+      _appname = this.appname;
       done = this.async();
       prompts = [
         {
           type: 'input',
           name: 'appName',
           message: 'What is your app name',
-          "default": this.appname
+          "default": function() {
+            return _appname.replace(/\s/g, '-');
+          }
         }
       ];
       this.prompt(prompts, (function(props) {
