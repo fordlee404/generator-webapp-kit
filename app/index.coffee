@@ -446,7 +446,7 @@ module.exports = yeoman.generators.Base.extend {
           options: {
             includesDir: 'srcHTML',
             globals: {
-              ASSETS: '../..'
+              ASSETS: ''
             }
           },
           files: [
