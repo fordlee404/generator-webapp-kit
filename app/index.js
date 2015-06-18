@@ -260,6 +260,7 @@ module.exports = yeoman.generators.Base.extend({
       _usemin = "{ html: [] }";
       gruntfile.insertConfig('usemin', _usemin);
       gruntfile.loadNpmTasks('grunt-usemin');
+      gruntfile.registerTask('server', ['webpack:dev', 'connect', 'watch']);
       gruntfile.registerTask('production', ['clean', 'compass', 'cssmin:production', 'imagemin:production', 'copy:production', 'usemin']);
       fs.writeFileSync('Gruntfile.js', gruntfile.toString());
       console.log('   ' + chalk.green('create') + ' Gruntfile.js');
