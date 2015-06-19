@@ -283,12 +283,11 @@ module.exports = yeoman.generators.Base.extend({
       this.fs.write(this.destinationPath('/sass/Readme.md'), '#Sass开发目录');
       this.fs.write(this.destinationPath('/stylesheets/Readme.md'), '#CSS开发目录');
     },
-    htmlTemplate: function() {
+    commonHTML: function() {
       this.fs.copy(this.templatePath('__page-head.html'), this.destinationPath('/srcHTML/common/_page-head.html'));
       this.fs.copy(this.templatePath('__page-foot.html'), this.destinationPath('/srcHTML/common/_page-foot.html'));
-      this.fs.copy(this.templatePath('_index.html'), this.destinationPath('/srcHTML/index.html'));
     },
-    cssTemplate: function() {
+    commonStyle: function() {
       this.fs.copy(this.templatePath('_util.css'), this.destinationPath('/stylesheets/common/util.css'));
       return this.fs.write(this.destinationPath('/stylesheets/common/common.css'), '/* common style */');
     },
@@ -301,6 +300,21 @@ module.exports = yeoman.generators.Base.extend({
         _content += '<link rel="stylesheet" href="@@ASSETS/' + src + '" />\n';
       }
       this.fs.write(this.destinationPath('/srcHTML/common/_plugin-style.html'), _content);
+    },
+    indexTemplate: function() {
+      var entry, entryJSON, error;
+      this.fs.copy(this.templatePath('_index.html'), this.destinationPath('/srcHTML/index.html'));
+      this.fs.write(this.destinationPath('/stylesheets/pages/website-index.css'), 'body.website-index { /* Stuff your style */ }');
+      this.fs.write(this.destinationPath('/javascripts/pages/website-index.js'), '(function(){ /* Stuff your codes */ })();');
+      try {
+        entryJSON = this.fs.read(this.destinationPath('.webpack_entry.json'));
+        entry = JSON.parse(entryJSON);
+      } catch (_error) {
+        error = _error;
+        entry = {};
+      }
+      entry['website-index'] = './pages/website-index.js';
+      return this.fs.write(this.destinationPath('.webpack_entry.json'), JSON.stringify(entry, null, '    '));
     }
   },
   install: {
