@@ -288,6 +288,10 @@ module.exports = yeoman.generators.Base.extend({
       this.fs.copy(this.templatePath('__page-foot.html'), this.destinationPath('/srcHTML/common/_page-foot.html'));
       this.fs.copy(this.templatePath('_index.html'), this.destinationPath('/srcHTML/index.html'));
     },
+    cssTemplate: function() {
+      this.fs.copy(this.templatePath('_util.css'), this.destinationPath('/stylesheets/common/util.css'));
+      return this.fs.write(this.destinationPath('/stylesheets/common/common.css'), '/* common style */');
+    },
     pluginStyle: function() {
       var plugins, src, _content, _i, _len;
       plugins = this.config.get('cssminCore');

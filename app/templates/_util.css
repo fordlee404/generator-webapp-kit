@@ -1,0 +1,135 @@
+/*
+ *@ Name:       自适应图文混排组件
+ *@ Update:     2013-9-29 19:23:27
+ *@ Usage:      如果有溢出的内容需要显示请使用 clearcell
+ *@ demo:       http://jsbin.com/EMIvoJohU/1/edit
+ */
+.clearall {
+  overflow: hidden;
+  _overflow: visible;
+  *zoom: 1;
+}
+.clearcell {
+  display: table-cell;
+  *zoom: 1;
+}
+.clearcell:after {
+  clear: both;
+  display: block;
+  visibility: visible;
+  overflow: hidden;
+  height: 0 !important;
+  line-height: 0;
+  font-size: xx-large;
+  content: " x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x ";
+}
+/* 强制不换行 */
+.nowrap {
+  white-space: nowrap;
+  word-wrap: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* 连续字符换行 */
+.wrap {
+  white-space: normal;
+  word-wrap: break-word;
+}
+.hidden,
+.hide {
+  display: none;
+}
+.unvisible {
+  visibility: hidden;
+}
+.clear {
+  clear: both;
+}
+/**
+* 文字溢出显示省略号
+* 1. Opera 9-10.6
+* 2. Chrome 21+ bug https://bugs.webkit.org/show_bug.cgi?id=121902
+*/
+.ellipsis {
+  display: block;
+  white-space: nowrap;
+  word-wrap: normal;
+  overflow: hidden;
+  -o-text-overflow: ellipsis;
+  /* 1 */
+  text-overflow: ellipsis;
+  text-align: left;
+  /* 2 */
+}
+/* --------------------------------------------------------------------------
+   图片替换
+   -------------------------------------------------------------------------- */
+/** 隐藏文字
+* 1.text-indent:-999em 存在性能问题：
+*   http://www.zeldman.com/2012/03/01/replacing-the-9999px-hack-new-image-replacement/
+*/
+.text-hide {
+  text-indent: 100%;
+  /* 1 */
+  white-space: nowrap;
+  overflow: hidden;
+}
+/*
+ * 1. 防止 OS X 中 Webfont 视觉上看起来变粗
+ * 2. Fiefox 25 开始支持「-moz-osx-font-smoothing:auto(默认)|grayscale」
+ * Demo: http://jsbin.com/iWItiQe/2
+ */
+.antialiased {
+  -webkit-font-smoothing: antialiased;
+  /* 1 */
+  -moz-osx-font-smoothing: grayscale;
+  /* 2 */
+}
+/**
+ * 统一用双线显示人民币符号「&yen;(￥)」
+ */
+.rmb,
+.yuan {
+  font-family: arial;
+  font-style: normal;
+}
+/**
+ * 文字
+ */
+/* 文字居左 */
+.text-left {
+  text-align: left!important;
+}
+/* 文字居中 */
+.text-center {
+  text-align: center!important;
+}
+/* 文字居右 */
+.text-right {
+  text-align: right!important;
+}
+/* 文字两端对齐，Chrome中需要在每个字之间加空格实现，如果容器宽度不够加宽度，则配合letter-spacing实现 */
+.text-justify {
+  text-align: justify;
+  text-justify: distribute-all-lines;
+  /*IE6-8*/
+  text-align-last: justify;
+  /*IE9*/
+  -moz-text-align-last: justify;
+  /*FF*/
+  -webkit-text-align-last: justify;
+  /*chrome 20+*/
+}
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  /* chrome*/
+  .text-justify::after {
+    content: ".";
+    display: inline-block;
+    width: 100%;
+    overflow: hidden;
+    height: 0;
+  }
+}
+.text-gray {
+  color: #868686;
+}

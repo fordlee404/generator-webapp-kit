@@ -501,6 +501,11 @@ module.exports = yeoman.generators.Base.extend {
 
       return
 
+    cssTemplate: ->
+      @fs.copy @templatePath('_util.css'),@destinationPath('/stylesheets/common/util.css')
+      @fs.write @destinationPath('/stylesheets/common/common.css'), '/* common style */'
+
+
     pluginStyle: ->
       plugins = @config.get 'cssminCore'
       _content = ''
