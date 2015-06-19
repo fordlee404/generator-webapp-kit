@@ -501,6 +501,16 @@ module.exports = yeoman.generators.Base.extend {
 
       return
 
+    pluginStyle: ->
+      plugins = @config.get 'cssminCore'
+      _content = ''
+      for src in plugins
+        _content += ('<link rel="stylesheet" href="'+src+'" />\n')
+
+      @fs.write @destinationPath('/srcHTML/common/_plugin-style.html'),_content
+
+      return
+
 
   # Where conflicts are handled (used internally)
   # conflicts: function(){},
