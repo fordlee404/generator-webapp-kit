@@ -294,7 +294,7 @@ module.exports = yeoman.generators.Base.extend({
       _content = '';
       for (_i = 0, _len = plugins.length; _i < _len; _i++) {
         src = plugins[_i];
-        _content += '<link rel="stylesheet" href="' + src + '" />\n';
+        _content += '<link rel="stylesheet" href="@@ASSETS/' + src + '" />\n';
       }
       this.fs.write(this.destinationPath('/srcHTML/common/_plugin-style.html'), _content);
     }

@@ -505,7 +505,7 @@ module.exports = yeoman.generators.Base.extend {
       plugins = @config.get 'cssminCore'
       _content = ''
       for src in plugins
-        _content += ('<link rel="stylesheet" href="'+src+'" />\n')
+        _content += ('<link rel="stylesheet" href="@@ASSETS/'+src+'" />\n')
 
       @fs.write @destinationPath('/srcHTML/common/_plugin-style.html'),_content
 
