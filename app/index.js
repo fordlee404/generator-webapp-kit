@@ -287,6 +287,16 @@ module.exports = yeoman.generators.Base.extend({
       this.fs.copy(this.templatePath('__page-head.html'), this.destinationPath('/srcHTML/common/_page-head.html'));
       this.fs.copy(this.templatePath('__page-foot.html'), this.destinationPath('/srcHTML/common/_page-foot.html'));
       this.fs.copy(this.templatePath('_index.html'), this.destinationPath('/srcHTML/index.html'));
+    },
+    pluginStyle: function() {
+      var plugins, src, _content, _i, _len;
+      plugins = this.config.get('cssminCore');
+      _content = '';
+      for (_i = 0, _len = plugins.length; _i < _len; _i++) {
+        src = plugins[_i];
+        _content += '<link rel="stylesheet" href="' + src + '" />\n';
+      }
+      this.fs.write(this.destinationPath('/srcHTML/common/_plugin-style.html'), _content);
     }
   },
   install: {
