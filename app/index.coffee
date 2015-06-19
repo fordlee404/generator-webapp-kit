@@ -494,12 +494,16 @@ module.exports = yeoman.generators.Base.extend {
       @fs.write @destinationPath('/stylesheets/Readme.md'), '#CSS开发目录'
       return
 
-    htmlTemplate: ->
+    commonHTML: ->
       @fs.copy @templatePath('__page-head.html'),@destinationPath('/srcHTML/common/_page-head.html')
       @fs.copy @templatePath('__page-foot.html'),@destinationPath('/srcHTML/common/_page-foot.html')
-      @fs.copy @templatePath('_index.html'),@destinationPath('/srcHTML/index.html')
 
       return
+
+    commonStyle: ->
+      @fs.copy @templatePath('_util.css'),@destinationPath('/stylesheets/common/util.css')
+      @fs.write @destinationPath('/stylesheets/common/common.css'), '/* common style */'
+
 
     pluginStyle: ->
       plugins = @config.get 'cssminCore'
@@ -510,6 +514,20 @@ module.exports = yeoman.generators.Base.extend {
       @fs.write @destinationPath('/srcHTML/common/_plugin-style.html'),_content
 
       return
+
+    indexTemplate: ->
+      @fs.copy @templatePath('_index.html'),@destinationPath('/srcHTML/index.html')
+      @fs.write @destinationPath('/stylesheets/pages/website-index.css'),'body.website-index { /* Stuff your style */ }'
+
+      @fs.write @destinationPath('/javascripts/pages/website-index.js'),'(function(){ /* Stuff your codes */ })();'
+      try
+        entryJSON=@fs.read(@destinationPath('.webpack_entry.json'))
+        entry=JSON.parse entryJSON
+      catch error
+        entry={}
+
+      entry['website-index']='./pages/website-index.js'
+      @fs.write @destinationPath('.webpack_entry.json'),JSON.stringify(entry,null,'    ')
 
 
   # Where conflicts are handled (used internally)
