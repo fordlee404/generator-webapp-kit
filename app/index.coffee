@@ -189,6 +189,8 @@ module.exports = yeoman.generators.Base.extend {
       return
 
     webpack:->
+      @fs.copy @templatePath('_webpack.config.js'),@destinationPath('webpack.config.js')
+      @fs.copy @templatePath('_webpack.production.config.js'),@destinationPath('webpack.production.config.js')
       return
 
     folders: ->
@@ -249,6 +251,28 @@ module.exports = yeoman.generators.Base.extend {
         saveDev: true
       ,->
         _me.spawnCommand 'grunt',['includereplace']
+
+      return
+
+    webpack: ->
+      list = [
+        'webpack'
+        'webpack-dev-server'
+        'coffee-loader'
+        'babel-loader'
+        'extract-text-webpack-plugin'
+        'style-loader'
+        'css-loader'
+        'file-loader'
+        'url-loader'
+        'less-loader'
+        'sass-loader'
+        'assets-webpack-plugin'
+        'autoprefixer-loader'
+      ]
+
+      @npmInstall list,
+        saveDev: true
 
       return
 

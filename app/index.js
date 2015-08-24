@@ -189,7 +189,10 @@ module.exports = yeoman.generators.Base.extend({
     gruntfile: function() {
       this.fs.copy(this.templatePath('_Gruntfile.coffee'), this.destinationPath('Gruntfile.coffee'));
     },
-    webpack: function() {},
+    webpack: function() {
+      this.fs.copy(this.templatePath('_webpack.config.js'), this.destinationPath('webpack.config.js'));
+      this.fs.copy(this.templatePath('_webpack.production.config.js'), this.destinationPath('webpack.production.config.js'));
+    },
     folders: function() {
       this.fs.write(this.destinationPath('/srcHTML/Readme.md'), '#HTML开发目录');
       this.fs.write(this.destinationPath('/HTML/Readme.md'), '#编译后HTML目录');
@@ -233,6 +236,13 @@ module.exports = yeoman.generators.Base.extend({
         saveDev: true
       }, function() {
         return _me.spawnCommand('grunt', ['includereplace']);
+      });
+    },
+    webpack: function() {
+      var list;
+      list = ['webpack', 'webpack-dev-server', 'coffee-loader', 'babel-loader', 'extract-text-webpack-plugin', 'style-loader', 'css-loader', 'file-loader', 'url-loader', 'less-loader', 'sass-loader', 'assets-webpack-plugin', 'autoprefixer-loader'];
+      this.npmInstall(list, {
+        saveDev: true
       });
     },
     plugins: function() {
