@@ -177,51 +177,6 @@ module.exports = yeoman.generators.Base.extend({
     gitFile: function() {
       this.fs.copy(this.templatePath('gitignore'), this.destinationPath('.gitignore'));
       this.fs.copy(this.templatePath('gitattributes'), this.destinationPath('.gitattributes'));
-    },
-    compassConfig: function() {
-      return this.fs.copy(this.templatePath('_config.rb'), this.destinationPath('config.rb'));
-    },
-    pluginsConfig: function() {
-      var cssminCore, plugins, webpackAlias;
-      plugins = (function(_this) {
-        return function() {
-          var pluginName, ret, _i, _len, _ref;
-          ret = {};
-          _ref = _this.config.get('plugins');
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            pluginName = _ref[_i];
-            ret[pluginName] = pluginName;
-          }
-          return ret;
-        };
-      })(this)();
-      webpackAlias = {};
-      cssminCore = [];
-      if (plugins['normalize.css']) {
-        cssminCore.push('plugins/normalize.css/normalize.css');
-      }
-      if (plugins.jquery) {
-        webpackAlias.jquery = 'plugins/jquery/jquery.min.js';
-      }
-      if (plugins.zeptojs) {
-        webpackAlias.zepto = 'plugins/zepto/zepto.min.js';
-      }
-      if (plugins.bootstrap) {
-        cssminCore.push('plugins/bootstrap/dist/css/bootstrap.css');
-        webpackAlias.bootstrap = 'plugins/bootstrap/dist/js/bootstrap.min.js';
-      }
-      if (plugins.pure) {
-        cssminCore.push('plugins/pure/pure.css');
-      }
-      if (plugins.foundation) {
-        cssminCore.push('plugins/foundation/css/foundation.css');
-        webpackAlias.foundation = 'plugins/foundation/js/foundation/foundation.js';
-      }
-      if (plugins.modernizr) {
-        webpackAlias.modernizr = 'plugins/modernizr/modernizr.js';
-      }
-      this.config.set('webpackAlias', webpackAlias);
-      return this.config.set('cssminCore', cssminCore);
     }
   },
   writing: {

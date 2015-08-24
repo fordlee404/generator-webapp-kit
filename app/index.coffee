@@ -172,49 +172,6 @@ module.exports = yeoman.generators.Base.extend {
       @fs.copy @templatePath('gitattributes'), @destinationPath('.gitattributes')
       return
 
-    compassConfig: ->
-      @fs.copy @templatePath('_config.rb'),@destinationPath('config.rb')
-
-    pluginsConfig: ->
-      plugins=do =>
-        ret={}
-        ret[pluginName]=pluginName for pluginName in @config.get('plugins')
-        ret
-      webpackAlias={}
-      cssminCore=[]
-
-
-      if plugins['normalize.css']
-        cssminCore.push 'plugins/normalize.css/normalize.css'
-
-      if plugins.jquery
-        webpackAlias.jquery='plugins/jquery/jquery.min.js'
-
-      if plugins.zeptojs
-        webpackAlias.zepto='plugins/zepto/zepto.min.js'
-
-      if plugins.bootstrap
-        cssminCore.push 'plugins/bootstrap/dist/css/bootstrap.css'
-        webpackAlias.bootstrap='plugins/bootstrap/dist/js/bootstrap.min.js'
-
-      if plugins.pure
-        cssminCore.push 'plugins/pure/pure.css'
-
-
-      if plugins.foundation
-        cssminCore.push 'plugins/foundation/css/foundation.css'
-        webpackAlias.foundation='plugins/foundation/js/foundation/foundation.js'
-
-      if plugins.modernizr
-        webpackAlias.modernizr='plugins/modernizr/modernizr.js'
-
-      @config.set 'webpackAlias',webpackAlias
-      @config.set 'cssminCore',cssminCore
-
-
-
-
-
   # If the method name doesn't match a priority, it is pushed in the default group
   # default
 
@@ -510,7 +467,6 @@ module.exports = yeoman.generators.Base.extend {
     commonStyle: ->
       @fs.copy @templatePath('_util.css'),@destinationPath('/stylesheets/common/util.css')
       @fs.write @destinationPath('/stylesheets/common/common.css'), '/* common style */'
-
 
     pluginStyle: ->
       plugins = @config.get 'cssminCore'
