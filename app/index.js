@@ -115,25 +115,34 @@ module.exports = yeoman.generators.Base.extend({
           choices: [
             {
               name: 'Bootstrap',
-              value: 'bootstrap'
+              value: {
+                name: 'bootstrap',
+                installer: 'npm'
+              }
             }, {
               name: 'Pure.css',
-              value: 'pure'
-            }, {
-              name: 'Foundation',
-              value: 'foundation'
+              value: {
+                name: 'pure',
+                installer: 'bower'
+              }
             }, {
               name: 'Normalize.css',
-              value: 'normalize.css'
+              value: {
+                name: 'normalize.css',
+                installer: 'npm'
+              }
             }, {
               name: 'jQuery',
-              value: 'jquery'
-            }, {
-              name: 'Zepto',
-              value: 'zeptojs'
+              value: {
+                name: 'jquery',
+                installer: 'npm'
+              }
             }, {
               name: 'Modernizr',
-              value: 'modernizr'
+              value: {
+                name: 'modernizr',
+                installer: 'npm'
+              }
             }
           ].sort(sortPrompts)
         }
@@ -332,9 +341,24 @@ module.exports = yeoman.generators.Base.extend({
       });
     },
     plugins: function() {
-      var pluginsList;
+      var bowerList, npmList, plugin, pluginsList, _i, _len;
       pluginsList = this.config.get('plugins');
-      this.bowerInstall(pluginsList, {
+      bowerList = [];
+      npmList = [];
+      for (_i = 0, _len = pluginsList.length; _i < _len; _i++) {
+        plugin = pluginsList[_i];
+        switch (plugin.installer) {
+          case 'npm':
+            npmList.push(plugin.name);
+            break;
+          case 'bower':
+            bowerList.push(plugin.name);
+        }
+      }
+      this.npmInstall(npmList, {
+        save: true
+      });
+      this.bowerInstall(bowerList, {
         save: true
       });
     }

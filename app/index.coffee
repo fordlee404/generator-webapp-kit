@@ -99,31 +99,38 @@ module.exports = yeoman.generators.Base.extend {
         choices: [
           {
             name: 'Bootstrap'
-            value: 'bootstrap'
+            value: {
+              name: 'bootstrap'
+              installer: 'npm'
+            }
           }
           {
             name: 'Pure.css'
-            value: 'pure'
-          }
-          {
-            name: 'Foundation'
-            value: 'foundation'
+            value: {
+              name: 'pure'
+              installer: 'bower'
+            }
           }
           {
             name: 'Normalize.css'
-            value: 'normalize.css'
+            value: {
+              name: 'normalize.css'
+              installer: 'npm'
+            }
           }
           {
             name: 'jQuery'
-            value: 'jquery'
-          }
-          {
-            name: 'Zepto'
-            value: 'zeptojs'
+            value: {
+              name: 'jquery'
+              installer: 'npm'
+            }
           }
           {
             name: 'Modernizr'
-            value: 'modernizr'
+            value: {
+              name: 'modernizr'
+              installer: 'npm'
+            }
           }
         ].sort sortPrompts
       ]
@@ -567,7 +574,18 @@ module.exports = yeoman.generators.Base.extend {
 
     plugins: ->
       pluginsList = @config.get('plugins')
-      @bowerInstall pluginsList,
+      bowerList = []
+      npmList = []
+
+      for plugin in pluginsList
+        switch plugin.installer
+          when 'npm' then npmList.push plugin.name
+          when 'bower' then bowerList.push plugin.name
+
+      @npmInstall npmList,
+        save: true
+
+      @bowerInstall bowerList,
         save: true
 
       return
