@@ -187,54 +187,9 @@ module.exports = yeoman.generators.Base.extend({
       });
     },
     gruntfile: function() {
-      var GruntfileEditor, gruntfile, _clean, _compass, _connect, _copy, _cssmin, _imagemin, _includereplace, _usemin, _watch, _webpack;
-      GruntfileEditor = require('gruntfile-editor');
-      gruntfile = new GruntfileEditor();
-      gruntfile.insertVariable('resolve', 'require(\'path\').resolve');
-      gruntfile.insertVariable('webpack', 'require(\'webpack\')');
-      gruntfile.insertConfig('pkg', "grunt.file.readJSON('package.json')");
-      _watch = "{ reload: { files: ['stylesheets/**/*.css', 'javascripts/**/*.js','javascripts/**/*.coffee','javascripts/**/*.jsx','HTML/**/*.html'], options: { livereload: true } }, HTML: { files: ['srcHTML/**/*.html'], tasks: ['includereplace:dev'] }, sasscompile: { files: ['sass/**/*.scss', 'sass/**/*.sass'], tasks: ['compass:compile'] }, javascript: { files: ['javascripts/**/*.js','javascripts/**/*.coffee','javascripts/**/*.jsx'], tasks: ['webpack:dev'] } }";
-      gruntfile.insertConfig("watch", _watch);
-      gruntfile.loadNpmTasks('grunt-contrib-watch');
-      gruntfile.insertVariable('phpMiddleware', "require('connect-php')");
-      _connect = '{ dev: { options: { port: 1024, hostname: "*", livereload: true, middleware: function(connect, options) { var directory, middlewares; middlewares = []; directory = options.directory || options.base[options.base.length - 1]; if (!Array.isArray(options.base)) { options.base = [options.base]; } middlewares.push(phpMiddleware(directory)); options.base.forEach(function(base) { return middlewares.push(connect["static"](base)); }); middlewares.push(connect.directory(directory)); return middlewares; } } } }';
-      gruntfile.insertConfig('connect', _connect);
-      gruntfile.loadNpmTasks('grunt-contrib-connect');
-      _clean = "['dist/', 'packed-scripts/']";
-      gruntfile.insertConfig('clean', _clean);
-      gruntfile.loadNpmTasks('grunt-contrib-clean');
-      _compass = '{ compile: { options: { config: "config.rb" } } }';
-      gruntfile.insertConfig('compass', _compass);
-      gruntfile.loadNpmTasks('grunt-contrib-compass');
-      _cssmin = "{ options: { keepSpecialComments: 0 }, dev: { files: { 'dist/stylesheets/core.min.css': ['" + (this.config.get('cssminCore').join(',')) + "'], 'dist/stylesheets/common/app.min.css': ['stylesheets/common/**/*.css'], 'dist/stylesheets/pages/pages.min.css': ['stylesheets/pages/**/*.css'] } }, production: { files: { 'dist/<%= pkg.version %>/plugins/css/core.min.css': ['" + (this.config.get('cssminCore').join(',')) + "'], 'dist/<%= pkg.version %>/stylesheets/common/app.min.css': ['stylesheets/common/**/*.css'], 'dist/<%= pkg.version %>/stylesheets/pages/pages.min.css': ['stylesheets/pages/**/*.css'] } } }";
-      gruntfile.insertConfig('cssmin', _cssmin);
-      gruntfile.loadNpmTasks('grunt-contrib-cssmin');
-      _webpack = "{ options: { context: resolve('./javascripts'), entry: grunt.file.readJSON('./.webpack_entry.json'), resolve: { root: [ resolve('./scripts'), resolve('./plugins'), resolve('./'), ], alias: grunt.file.readJSON('./.webpack_alias.json') }, module:{ loaders: [ { test: /\.coffee$/, loader: 'coffee-loader' }, { test: /\.js?$/, exclude: /(node_modules|bower_components)/, loader: 'babel' }, { test: /\.jsx?$/, exclude: /(node_modules|bower_components)/, loader: 'babel' }, { test: /\.(coffee\.md|litcoffee)$/, loader: 'coffee-loader?literate' } ] } }, dev: { devtool: 'inline-source-map', watch:true, output: { path: resolve('./packed-scripts'), filename: '[name].js' }, plugins: [ new webpack.optimize.CommonsChunkPlugin('commons.js') ] }, production:{ output: { path: resolve('./packed-scripts'), filename: '[name].js' }, plugins: [ new webpack.optimize.UglifyJsPlugin(), new webpack.optimize.OccurenceOrderPlugin(), new webpack.optimize.CommonsChunkPlugin('commons.js') ] } }";
-      gruntfile.insertConfig('webpack', _webpack);
-      gruntfile.loadNpmTasks('grunt-webpack');
-      _imagemin = "{ options: { optimizationLevel: 0 }, dev: { files: [ { expand: true, cwd: 'images/', src: '**/*.{png,jpg,gif,svg}', dest: 'dist/images/' } ] }, production: { files: [ { expand: true, cwd: 'images/', src: '**/*.{png,jpg,gif,svg}', dest: 'dist/<%= pkg.version %>/images/' } ] } }";
-      gruntfile.insertConfig('imagemin', _imagemin);
-      gruntfile.loadNpmTasks('grunt-contrib-imagemin');
-      _copy = "{ dev: { files: [ { src: ['images/favicons/browserconfig.xml'], dest: 'dist/images/favicons/browserconfig.xml' }, { src: ['images/favicons/favicon.ico'], dest: 'dist/images/favicons/favicon.ico' } ] }, production: { files: [ { src: ['images/favicons/browserconfig.xml'], dest: 'dist/<%= pkg.version %>/images/favicons/browserconfig.xml' }, { src: ['images/favicons/favicon.ico'], dest: 'dist/<%= pkg.version %>/images/favicons/favicon.ico' } ] } }";
-      gruntfile.insertConfig('copy', _copy);
-      gruntfile.loadNpmTasks('grunt-contrib-copy');
-      _includereplace = "{ dev: { options: { includesDir: 'srcHTML', globals: { ASSETS: '' } }, files: [ { expand: true, dest: 'HTML/', cwd: 'srcHTML/', src: ['**/*','!**/_*'] } ] } }";
-      gruntfile.insertConfig('includereplace', _includereplace);
-      gruntfile.loadNpmTasks('grunt-include-replace');
-      _usemin = "{ html: [] }";
-      gruntfile.insertConfig('usemin', _usemin);
-      gruntfile.loadNpmTasks('grunt-usemin');
-      gruntfile.registerTask('server', ['webpack:dev', 'connect', 'watch']);
-      gruntfile.registerTask('production', ['clean', 'compass', 'cssmin:production', 'imagemin:production', 'copy:production', 'usemin']);
-      fs.writeFileSync('Gruntfile.js', gruntfile.toString());
-      console.log('   ' + chalk.green('create') + ' Gruntfile.js');
+      this.fs.copy(this.templatePath('_Gruntfile.coffee'), this.destinationPath('Gruntfile.coffee'));
     },
-    webpack: function() {
-      var webpackAlias;
-      webpackAlias = this.config.get('webpackAlias');
-      this.fs.write(this.destinationPath('/.webpack_alias.json'), JSON.stringify(webpackAlias, null, '    '));
-      return this.fs.write(this.destinationPath('/.webpack_entry.json'), '{}');
-    },
+    webpack: function() {},
     folders: function() {
       this.fs.write(this.destinationPath('/srcHTML/Readme.md'), '#HTML开发目录');
       this.fs.write(this.destinationPath('/HTML/Readme.md'), '#编译后HTML目录');
@@ -254,16 +209,6 @@ module.exports = yeoman.generators.Base.extend({
     commonStyle: function() {
       this.fs.copy(this.templatePath('_util.css'), this.destinationPath('/stylesheets/common/util.css'));
       return this.fs.write(this.destinationPath('/stylesheets/common/common.css'), '/* common style */');
-    },
-    pluginStyle: function() {
-      var plugins, src, _content, _i, _len;
-      plugins = this.config.get('cssminCore');
-      _content = '';
-      for (_i = 0, _len = plugins.length; _i < _len; _i++) {
-        src = plugins[_i];
-        _content += '<link rel="stylesheet" href="@@ASSETS/' + src + '" />\n';
-      }
-      this.fs.write(this.destinationPath('/srcHTML/common/_plugin-style.html'), _content);
     },
     indexTemplate: function() {
       var entry, entryJSON, error;
@@ -285,10 +230,7 @@ module.exports = yeoman.generators.Base.extend({
     grunt: function() {
       var list, _me;
       _me = this;
-      list = ['grunt', 'grunt-contrib-connect', 'grunt-contrib-watch', 'connect-php', 'grunt-contrib-clean', 'grunt-contrib-compass', 'grunt-contrib-cssmin', 'grunt-contrib-imagemin', 'grunt-contrib-copy', 'grunt-include-replace', 'grunt-webpack', 'babel-loader', 'coffee-loader', 'script-loader', 'grunt-usemin'];
-      if (inArray('requirejs', this.config.get('plugins'))) {
-        list.push('grunt-contrib-requirejs');
-      }
+      list = ['matchdep', 'grunt', 'grunt-contrib-watch', 'grunt-contrib-imagemin', 'grunt-include-replace', 'grunt-usemin', 'grunt-filerev', 'grunt-filerev-assets'];
       this.npmInstall(list, {
         saveDev: true
       }, function() {

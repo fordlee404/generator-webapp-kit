@@ -185,265 +185,11 @@ module.exports = yeoman.generators.Base.extend {
       return
 
     gruntfile: ->
-      GruntfileEditor = require 'gruntfile-editor'
-      gruntfile = new GruntfileEditor()
-
-      gruntfile.insertVariable  'resolve', 'require(\'path\').resolve'
-      gruntfile.insertVariable  'webpack', 'require(\'webpack\')'
-      # package.json
-      gruntfile.insertConfig 'pkg',"grunt.file.readJSON('package.json')"
-
-      # watch
-      _watch = "{
-        reload: {
-          files: ['stylesheets/**/*.css', 'javascripts/**/*.js','javascripts/**/*.coffee','javascripts/**/*.jsx','HTML/**/*.html'],
-          options: {
-            livereload: true
-          }
-        },
-        HTML: {
-          files: ['srcHTML/**/*.html'],
-          tasks: ['includereplace:dev']
-        },
-        sasscompile: {
-          files: ['sass/**/*.scss', 'sass/**/*.sass'],
-          tasks: ['compass:compile']
-        },
-        javascript: {
-          files: ['javascripts/**/*.js','javascripts/**/*.coffee','javascripts/**/*.jsx'],
-          tasks: ['webpack:dev']
-        }
-      }"
-      gruntfile.insertConfig "watch",_watch
-      gruntfile.loadNpmTasks 'grunt-contrib-watch'
-
-      # connect
-      gruntfile.insertVariable 'phpMiddleware',"require('connect-php')"
-      _connect = '{
-        dev: {
-          options: {
-            port: 1024,
-            hostname: "*",
-            livereload: true,
-            middleware: function(connect, options) {
-              var directory, middlewares;
-              middlewares = [];
-              directory = options.directory || options.base[options.base.length - 1];
-              if (!Array.isArray(options.base)) {
-                options.base = [options.base];
-              }
-              middlewares.push(phpMiddleware(directory));
-              options.base.forEach(function(base) {
-                return middlewares.push(connect["static"](base));
-              });
-              middlewares.push(connect.directory(directory));
-              return middlewares;
-            }
-          }
-        }
-      }'
-      gruntfile.insertConfig 'connect',_connect
-      gruntfile.loadNpmTasks 'grunt-contrib-connect'
-
-      # clean
-      _clean = "['dist/', 'packed-scripts/']"
-      gruntfile.insertConfig 'clean',_clean
-      gruntfile.loadNpmTasks 'grunt-contrib-clean'
-
-      # compass
-      _compass = '{
-        compile: {
-          options: {
-            config: "config.rb"
-          }
-        }
-      }'
-      gruntfile.insertConfig 'compass',_compass
-      gruntfile.loadNpmTasks 'grunt-contrib-compass'
-
-      # cssmin
-      _cssmin = "{
-        options: {
-          keepSpecialComments: 0
-        },
-        dev: {
-          files: {
-            'dist/stylesheets/core.min.css': ['#{@config.get('cssminCore').join(',')}'],
-            'dist/stylesheets/common/app.min.css': ['stylesheets/common/**/*.css'],
-            'dist/stylesheets/pages/pages.min.css': ['stylesheets/pages/**/*.css']
-          }
-        },
-        production: {
-          files: {
-            'dist/<%= pkg.version %>/plugins/css/core.min.css': ['#{@config.get('cssminCore').join(',')}'],
-            'dist/<%= pkg.version %>/stylesheets/common/app.min.css': ['stylesheets/common/**/*.css'],
-            'dist/<%= pkg.version %>/stylesheets/pages/pages.min.css': ['stylesheets/pages/**/*.css']
-          }
-        }
-      }"
-      gruntfile.insertConfig 'cssmin',_cssmin
-      gruntfile.loadNpmTasks 'grunt-contrib-cssmin'
-
-      # Webpack
-      _webpack = "{
-        options: {
-          context: resolve('./javascripts'),
-          entry: grunt.file.readJSON('./.webpack_entry.json'),
-          resolve: {
-            root: [
-              resolve('./scripts'),
-              resolve('./plugins'),
-              resolve('./'),
-            ],
-            alias: grunt.file.readJSON('./.webpack_alias.json')
-          },
-          module:{
-            loaders: [
-              {
-                test: /\.coffee$/,
-                loader: 'coffee-loader'
-              },
-              {
-                test: /\.js?$/,
-                exclude: /(node_modules|bower_components)/,
-                loader: 'babel'
-              },
-              {
-                test: /\.jsx?$/,
-                exclude: /(node_modules|bower_components)/,
-                loader: 'babel'
-              },
-              {
-                test: /\.(coffee\.md|litcoffee)$/,
-                loader: 'coffee-loader?literate'
-              }
-            ]
-          }
-        },
-        dev: {
-          devtool: 'inline-source-map',
-          watch:true,
-          output: {
-            path: resolve('./packed-scripts'),
-            filename: '[name].js'
-          },
-          plugins: [
-            new webpack.optimize.CommonsChunkPlugin('commons.js')
-          ]
-        },
-        production:{
-          output: {
-            path: resolve('./packed-scripts'),
-            filename: '[name].js'
-          },
-          plugins: [
-            new webpack.optimize.UglifyJsPlugin(),
-            new webpack.optimize.OccurenceOrderPlugin(),
-            new webpack.optimize.CommonsChunkPlugin('commons.js')
-          ]
-        }
-      }"
-
-      gruntfile.insertConfig 'webpack', _webpack
-      gruntfile.loadNpmTasks 'grunt-webpack'
-
-      # imagemin
-      _imagemin = "{
-        options: {
-          optimizationLevel: 0
-        },
-        dev: {
-          files: [
-            {
-              expand: true,
-              cwd: 'images/',
-              src: '**/*.{png,jpg,gif,svg}',
-              dest: 'dist/images/'
-            }
-          ]
-        },
-        production: {
-          files: [
-            {
-              expand: true,
-              cwd: 'images/',
-              src: '**/*.{png,jpg,gif,svg}',
-              dest: 'dist/<%= pkg.version %>/images/'
-            }
-          ]
-        }
-      }"
-      gruntfile.insertConfig 'imagemin',_imagemin
-      gruntfile.loadNpmTasks 'grunt-contrib-imagemin'
-
-      # copy
-      _copy = "{
-        dev: {
-          files: [
-            {
-              src: ['images/favicons/browserconfig.xml'],
-              dest: 'dist/images/favicons/browserconfig.xml'
-            }, {
-              src: ['images/favicons/favicon.ico'],
-              dest: 'dist/images/favicons/favicon.ico'
-            }
-          ]
-        },
-        production: {
-          files: [
-            {
-              src: ['images/favicons/browserconfig.xml'],
-              dest: 'dist/<%= pkg.version %>/images/favicons/browserconfig.xml'
-            }, {
-              src: ['images/favicons/favicon.ico'],
-              dest: 'dist/<%= pkg.version %>/images/favicons/favicon.ico'
-            }
-          ]
-        }
-      }"
-      gruntfile.insertConfig 'copy',_copy
-      gruntfile.loadNpmTasks 'grunt-contrib-copy'
-
-      # include replace
-      _includereplace = "{
-        dev: {
-          options: {
-            includesDir: 'srcHTML',
-            globals: {
-              ASSETS: ''
-            }
-          },
-          files: [
-            {
-              expand: true,
-              dest: 'HTML/',
-              cwd: 'srcHTML/',
-              src: ['**/*','!**/_*']
-            }
-          ]
-        }
-      }"
-      gruntfile.insertConfig 'includereplace',_includereplace
-      gruntfile.loadNpmTasks 'grunt-include-replace'
-
-      # usemin
-      _usemin = "{
-        html: []
-      }"
-      gruntfile.insertConfig 'usemin',_usemin
-      gruntfile.loadNpmTasks 'grunt-usemin'
-
-      gruntfile.registerTask 'server',['webpack:dev','connect','watch']
-      gruntfile.registerTask 'production',['clean', 'compass', 'cssmin:production','imagemin:production', 'copy:production', 'usemin']
-
-      fs.writeFileSync 'Gruntfile.js',gruntfile.toString()
-      console.log '   '+chalk.green('create')+' Gruntfile.js'
-
+      @fs.copy @templatePath('_Gruntfile.coffee'),@destinationPath('Gruntfile.coffee')
       return
+
     webpack:->
-      webpackAlias=@config.get 'webpackAlias'
-      @fs.write @destinationPath('/.webpack_alias.json'), JSON.stringify(webpackAlias,null,'    ')
-      @fs.write @destinationPath('/.webpack_entry.json'), '{}'
+      return
 
     folders: ->
       @fs.write @destinationPath('/srcHTML/Readme.md'), '#HTML开发目录'
@@ -468,16 +214,6 @@ module.exports = yeoman.generators.Base.extend {
       @fs.copy @templatePath('_util.css'),@destinationPath('/stylesheets/common/util.css')
       @fs.write @destinationPath('/stylesheets/common/common.css'), '/* common style */'
 
-    pluginStyle: ->
-      plugins = @config.get 'cssminCore'
-      _content = ''
-      for src in plugins
-        _content += ('<link rel="stylesheet" href="@@ASSETS/'+src+'" />\n')
-
-      @fs.write @destinationPath('/srcHTML/common/_plugin-style.html'),_content
-
-      return
-
     indexTemplate: ->
       @fs.copy @templatePath('_index.html'),@destinationPath('/srcHTML/index.html')
       @fs.write @destinationPath('/stylesheets/pages/website-index.css'),'body.website-index { /* Stuff your style */ }'
@@ -501,25 +237,15 @@ module.exports = yeoman.generators.Base.extend {
     grunt: ->
       _me = @
       list = [
+        'matchdep'
         'grunt'
-        'grunt-contrib-connect'
         'grunt-contrib-watch'
-        'connect-php'
-        'grunt-contrib-clean'
-        'grunt-contrib-compass'
-        'grunt-contrib-cssmin'
         'grunt-contrib-imagemin'
-        'grunt-contrib-copy'
         'grunt-include-replace'
-        'grunt-webpack',
-        'babel-loader',
-        'coffee-loader',
-        'script-loader',
         'grunt-usemin'
+        'grunt-filerev'
+        'grunt-filerev-assets'
       ]
-
-      if inArray 'requirejs',@config.get('plugins')
-        list.push 'grunt-contrib-requirejs'
 
       @npmInstall list,
         saveDev: true
