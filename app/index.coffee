@@ -9,6 +9,10 @@ inArray = (value,array)->
     return true if val is value
   return false
 
+sortPrompts=(a,b)->
+  return 1 if a.name>b.name
+  return -1 if b.name>a.name
+  return 0
 module.exports = yeoman.generators.Base.extend {
 
   # Your initialization methods (checking current project state, getting configs, etc)
@@ -26,16 +30,14 @@ module.exports = yeoman.generators.Base.extend {
       return
 
     name: ->
+      _appname = @appname
       done = @async()
-      root = @destinationRoot()
       prompts = [
         type: 'input'
         name: 'appName'
         message: 'What is your app name'
         default: ->
-          rootArr = root.split '/'
-          len = rootArr.length
-          rootArr[len - 1]
+          _appname.replace /\s/g,'-'
       ]
       @prompt prompts, ((props) ->
         @config.set props
@@ -50,6 +52,7 @@ module.exports = yeoman.generators.Base.extend {
         type: 'input'
         name: 'authors'
         message: 'Author: '
+        store:true
       ]
       @prompt prompt, ((props) ->
         @config.set props
@@ -119,30 +122,10 @@ module.exports = yeoman.generators.Base.extend {
             value: 'zeptojs'
           }
           {
-            name: 'RequireJS'
-            value: 'requirejs'
-          }
-          {
-            name: 'Browserify'
-            value: 'browserify'
-          }
-          {
-            name: 'Vue.js'
-            value: 'vue'
-          }
-          {
             name: 'Modernizr'
             value: 'modernizr'
           }
-          {
-            name: 'AngularJS'
-            value: 'angular'
-          }
-          {
-            name: 'Polymer'
-            value: 'polymer'
-          }
-        ]
+        ].sort sortPrompts
       ]
       @prompt prompt, ((props) ->
         @config.set props
@@ -179,10 +162,50 @@ module.exports = yeoman.generators.Base.extend {
 
     gitFile: ->
       @fs.copy @templatePath('gitignore'), @destinationPath('.gitignore')
+      @fs.copy @templatePath('gitattributes'), @destinationPath('.gitattributes')
       return
 
     compassConfig: ->
       @fs.copy @templatePath('_config.rb'),@destinationPath('config.rb')
+
+    pluginsConfig: ->
+      plugins=do =>
+        ret={}
+        ret[pluginName]=pluginName for pluginName in @config.get('plugins')
+        ret
+      webpackAlias={}
+      cssminCore=[]
+
+
+      if plugins['normalize.css']
+        cssminCore.push 'plugins/normalize.css/normalize.css'
+
+      if plugins.jquery
+        webpackAlias.jquery='plugins/jquery/jquery.min.js'
+
+      if plugins.zeptojs
+        webpackAlias.zepto='plugins/zepto/zepto.min.js'
+
+      if plugins.bootstrap
+        cssminCore.push 'plugins/bootstrap/dist/css/bootstrap.css'
+        webpackAlias.bootstrap='plugins/bootstrap/dist/js/bootstrap.min.js'
+
+      if plugins.pure
+        cssminCore.push 'plugins/pure/pure.css'
+
+
+      if plugins.foundation
+        cssminCore.push 'plugins/foundation/css/foundation.css'
+        webpackAlias.foundation='plugins/foundation/js/foundation/foundation.js'
+
+      if plugins.modernizr
+        webpackAlias.modernizr='plugins/modernizr/modernizr.js'
+
+      @config.set 'webpackAlias',webpackAlias
+      @config.set 'cssminCore',cssminCore
+
+
+
 
 
   # If the method name doesn't match a priority, it is pushed in the default group
@@ -200,13 +223,16 @@ module.exports = yeoman.generators.Base.extend {
     gruntfile: ->
       GruntfileEditor = require 'gruntfile-editor'
       gruntfile = new GruntfileEditor()
+
+      gruntfile.insertVariable  'resolve', 'require(\'path\').resolve'
+      gruntfile.insertVariable  'webpack', 'require(\'webpack\')'
       # package.json
       gruntfile.insertConfig 'pkg',"grunt.file.readJSON('package.json')"
 
       # watch
       _watch = "{
         reload: {
-          files: ['stylesheets/**/*.css', 'javascripts/**/*.js', 'HTML/**/*.html'],
+          files: ['stylesheets/**/*.css', 'javascripts/**/*.js','javascripts/**/*.coffee','javascripts/**/*.jsx','HTML/**/*.html'],
           options: {
             livereload: true
           }
@@ -219,13 +245,9 @@ module.exports = yeoman.generators.Base.extend {
           files: ['sass/**/*.scss', 'sass/**/*.sass'],
           tasks: ['compass:compile']
         },
-        coffeecompile: {
-          files: ['coffeescript/**/*.coffee'],
-          tasks: ['coffee:compile']
-        },
         javascript: {
-          files: ['javascripts/**/*.js'],
-          tasks: ['jshint:all']
+          files: ['javascripts/**/*.js','javascripts/**/*.coffee','javascripts/**/*.jsx'],
+          tasks: ['webpack:dev']
         }
       }"
       gruntfile.insertConfig "watch",_watch
@@ -260,7 +282,7 @@ module.exports = yeoman.generators.Base.extend {
       gruntfile.loadNpmTasks 'grunt-contrib-connect'
 
       # clean
-      _clean = "['dist/', 'build/']"
+      _clean = "['dist/', 'packed-scripts/']"
       gruntfile.insertConfig 'clean',_clean
       gruntfile.loadNpmTasks 'grunt-contrib-clean'
 
@@ -282,14 +304,14 @@ module.exports = yeoman.generators.Base.extend {
         },
         dev: {
           files: {
-            'dist/plugins/css/core.min.css': [],
+            'dist/stylesheets/core.min.css': ['#{@config.get('cssminCore').join(',')}'],
             'dist/stylesheets/common/app.min.css': ['stylesheets/common/**/*.css'],
             'dist/stylesheets/pages/pages.min.css': ['stylesheets/pages/**/*.css']
           }
         },
         production: {
           files: {
-            'dist/<%= pkg.version %>/plugins/css/core.min.css': [],
+            'dist/<%= pkg.version %>/plugins/css/core.min.css': ['#{@config.get('cssminCore').join(',')}'],
             'dist/<%= pkg.version %>/stylesheets/common/app.min.css': ['stylesheets/common/**/*.css'],
             'dist/<%= pkg.version %>/stylesheets/pages/pages.min.css': ['stylesheets/pages/**/*.css']
           }
@@ -298,40 +320,68 @@ module.exports = yeoman.generators.Base.extend {
       gruntfile.insertConfig 'cssmin',_cssmin
       gruntfile.loadNpmTasks 'grunt-contrib-cssmin'
 
-      # Coffeescript
-      _coffee = "{
-        compile: {
-          options: {
-            bare: true,
-            join: false
+      # Webpack
+      _webpack = "{
+        options: {
+          context: resolve('./javascripts'),
+          entry: grunt.file.readJSON('./.webpack_entry.json'),
+          resolve: {
+            root: [
+              resolve('./scripts'),
+              resolve('./plugins'),
+              resolve('./'),
+            ],
+            alias: grunt.file.readJSON('./.webpack_alias.json')
           },
-          files: [
-            {
-              expand: true,
-              cwd: 'coffeescript/',
-              src: '**/*.coffee',
-              dest: 'javascripts/',
-              ext: '.js'
-            }
+          module:{
+            loaders: [
+              {
+                test: /\.coffee$/,
+                loader: 'coffee-loader'
+              },
+              {
+                test: /\.js?$/,
+                exclude: /(node_modules|bower_components)/,
+                loader: 'babel'
+              },
+              {
+                test: /\.jsx?$/,
+                exclude: /(node_modules|bower_components)/,
+                loader: 'babel'
+              },
+              {
+                test: /\.(coffee\.md|litcoffee)$/,
+                loader: 'coffee-loader?literate'
+              }
+            ]
+          }
+        },
+        dev: {
+          devtool: 'inline-source-map',
+          watch:true,
+          output: {
+            path: resolve('./packed-scripts'),
+            filename: '[name].js'
+          },
+          plugins: [
+            new webpack.optimize.CommonsChunkPlugin('commons.js')
+          ]
+        },
+        production:{
+          output: {
+            path: resolve('./packed-scripts'),
+            filename: '[name].js'
+          },
+          plugins: [
+            new webpack.optimize.UglifyJsPlugin(),
+            new webpack.optimize.OccurenceOrderPlugin(),
+            new webpack.optimize.CommonsChunkPlugin('commons.js')
           ]
         }
       }"
-      gruntfile.insertConfig 'coffee',_coffee
-      gruntfile.loadNpmTasks 'grunt-contrib-coffee'
 
-      #jshint
-      _jshint = "{
-        all: {
-          options: {
-            jshintrc: true
-          },
-          files: {
-            src: ['javascripts/**/*.js']
-          }
-        }
-      }"
-      gruntfile.insertConfig 'jshint',_jshint
-      gruntfile.loadNpmTasks 'grunt-contrib-jshint'
+      gruntfile.insertConfig 'webpack', _webpack
+      gruntfile.loadNpmTasks 'grunt-webpack'
 
       # imagemin
       _imagemin = "{
@@ -396,7 +446,7 @@ module.exports = yeoman.generators.Base.extend {
           options: {
             includesDir: 'srcHTML',
             globals: {
-              ASSETS: '../..'
+              ASSETS: ''
             }
           },
           files: [
@@ -404,7 +454,7 @@ module.exports = yeoman.generators.Base.extend {
               expand: true,
               dest: 'HTML/',
               cwd: 'srcHTML/',
-              src: ['**/*']
+              src: ['**/*','!**/_*']
             }
           ]
         }
@@ -419,68 +469,65 @@ module.exports = yeoman.generators.Base.extend {
       gruntfile.insertConfig 'usemin',_usemin
       gruntfile.loadNpmTasks 'grunt-usemin'
 
-      hasRequirejs = inArray 'requirejs',@config.get('plugins')
-
-      if hasRequirejs
-        # requirejs
-        _requirejs = "{
-          options: {
-            baseUrl: 'javascripts/pages/',
-            mainConfigFile: 'javascripts/pages/app.js',
-            keepBuildDir: true,
-            modules: [
-              {
-                name: 'app'
-              }
-            ]
-          },
-          dev: {
-            options: {
-              dir: 'dist/javascripts/pages/'
-            }
-          },
-          production: {
-            options: {
-              dir: 'dist/<%= pkg.version %>/javascripts/pages/'
-            }
-          }
-        }"
-        gruntfile.insertConfig 'requirejs',_requirejs
-        gruntfile.loadNpmTasks 'grunt-contrib-requirejs'
-
-      gruntfile.registerTask 'server',['connect', 'watch']
-      gruntfile.registerTask 'default',['server']
-
-      if hasRequirejs
-        gruntfile.registerTask 'release',['clean', 'compass', 'cssmin:dev', 'coffee', 'jshint', 'requirejs:dev', 'imagemin:dev', 'copy:dev']
-        gruntfile.registerTask 'production',['clean', 'compass', 'cssmin:production', 'coffee', 'jshint', 'requirejs:production', 'imagemin:production', 'copy:production', 'usemin']
-      else
-        gruntfile.registerTask 'release',['clean', 'compass', 'cssmin:dev', 'coffee', 'jshint', 'imagemin:dev', 'copy:dev']
-        gruntfile.registerTask 'production',['clean', 'compass', 'cssmin:production', 'coffee', 'jshint', 'imagemin:production', 'copy:production', 'usemin']
+      gruntfile.registerTask 'server',['webpack:dev','connect','watch']
+      gruntfile.registerTask 'production',['clean', 'compass', 'cssmin:production','imagemin:production', 'copy:production', 'usemin']
 
       fs.writeFileSync 'Gruntfile.js',gruntfile.toString()
       console.log '   '+chalk.green('create')+' Gruntfile.js'
 
       return
+    webpack:->
+      webpackAlias=@config.get 'webpackAlias'
+      @fs.write @destinationPath('/.webpack_alias.json'), JSON.stringify(webpackAlias,null,'    ')
+      @fs.write @destinationPath('/.webpack_entry.json'), '{}'
 
     folders: ->
       @fs.write @destinationPath('/srcHTML/Readme.md'), '#HTML开发目录'
       @fs.write @destinationPath('/HTML/Readme.md'), '#编译后HTML目录'
-      @fs.write @destinationPath('/coffeescript/Readme.md'), '#Coffeescript开发目录'
+      @fs.write @destinationPath('/javascripts/Readme.md'), '#脚本开发目录'
       @fs.write @destinationPath('/fake-response/Readme.md'), '#模拟响应目录'
       @fs.write @destinationPath('/images/Readme.md'), '#图片目录'
-      @fs.write @destinationPath('/javascripts/Readme.md'), '#Javascript目录'
+      @fs.write @destinationPath('/packed-scripts/Readme.md'), '#Webpack 打包'
       @fs.write @destinationPath('/plugins/Readme.md'), '#插件目录'
       @fs.write @destinationPath('/psd/Readme.md'), '#设计PSD目录'
       @fs.write @destinationPath('/sass/Readme.md'), '#Sass开发目录'
-      @fs.write @destinationPath('/less/Readme.md'), '#Less开发目录'
       @fs.write @destinationPath('/stylesheets/Readme.md'), '#CSS开发目录'
       return
 
-    htmlTemplate: ->
-      @fs.copy @templatePath('_template.html'),@destinationPath('/HTML/template.html')
+    commonHTML: ->
+      @fs.copy @templatePath('__page-head.html'),@destinationPath('/srcHTML/common/_page-head.html')
+      @fs.copy @templatePath('__page-foot.html'),@destinationPath('/srcHTML/common/_page-foot.html')
 
       return
+
+    commonStyle: ->
+      @fs.copy @templatePath('_util.css'),@destinationPath('/stylesheets/common/util.css')
+      @fs.write @destinationPath('/stylesheets/common/common.css'), '/* common style */'
+
+
+    pluginStyle: ->
+      plugins = @config.get 'cssminCore'
+      _content = ''
+      for src in plugins
+        _content += ('<link rel="stylesheet" href="@@ASSETS/'+src+'" />\n')
+
+      @fs.write @destinationPath('/srcHTML/common/_plugin-style.html'),_content
+
+      return
+
+    indexTemplate: ->
+      @fs.copy @templatePath('_index.html'),@destinationPath('/srcHTML/index.html')
+      @fs.write @destinationPath('/stylesheets/pages/website-index.css'),'body.website-index { /* Stuff your style */ }'
+
+      @fs.write @destinationPath('/javascripts/pages/website-index.js'),'(function(){ /* Stuff your codes */ })();'
+      try
+        entryJSON=@fs.read(@destinationPath('.webpack_entry.json'))
+        entry=JSON.parse entryJSON
+      catch error
+        entry={}
+
+      entry['website-index']='./pages/website-index.js'
+      @fs.write @destinationPath('.webpack_entry.json'),JSON.stringify(entry,null,'    ')
 
 
   # Where conflicts are handled (used internally)
@@ -489,6 +536,7 @@ module.exports = yeoman.generators.Base.extend {
   # Where installation are run (npm, bower)
   install:
     grunt: ->
+      _me = @
       list = [
         'grunt'
         'grunt-contrib-connect'
@@ -497,11 +545,13 @@ module.exports = yeoman.generators.Base.extend {
         'grunt-contrib-clean'
         'grunt-contrib-compass'
         'grunt-contrib-cssmin'
-        'grunt-contrib-coffee'
-        'grunt-contrib-jshint'
         'grunt-contrib-imagemin'
         'grunt-contrib-copy'
         'grunt-include-replace'
+        'grunt-webpack',
+        'babel-loader',
+        'coffee-loader',
+        'script-loader',
         'grunt-usemin'
       ]
 
@@ -510,6 +560,8 @@ module.exports = yeoman.generators.Base.extend {
 
       @npmInstall list,
         saveDev: true
+      ,->
+        _me.spawnCommand 'grunt',['includereplace']
 
       return
 

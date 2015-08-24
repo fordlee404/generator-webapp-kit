@@ -11,19 +11,19 @@
 <meta name="keywords" content="" />
 <meta name="description" content="" />
 
-<title>Template</title>
+<link rel="shortcut icon" href="@@ASSETS/images/favicons/favicon.ico">
+
+<title>@@page-title</title>
 <!-- build:css plugins/css/core.min.css -->
-<link rel="stylesheet" href="">
+@@include('common/_plugin-style.html')
 <!-- endbuild -->
 <!-- build:css  stylesheets/common/app.min.css-->
-<link rel="stylesheet" href="">
+<link rel="stylesheet" href="@@ASSETS/stylesheets/common/util.css">
+<link rel="stylesheet" href="@@ASSETS/stylesheets/common/common.css">
 <!-- endbuild -->
 <!-- build:css stylesheets/pages/pages.min.css -->
-<link rel="stylesheet" href="">
+<link rel="stylesheet" href="@@ASSETS/stylesheets/pages/@@page-id.css">
 <!-- endbuild -->
-<script src="../../assets/plugins/modernizr/modernizr.js"></script>
+<script src="@@ASSETS/plugins/modernizr/modernizr.js"></script>
 </head>
-<body>
-Hello World!
-</body>
-</html>
+<body class="@@page-id">
