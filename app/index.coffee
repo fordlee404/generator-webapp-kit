@@ -194,13 +194,11 @@ module.exports = yeoman.generators.Base.extend {
     folders: ->
       @fs.write @destinationPath('/srcHTML/Readme.md'), '#HTML开发目录'
       @fs.write @destinationPath('/HTML/Readme.md'), '#编译后HTML目录'
-      @fs.write @destinationPath('/javascripts/Readme.md'), '#脚本开发目录'
+      @fs.write @destinationPath('/scripts/Readme.md'), '#脚本开发目录'
       @fs.write @destinationPath('/fake-response/Readme.md'), '#模拟响应目录'
       @fs.write @destinationPath('/images/Readme.md'), '#图片目录'
-      @fs.write @destinationPath('/packed-scripts/Readme.md'), '#Webpack 打包'
       @fs.write @destinationPath('/plugins/Readme.md'), '#插件目录'
       @fs.write @destinationPath('/psd/Readme.md'), '#设计PSD目录'
-      @fs.write @destinationPath('/sass/Readme.md'), '#Sass开发目录'
       @fs.write @destinationPath('/stylesheets/Readme.md'), '#CSS开发目录'
       return
 

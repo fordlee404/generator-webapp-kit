@@ -193,13 +193,11 @@ module.exports = yeoman.generators.Base.extend({
     folders: function() {
       this.fs.write(this.destinationPath('/srcHTML/Readme.md'), '#HTML开发目录');
       this.fs.write(this.destinationPath('/HTML/Readme.md'), '#编译后HTML目录');
-      this.fs.write(this.destinationPath('/javascripts/Readme.md'), '#脚本开发目录');
+      this.fs.write(this.destinationPath('/scripts/Readme.md'), '#脚本开发目录');
       this.fs.write(this.destinationPath('/fake-response/Readme.md'), '#模拟响应目录');
       this.fs.write(this.destinationPath('/images/Readme.md'), '#图片目录');
-      this.fs.write(this.destinationPath('/packed-scripts/Readme.md'), '#Webpack 打包');
       this.fs.write(this.destinationPath('/plugins/Readme.md'), '#插件目录');
       this.fs.write(this.destinationPath('/psd/Readme.md'), '#设计PSD目录');
-      this.fs.write(this.destinationPath('/sass/Readme.md'), '#Sass开发目录');
       this.fs.write(this.destinationPath('/stylesheets/Readme.md'), '#CSS开发目录');
     },
     commonHTML: function() {
