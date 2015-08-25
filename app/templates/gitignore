@@ -1,6 +1,7 @@
 .DS_Store
 .git
-node_modules
 .sass-cache
 .idea
-packed-scripts
+build
+filerev.json
+webpack-assets.json
