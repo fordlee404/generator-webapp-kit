@@ -3,5 +3,10 @@
   "version": "0.0.0",
   "authors": "<%= authors %>",
   "description" : "<%= description %>",
-  "license": "<%= license %>"
+  "license": "<%= license %>",
+  "scripts": {
+    "start": "node node_modules/.bin/webpack-dev-server",
+    "build": "rm -r build filerev.json webpack-assets.json ; grunt imagemin ; ./node_modules/.bin/webpack --progress --config webpack.production.config.js && grunt files && grunt build",
+    "package": "rm -r build; webpack"
+  }
 }
