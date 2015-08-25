@@ -212,19 +212,10 @@ module.exports = yeoman.generators.Base.extend({
       return this.fs.write(this.destinationPath('/stylesheets/common/common.css'), '/* common style */');
     },
     indexTemplate: function() {
-      var entry, entryJSON, error;
       this.fs.copy(this.templatePath('_index.html'), this.destinationPath('/srcHTML/index.html'));
-      this.fs.write(this.destinationPath('/stylesheets/pages/website-index.css'), 'body.website-index { /* Stuff your style */ }');
-      this.fs.write(this.destinationPath('/javascripts/pages/website-index.js'), '(function(){ /* Stuff your codes */ })();');
-      try {
-        entryJSON = this.fs.read(this.destinationPath('.webpack_entry.json'));
-        entry = JSON.parse(entryJSON);
-      } catch (_error) {
-        error = _error;
-        entry = {};
-      }
-      entry['website-index'] = './pages/website-index.js';
-      return this.fs.write(this.destinationPath('.webpack_entry.json'), JSON.stringify(entry, null, '    '));
+      this.fs.write(this.destinationPath('/stylesheets/pages/website-index.css'), '/* Stuff your style */');
+      this.fs.write(this.destinationPath('/scripts/pages/website-index.js'), '(function(){ /* Stuff your codes */ })();');
+      return this.fs.write(this.destinationPath('app-entry.js'), 'module.exports = { "website-index": "./website-index" }');
     }
   },
   install: {

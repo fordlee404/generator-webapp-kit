@@ -216,17 +216,11 @@ module.exports = yeoman.generators.Base.extend {
 
     indexTemplate: ->
       @fs.copy @templatePath('_index.html'),@destinationPath('/srcHTML/index.html')
-      @fs.write @destinationPath('/stylesheets/pages/website-index.css'),'body.website-index { /* Stuff your style */ }'
+      @fs.write @destinationPath('/stylesheets/pages/website-index.css'),'/* Stuff your style */'
 
-      @fs.write @destinationPath('/javascripts/pages/website-index.js'),'(function(){ /* Stuff your codes */ })();'
-      try
-        entryJSON=@fs.read(@destinationPath('.webpack_entry.json'))
-        entry=JSON.parse entryJSON
-      catch error
-        entry={}
+      @fs.write @destinationPath('/scripts/pages/website-index.js'),'(function(){ /* Stuff your codes */ })();'
 
-      entry['website-index']='./pages/website-index.js'
-      @fs.write @destinationPath('.webpack_entry.json'),JSON.stringify(entry,null,'    ')
+      @fs.write @destinationPath('app-entry.js'),'module.exports = { "website-index": "./website-index" }'
 
 
   # Where conflicts are handled (used internally)
