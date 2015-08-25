@@ -5,7 +5,7 @@ module.exports = {
   entry: require('./app-entry'),
   output: {
     path: __dirname + '/build',
-    publicPath: '',
+    publicPath: '/build',
     filename: '[name].js',
     sourceMapFilename: '[file].map'
   },
@@ -28,7 +28,7 @@ module.exports = {
     ]
   },
   resolve:{
-    root: [__dirname+'/assets'],
+    root: [__dirname],
     alias: {
       styles: __dirname+'/stylesheets',
       images: __dirname+'/images',
