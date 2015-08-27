@@ -4,6 +4,7 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var AssetsPlugin = require('assets-webpack-plugin');
 
 webpackConfig.output.filename = '[name].[chunkhash].js';
+webpackConfig.output.publicPath = './';
 
 webpackConfig.devtool = 'source-map';
 
