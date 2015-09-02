@@ -20,7 +20,7 @@
     "node": ">=0.10.20"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "./node_modules/.bin/mocha"
   },
   "files": [
     "app"

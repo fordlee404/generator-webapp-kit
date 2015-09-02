@@ -241,22 +241,24 @@ module.exports = yeoman.generators.Base.extend({
       pluginsList = this.config.get('plugins');
       bowerList = [];
       npmList = [];
-      for (_i = 0, _len = pluginsList.length; _i < _len; _i++) {
-        plugin = pluginsList[_i];
-        switch (plugin.installer) {
-          case 'npm':
-            npmList.push(plugin.name);
-            break;
-          case 'bower':
-            bowerList.push(plugin.name);
+      if ((pluginsList != null) && pluginsList.length > 0) {
+        for (_i = 0, _len = pluginsList.length; _i < _len; _i++) {
+          plugin = pluginsList[_i];
+          switch (plugin.installer) {
+            case 'npm':
+              npmList.push(plugin.name);
+              break;
+            case 'bower':
+              bowerList.push(plugin.name);
+          }
         }
+        this.npmInstall(npmList, {
+          save: true
+        });
+        this.bowerInstall(bowerList, {
+          save: true
+        });
       }
-      this.npmInstall(npmList, {
-        save: true
-      });
-      this.bowerInstall(bowerList, {
-        save: true
-      });
     }
   }
 });

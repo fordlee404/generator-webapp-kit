@@ -275,18 +275,19 @@ module.exports = yeoman.generators.Base.extend {
       bowerList = []
       npmList = []
 
-      for plugin in pluginsList
-        switch plugin.installer
-          when 'npm' then npmList.push plugin.name
-          when 'bower' then bowerList.push plugin.name
+      if pluginsList? and pluginsList.length>0
+        for plugin in pluginsList
+          switch plugin.installer
+            when 'npm' then npmList.push plugin.name
+            when 'bower' then bowerList.push plugin.name
 
-      @npmInstall npmList,
-        save: true
+        @npmInstall npmList,
+          save: true
 
-      @bowerInstall bowerList,
-        save: true
+        @bowerInstall bowerList,
+          save: true
 
-      return
+        return
 
 
   # Called last, cleanup, say good bye, etc
