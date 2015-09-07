@@ -1,7 +1,7 @@
-.DS_Store
-.git
-.sass-cache
-.idea
+**/.DS_Store
+**/.git
+.sass-cache/
+.idea/
 build
 filerev.json
 webpack-assets.json
