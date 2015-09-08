@@ -9,8 +9,8 @@ describe('webapp-kit:app', function () {
   before(function (done) {
     helpers.run(path.join(__dirname, '../app'))
       .withOptions({ skipInstall: true })
-      .withPrompt({
-        someOption: true
+      .withPrompts({
+        appName: 'test'
       })
       .on('end', done);
   });
