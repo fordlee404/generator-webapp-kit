@@ -21,11 +21,27 @@ module.exports = {
     loaders: [
       { test: /\.coffee$/, loader: "coffee-loader" },
       { test: /\.(coffee\.md|litcoffee)$/, loader: "coffee-loader?literate" },
-      { test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader','css-loader!autoprefixer-loader') },
-      { test: /\.less$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!less-loader") },
-      { test: /(\.scss)|(\.sass)$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!sass-loader?sourceMap") },
+      { test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader','css-loader!postcss-loader') },
+      { test: /\.less$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!postcss-loader!less-loader") },
+      { test: /(\.scss)|(\.sass)$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!postcss-loader!sass-loader?sourceMap") },
       { test: /(\.woff)|(\.ttf)|(\.eot)|(\.svg)|(\.png)|(\.jpg)|(\.gif)/, loader: "file-loader"},
     ]
+  },
+  postcss: function () {
+    return [
+      require('autoprefixer'),
+      require("postcss-color-rgba-fallback"),
+      require('postcss-opacity'),
+      require('postcss-pseudoelements'),
+      require('postcss-sprites')({
+        stylesheetPath: './stylesheets/pages',
+        spritePath: './images/sprites.png',
+        retina: true,
+        filterBy: function(image) {
+          return /(sprites\/).*\/?(\.jpg|\.png)$/gi.test(image.url);
+        }
+      })
+    ];
   },
   resolve:{
     root: [__dirname],

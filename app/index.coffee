@@ -262,7 +262,12 @@ module.exports = yeoman.generators.Base.extend {
         'less-loader'
         'sass-loader'
         'assets-webpack-plugin'
-        'autoprefixer-loader'
+        'postcss-loader'
+        'autoprefixer'
+        'postcss-color-rgba-fallback'
+        'postcss-opacity'
+        'postcss-pseudoelements'
+        'postcss-sprites'
       ]
 
       @npmInstall list,
