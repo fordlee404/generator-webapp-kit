@@ -47,12 +47,11 @@ module.exports = yeoman.generators.Base.extend({
           type: 'input',
           name: 'appName',
           message: 'What is your app name',
-          "default": function() {
-            return _appname.replace(/\s/g, '-');
-          }
+          "default": _appname
         }
       ];
       this.prompt(prompts, (function(props) {
+        props.appName = props.appName.replace(/\s/g, '-');
         this.config.set(props);
         done();
       }).bind(this));

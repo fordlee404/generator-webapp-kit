@@ -36,10 +36,10 @@ module.exports = yeoman.generators.Base.extend {
         type: 'input'
         name: 'appName'
         message: 'What is your app name'
-        default: ->
-          _appname.replace /\s/g,'-'
+        default: _appname
       ]
       @prompt prompts, ((props) ->
+        props.appName = props.appName.replace /\s/g,'-'
         @config.set props
         done()
         return
