@@ -194,31 +194,31 @@ module.exports = yeoman.generators.Base.extend {
       return
 
     folders: ->
-      @fs.write @destinationPath('/srcHTML/Readme.md'), '#HTML开发目录'
-      @fs.write @destinationPath('/HTML/Readme.md'), '#编译后HTML目录'
-      @fs.write @destinationPath('/scripts/Readme.md'), '#脚本开发目录'
-      @fs.write @destinationPath('/fake-response/Readme.md'), '#模拟响应目录'
-      @fs.write @destinationPath('/images/Readme.md'), '#图片目录'
-      @fs.write @destinationPath('/plugins/Readme.md'), '#插件目录'
-      @fs.write @destinationPath('/psd/Readme.md'), '#设计PSD目录'
-      @fs.write @destinationPath('/stylesheets/Readme.md'), '#CSS开发目录'
+      @fs.write @destinationPath('srcHTML/Readme.md'), '#HTML开发目录'
+      @fs.write @destinationPath('HTML/Readme.md'), '#编译后HTML目录'
+      @fs.write @destinationPath('scripts/Readme.md'), '#脚本开发目录'
+      @fs.write @destinationPath('fake-response/Readme.md'), '#模拟响应目录'
+      @fs.write @destinationPath('images/Readme.md'), '#图片目录'
+      @fs.write @destinationPath('plugins/Readme.md'), '#插件目录'
+      @fs.write @destinationPath('psd/Readme.md'), '#设计PSD目录'
+      @fs.write @destinationPath('stylesheets/Readme.md'), '#CSS开发目录'
       return
 
     commonHTML: ->
-      @fs.copy @templatePath('__page-head.html'),@destinationPath('/srcHTML/common/_page-head.html')
-      @fs.copy @templatePath('__page-foot.html'),@destinationPath('/srcHTML/common/_page-foot.html')
+      @fs.copy @templatePath('__page-head.html'),@destinationPath('srcHTML/common/_page-head.html')
+      @fs.copy @templatePath('__page-foot.html'),@destinationPath('srcHTML/common/_page-foot.html')
 
       return
 
     commonStyle: ->
-      @fs.copy @templatePath('_util.css'),@destinationPath('/stylesheets/common/util.css')
-      @fs.write @destinationPath('/stylesheets/common/common.css'), '/* common style */'
+      @fs.copy @templatePath('_util.css'),@destinationPath('stylesheets/common/util.css')
+      @fs.write @destinationPath('stylesheets/common/common.css'), '/* common style */'
 
     indexTemplate: ->
-      @fs.copy @templatePath('_index.html'),@destinationPath('/srcHTML/index.html')
-      @fs.write @destinationPath('/stylesheets/pages/website-index.css'),'/* Stuff your style */'
+      @fs.copy @templatePath('_index.html'),@destinationPath('srcHTML/index.html')
+      @fs.write @destinationPath('stylesheets/pages/website-index.css'),'/* Stuff your style */'
 
-      @fs.write @destinationPath('/scripts/pages/website-index.js'),'(function(){ /* Stuff your codes */ })();'
+      @fs.write @destinationPath('scripts/pages/website-index.js'),'(function(){ /* Stuff your codes */ })();'
 
       @fs.write @destinationPath('app-entry.js'),'module.exports = { "website-index": "./website-index" }'
 
