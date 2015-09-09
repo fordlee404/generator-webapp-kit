@@ -19,7 +19,6 @@ describe('webapp-kit:app', function () {
 
     it('change whitespace to middle line in app name', function(){
       var pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-      console.log(pkg.name);
       assert.equal(pkg.name, 'Test-example');
     });
 
