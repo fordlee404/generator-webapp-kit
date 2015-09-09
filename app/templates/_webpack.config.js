@@ -23,8 +23,8 @@ module.exports = {
       { test: /\.(coffee\.md|litcoffee)$/, loader: "coffee-loader?literate" },
       { test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader','css-loader!autoprefixer-loader') },
       { test: /\.less$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!less-loader") },
-      { test: /(\.scss)|(\.sass)$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!sass-loader?sourceMap") },
-      { test: /(\.woff)|(\.ttf)|(\.eot)|(\.svg)|(\.png)|(\.jpg)|(\.gif)/, loader: "file-loader"},
+      { test: /\.(scss|sass)$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!sass-loader?sourceMap") },
+      { test: /\.(woff|ttf|eot|svg|png|jpg|jpeg|gif)/, loader: "file-loader"},
     ]
   },
   resolve:{
