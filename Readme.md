@@ -2,8 +2,54 @@
 
 > [Yeoman](http://yeoman.io) generator
 
-
 ## Getting Started
+
+This yeoman generator helps you to write front-end code (HTML, CSS, Javascript etc) fast, orignize your project files and compile your code to production.
+
+It generator a basic front-end develop environment. Includes a basic directory structure, a develop server and static file tools for production environment (compile language and compress files and images). It's all based on [Webpack](http://webpack.github.io) and [Grunt](http://gruntjs.com).
+
+### Directory structure
+
+```
+project
+  |-- fake-response
+    |-- // Put your ajax fake response files, like json
+  |-- HTML
+    |-- // The generated HTML file, you don't need to edit the files in this folder, it's generated from srcHTML folder
+  |-- images
+    |-- // Put your images
+  |-- node_modules
+    |-- // npm install folder
+  |-- plugins
+    |-- // Bower install folder
+  |-- scripts // Put your scripts, like .js files, .coffee files and others
+    |-- common
+      |-- // common script files
+    |-- pages
+      |-- // pages script files
+  |-- srcHTML
+    |-- // Put your .html files
+  |-- stylesheets // Put your style files, .css/.less/.scss etc
+    |-- common
+      |-- // common style
+    |-- pages
+      |-- // pages style
+  |-- .bowerrc
+  |-- .editorconfig
+  |-- .gitattributes
+  |-- .gitignore
+  |-- .jshintrc
+  |-- .yo-rc.json
+  |-- app-entry.js // webpack entry
+  |-- bower.json
+  |-- Gruntfile.coffee
+  |-- package.json
+  |-- Readme.md
+  |-- webpack.config.js // webpack config for dev
+  |-- webpack.production.config.js // webpack config for production
+```
+
+## Yeoman
 
 ### What is Yeoman?
 
