@@ -89,7 +89,17 @@ Put your style files in `stylesheets` folder. `.css` file, `.less` file, `.scss`
 
 #### How to write script
 
-Put your script files in 'scripts' folder. Of course, you can write javascript or coffeescript. You must add your script file in `app-entry.js`, so that the webpack will generate the file and it's dependencies.
+Put your script files in 'scripts' folder. Of course, you can write javascript or coffeescript. Then you need to add your script file in `app-entry.js`, so that the webpack will generate the file and it's dependencies.
+
+### Production
+
+Open a terminal window and run:
+
+```
+$ npm run build
+```
+
+That's all. All your scripts, styles, images and fonts will be put in the `build` folder. It use webpack and grunt to process all the static resources. See details in the `package.json`, `Gruntfile.coffee` and `webpack.config.json` and `webpack.production.config.json`.
 
 ## Yeoman
 
