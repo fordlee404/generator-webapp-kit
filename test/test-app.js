@@ -10,6 +10,7 @@ describe('webapp-kit:app', function () {
   describe('all default input', function(){
     before(function(done){
       helpers.run(path.join(__dirname, '../app'))
+        .withOptions({ skipInstall: true })
         .on('end',done);
     });
 
@@ -42,6 +43,7 @@ describe('webapp-kit:app', function () {
   describe('when app name have whitespace', function(){
     before(function(done){
       helpers.run(path.join(__dirname, '../app'))
+        .withOptions({ skipInstall: true })
         .withPrompts({
           appName: 'Test example'
         })

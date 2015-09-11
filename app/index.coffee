@@ -216,6 +216,7 @@ module.exports = yeoman.generators.Base.extend {
 
     indexTemplate: ->
       @fs.copy @templatePath('_index.html'),@destinationPath('srcHTML/index.html')
+      @fs.copy @templatePath('_indexHTML.html'),@destinationPath('HTML/index.html')
       @fs.write @destinationPath('stylesheets/pages/website-index.css'),'/* Stuff your style */'
 
       @fs.write @destinationPath('scripts/pages/website-index.js'),'(function(){ /* Stuff your codes */ })();'
@@ -243,8 +244,6 @@ module.exports = yeoman.generators.Base.extend {
 
       @npmInstall list,
         saveDev: true
-      ,->
-        _me.spawnCommand 'grunt',['includereplace']
 
       return
 

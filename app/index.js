@@ -212,6 +212,7 @@ module.exports = yeoman.generators.Base.extend({
     },
     indexTemplate: function() {
       this.fs.copy(this.templatePath('_index.html'), this.destinationPath('srcHTML/index.html'));
+      this.fs.copy(this.templatePath('_indexHTML.html'), this.destinationPath('HTML/index.html'));
       this.fs.write(this.destinationPath('stylesheets/pages/website-index.css'), '/* Stuff your style */');
       this.fs.write(this.destinationPath('scripts/pages/website-index.js'), '(function(){ /* Stuff your codes */ })();');
       return this.fs.write(this.destinationPath('app-entry.js'), 'module.exports = { "website-index": "./website-index" }');
@@ -224,8 +225,6 @@ module.exports = yeoman.generators.Base.extend({
       list = ['matchdep', 'grunt', 'grunt-contrib-watch', 'grunt-contrib-imagemin', 'grunt-include-replace', 'grunt-usemin', 'grunt-filerev', 'grunt-filerev-assets'];
       this.npmInstall(list, {
         saveDev: true
-      }, function() {
-        return _me.spawnCommand('grunt', ['includereplace']);
       });
     },
     webpack: function() {
