@@ -47,12 +47,11 @@ module.exports = yeoman.generators.Base.extend({
           type: 'input',
           name: 'appName',
           message: 'What is your app name',
-          "default": function() {
-            return _appname.replace(/\s/g, '-');
-          }
+          "default": _appname
         }
       ];
       this.prompt(prompts, (function(props) {
+        props.appName = props.appName.replace(/\s/g, '-');
         this.config.set(props);
         done();
       }).bind(this));
@@ -194,27 +193,28 @@ module.exports = yeoman.generators.Base.extend({
       this.fs.copy(this.templatePath('_webpack.production.config.js'), this.destinationPath('webpack.production.config.js'));
     },
     folders: function() {
-      this.fs.write(this.destinationPath('/srcHTML/Readme.md'), '#HTML开发目录');
-      this.fs.write(this.destinationPath('/HTML/Readme.md'), '#编译后HTML目录');
-      this.fs.write(this.destinationPath('/scripts/Readme.md'), '#脚本开发目录');
-      this.fs.write(this.destinationPath('/fake-response/Readme.md'), '#模拟响应目录');
-      this.fs.write(this.destinationPath('/images/Readme.md'), '#图片目录');
-      this.fs.write(this.destinationPath('/plugins/Readme.md'), '#插件目录');
-      this.fs.write(this.destinationPath('/psd/Readme.md'), '#设计PSD目录');
-      this.fs.write(this.destinationPath('/stylesheets/Readme.md'), '#CSS开发目录');
+      this.fs.write(this.destinationPath('srcHTML/Readme.md'), '#HTML开发目录');
+      this.fs.write(this.destinationPath('HTML/Readme.md'), '#编译后HTML目录');
+      this.fs.write(this.destinationPath('scripts/Readme.md'), '#脚本开发目录');
+      this.fs.write(this.destinationPath('fake-response/Readme.md'), '#模拟响应目录');
+      this.fs.write(this.destinationPath('images/Readme.md'), '#图片目录');
+      this.fs.write(this.destinationPath('plugins/Readme.md'), '#插件目录');
+      this.fs.write(this.destinationPath('psd/Readme.md'), '#设计PSD目录');
+      this.fs.write(this.destinationPath('stylesheets/Readme.md'), '#CSS开发目录');
     },
     commonHTML: function() {
-      this.fs.copy(this.templatePath('__page-head.html'), this.destinationPath('/srcHTML/common/_page-head.html'));
-      this.fs.copy(this.templatePath('__page-foot.html'), this.destinationPath('/srcHTML/common/_page-foot.html'));
+      this.fs.copy(this.templatePath('__page-head.html'), this.destinationPath('srcHTML/common/_page-head.html'));
+      this.fs.copy(this.templatePath('__page-foot.html'), this.destinationPath('srcHTML/common/_page-foot.html'));
     },
     commonStyle: function() {
-      this.fs.copy(this.templatePath('_util.css'), this.destinationPath('/stylesheets/common/util.css'));
-      return this.fs.write(this.destinationPath('/stylesheets/common/common.css'), '/* common style */');
+      this.fs.copy(this.templatePath('_util.css'), this.destinationPath('stylesheets/common/util.css'));
+      return this.fs.write(this.destinationPath('stylesheets/common/common.css'), '/* common style */');
     },
     indexTemplate: function() {
-      this.fs.copy(this.templatePath('_index.html'), this.destinationPath('/srcHTML/index.html'));
-      this.fs.write(this.destinationPath('/stylesheets/pages/website-index.css'), '/* Stuff your style */');
-      this.fs.write(this.destinationPath('/scripts/pages/website-index.js'), '(function(){ /* Stuff your codes */ })();');
+      this.fs.copy(this.templatePath('_index.html'), this.destinationPath('srcHTML/index.html'));
+      this.fs.copy(this.templatePath('_indexHTML.html'), this.destinationPath('HTML/index.html'));
+      this.fs.write(this.destinationPath('stylesheets/pages/website-index.css'), '/* Stuff your style */');
+      this.fs.write(this.destinationPath('scripts/pages/website-index.js'), '(function(){ /* Stuff your codes */ })();');
       return this.fs.write(this.destinationPath('app-entry.js'), 'module.exports = { "website-index": "./website-index" }');
     }
   },
@@ -225,8 +225,6 @@ module.exports = yeoman.generators.Base.extend({
       list = ['matchdep', 'grunt', 'grunt-contrib-watch', 'grunt-contrib-imagemin', 'grunt-include-replace', 'grunt-usemin', 'grunt-filerev', 'grunt-filerev-assets'];
       this.npmInstall(list, {
         saveDev: true
-      }, function() {
-        return _me.spawnCommand('grunt', ['includereplace']);
       });
     },
     webpack: function() {
@@ -241,22 +239,24 @@ module.exports = yeoman.generators.Base.extend({
       pluginsList = this.config.get('plugins');
       bowerList = [];
       npmList = [];
-      for (_i = 0, _len = pluginsList.length; _i < _len; _i++) {
-        plugin = pluginsList[_i];
-        switch (plugin.installer) {
-          case 'npm':
-            npmList.push(plugin.name);
-            break;
-          case 'bower':
-            bowerList.push(plugin.name);
+      if ((pluginsList != null) && pluginsList.length > 0) {
+        for (_i = 0, _len = pluginsList.length; _i < _len; _i++) {
+          plugin = pluginsList[_i];
+          switch (plugin.installer) {
+            case 'npm':
+              npmList.push(plugin.name);
+              break;
+            case 'bower':
+              bowerList.push(plugin.name);
+          }
         }
+        this.npmInstall(npmList, {
+          save: true
+        });
+        this.bowerInstall(bowerList, {
+          save: true
+        });
       }
-      this.npmInstall(npmList, {
-        save: true
-      });
-      this.bowerInstall(bowerList, {
-        save: true
-      });
     }
   }
 });
