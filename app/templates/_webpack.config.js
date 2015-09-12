@@ -15,6 +15,9 @@ module.exports = {
     port: 1024,
     host: '0.0.0.0'
   },
+  watchOptions: {
+    poll: true
+  },
   debug: true,
   devtool: 'eval',
   module: {
