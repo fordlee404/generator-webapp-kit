@@ -65,6 +65,18 @@ module.exports = (grunt)->
             dest: 'images/'
           }
         ]
+    cwebp:
+      dynamic:
+        options:
+          q: 80
+        files: [
+          {
+            expand: true,
+            cwd: './',
+            src: ['images/**/*.{png,jpg,jpeg}','plugins/**/*.{png,jpg,jpeg}'],
+            dest: './'
+          }
+        ]
 
   grunt.registerTask 'default',['watch']
   grunt.registerTask 'files',['filerev','filerev_assets']
