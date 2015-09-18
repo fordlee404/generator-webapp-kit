@@ -27,7 +27,7 @@ module.exports = {
       { test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader','css-loader!postcss-loader') },
       { test: /\.less$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!postcss-loader!less-loader") },
       { test: /(\.scss)|(\.sass)$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!postcss-loader!sass-loader?sourceMap") },
-      { test: /\.(woff|ttf|eot|svg|png|jpg|jpeg|gif)/, loader: "file-loader"},
+      { test: /\.(woff|ttf|eot|svg|png|jpg|jpeg|gif|webp)/, loader: "file-loader"},
     ]
   },
   postcss: function () {
@@ -43,6 +43,9 @@ module.exports = {
         filterBy: function(image) {
           return /(sprites\/).*\/?(\.jpg|\.png)$/gi.test(image.url);
         }
+      }),
+      require('webpcss').default({
+        noWebpClass: '.no-webp'
       })
     ];
   },

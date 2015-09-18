@@ -268,6 +268,7 @@ module.exports = yeoman.generators.Base.extend {
         'postcss-opacity'
         'postcss-pseudoelements'
         'postcss-sprites'
+        'webpcss'
       ]
 
       @npmInstall list,
