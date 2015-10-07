@@ -77,6 +77,10 @@ module.exports = (grunt)->
             dest: './'
           }
         ]
+    jshint:
+      options:
+        jshintrc: true
+      production: 'scripts/**/*.js'
 
   grunt.registerTask 'default',['watch']
   grunt.registerTask 'files',['filerev','filerev_assets']
@@ -96,3 +100,5 @@ module.exports = (grunt)->
 
     grunt.file.write './filerev.json',JSON.stringify(filerev)
     grunt.task.run 'usemin'
+
+  grunt.registerTask 'test',['jshint','coffeelint']
