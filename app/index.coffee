@@ -246,6 +246,7 @@ module.exports = yeoman.generators.Base.extend {
         'grunt-filerev-assets'
         'grunt-cwebp'
         'grunt-contrib-jshint'
+        'grunt-coffeelint'
       ]
 
       @npmInstall list,

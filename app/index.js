@@ -225,7 +225,7 @@ module.exports = yeoman.generators.Base.extend({
     grunt: function() {
       var list, _me;
       _me = this;
-      list = ['matchdep', 'grunt', 'grunt-contrib-watch', 'grunt-contrib-imagemin', 'grunt-include-replace', 'grunt-usemin', 'grunt-filerev', 'grunt-filerev-assets', 'grunt-cwebp', 'grunt-contrib-jshint'];
+      list = ['matchdep', 'grunt', 'grunt-contrib-watch', 'grunt-contrib-imagemin', 'grunt-include-replace', 'grunt-usemin', 'grunt-filerev', 'grunt-filerev-assets', 'grunt-cwebp', 'grunt-contrib-jshint', 'grunt-coffeelint'];
       this.npmInstall(list, {
         saveDev: true
       });

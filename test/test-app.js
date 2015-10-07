@@ -36,7 +36,8 @@ describe('webapp-kit:app', function () {
         'stylesheets/pages/website-index.css',
         'scripts/pages/website-index.js',
         'app-entry.js',
-        '.jshintrc'
+        '.jshintrc',
+        'coffeelint.json'
       ]);
     });
   });

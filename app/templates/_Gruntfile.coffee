@@ -81,6 +81,10 @@ module.exports = (grunt)->
       options:
         jshintrc: true
       production: 'scripts/**/*.js'
+    coffeelint:
+      options:
+        configFile: 'coffeelint.json'
+      production: 'scripts/**/*.coffee'
 
   grunt.registerTask 'default',['watch']
   grunt.registerTask 'files',['filerev','filerev_assets']
