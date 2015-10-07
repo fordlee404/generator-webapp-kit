@@ -172,6 +172,10 @@ module.exports = yeoman.generators.Base.extend {
       @fs.copy @templatePath('gitattributes'), @destinationPath('.gitattributes')
       return
 
+    coffeelint: ->
+      @fs.copy @templatePath('_coffeelint.json'), @destinationPath('coffeelint.json')
+      return
+
   # If the method name doesn't match a priority, it is pushed in the default group
   # default
 
@@ -271,6 +275,7 @@ module.exports = yeoman.generators.Base.extend {
         'postcss-sprites'
         'webpcss'
         'jshint-loader'
+        'coffeelint-loader'
       ]
 
       @npmInstall list,

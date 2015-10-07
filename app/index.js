@@ -176,6 +176,9 @@ module.exports = yeoman.generators.Base.extend({
     gitFile: function() {
       this.fs.copy(this.templatePath('gitignore'), this.destinationPath('.gitignore'));
       this.fs.copy(this.templatePath('gitattributes'), this.destinationPath('.gitattributes'));
+    },
+    coffeelint: function() {
+      this.fs.copy(this.templatePath('_coffeelint.json'), this.destinationPath('coffeelint.json'));
     }
   },
   writing: {
@@ -222,14 +225,14 @@ module.exports = yeoman.generators.Base.extend({
     grunt: function() {
       var list, _me;
       _me = this;
-      list = ['matchdep', 'grunt', 'grunt-contrib-watch', 'grunt-contrib-imagemin', 'grunt-include-replace', 'grunt-usemin', 'grunt-filerev', 'grunt-filerev-assets'];
+      list = ['matchdep', 'grunt', 'grunt-contrib-watch', 'grunt-contrib-imagemin', 'grunt-include-replace', 'grunt-usemin', 'grunt-filerev', 'grunt-filerev-assets', 'grunt-cwebp', 'grunt-contrib-jshint'];
       this.npmInstall(list, {
         saveDev: true
       });
     },
     webpack: function() {
       var list;
-      list = ['webpack', 'webpack-dev-server', 'coffee-loader', 'babel-loader', 'extract-text-webpack-plugin', 'style-loader', 'css-loader', 'file-loader', 'url-loader', 'less-loader', 'sass-loader', 'assets-webpack-plugin', 'autoprefixer-loader'];
+      list = ['webpack', 'webpack-dev-server', 'coffee-loader', 'babel-loader', 'extract-text-webpack-plugin', 'style-loader', 'css-loader', 'file-loader', 'url-loader', 'less-loader', 'sass-loader', 'assets-webpack-plugin', 'postcss-loader', 'autoprefixer', 'postcss-color-rgba-fallback', 'postcss-opacity', 'postcss-pseudoelements', 'postcss-sprites', 'webpcss', 'jshint-loader', 'coffeelint-loader'];
       this.npmInstall(list, {
         saveDev: true
       });

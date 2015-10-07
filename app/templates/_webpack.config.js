@@ -26,6 +26,11 @@ module.exports = {
         test: /\.js$/,
         include: path.resolve(__dirname, 'scripts'),
         loader: "jshint-loader"
+      },
+      {
+        test: /\.coffee$/,
+        include: path.resolve(__dirname, 'scripts'),
+        loader: "coffeelint-loader"
       }
     ],
     loaders: [
@@ -40,6 +45,13 @@ module.exports = {
   jshint: {
     devel: true
   },
+  coffeelint: (function(){
+    var options = JSON.parse(fs.readFileSync(__dirname+'/coffeelint.json'));
+
+    options.no_debugger.level = 'ignore';
+
+    return options;
+  })(),
   postcss: function () {
     return [
       require('autoprefixer'),
