@@ -35,7 +35,8 @@ describe('webapp-kit:app', function () {
         'srcHTML/index.html',
         'stylesheets/pages/website-index.css',
         'scripts/pages/website-index.js',
-        'app-entry.js'
+        'app-entry.js',
+        '.jshintrc'
       ]);
     });
   });

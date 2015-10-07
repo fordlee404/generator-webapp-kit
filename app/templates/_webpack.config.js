@@ -21,6 +21,13 @@ module.exports = {
   debug: true,
   devtool: 'eval',
   module: {
+    preLoaders: [
+      {
+        test: /\.js$/,
+        include: path.resolve(__dirname, 'scripts'),
+        loader: "jshint-loader"
+      }
+    ],
     loaders: [
       { test: /\.coffee$/, loader: "coffee-loader" },
       { test: /\.(coffee\.md|litcoffee)$/, loader: "coffee-loader?literate" },
@@ -29,6 +36,9 @@ module.exports = {
       { test: /(\.scss)|(\.sass)$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!postcss-loader!sass-loader?sourceMap") },
       { test: /\.(woff|ttf|eot|svg|png|jpg|jpeg|gif|webp)/, loader: "file-loader"},
     ]
+  },
+  jshint: {
+    devel: true
   },
   postcss: function () {
     return [

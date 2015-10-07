@@ -269,6 +269,7 @@ module.exports = yeoman.generators.Base.extend {
         'postcss-pseudoelements'
         'postcss-sprites'
         'webpcss'
+        'jshint-loader'
       ]
 
       @npmInstall list,
