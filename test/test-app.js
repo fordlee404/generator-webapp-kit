@@ -37,6 +37,7 @@ describe('webapp-kit:app', function () {
         'scripts/pages/website-index.js',
         'app-entry.js',
         '.jshintrc',
+        '.jscsrc',
         'coffeelint.json'
       ]);
     });

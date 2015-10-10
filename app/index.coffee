@@ -167,6 +167,10 @@ module.exports = yeoman.generators.Base.extend {
       @fs.copy @templatePath('jshintrc'), @destinationPath('.jshintrc')
       return
 
+    jscsrcFile: ->
+      @fs.copy @templatePath('jscsrc'), @destinationPath('.jscsrc')
+      return
+
     gitFile: ->
       @fs.copy @templatePath('gitignore'), @destinationPath('.gitignore')
       @fs.copy @templatePath('gitattributes'), @destinationPath('.gitattributes')
@@ -276,6 +280,7 @@ module.exports = yeoman.generators.Base.extend {
         'postcss-sprites'
         'webpcss'
         'jshint-loader'
+        'jscs-loader'
         'coffeelint-loader'
       ]
 
