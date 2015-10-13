@@ -263,6 +263,7 @@ module.exports = yeoman.generators.Base.extend {
         'webpack'
         'webpack-dev-server'
         'coffee-loader'
+        'script-loader'
         'babel-loader'
         'extract-text-webpack-plugin'
         'style-loader'
