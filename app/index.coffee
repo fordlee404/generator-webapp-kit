@@ -125,13 +125,6 @@ module.exports = yeoman.generators.Base.extend {
               installer: 'npm'
             }
           }
-          {
-            name: 'Modernizr'
-            value: {
-              name: 'modernizr'
-              installer: 'npm'
-            }
-          }
         ].sort sortPrompts
       ]
       @prompt prompt, ((props) ->

@@ -136,12 +136,6 @@ module.exports = yeoman.generators.Base.extend({
                 name: 'jquery',
                 installer: 'npm'
               }
-            }, {
-              name: 'Modernizr',
-              value: {
-                name: 'modernizr',
-                installer: 'npm'
-              }
             }
           ].sort(sortPrompts)
         }
