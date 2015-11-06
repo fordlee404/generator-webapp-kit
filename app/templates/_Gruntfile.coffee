@@ -65,6 +65,26 @@ module.exports = (grunt)->
             dest: 'images/'
           }
         ]
+    cwebp:
+      dynamic:
+        options:
+          q: 80
+        files: [
+          {
+            expand: true,
+            cwd: './',
+            src: ['images/**/*.{png,jpg,jpeg}','plugins/**/*.{png,jpg,jpeg}'],
+            dest: './'
+          }
+        ]
+    jshint:
+      options:
+        jshintrc: true
+      production: 'scripts/**/*.js'
+    coffeelint:
+      options:
+        configFile: 'coffeelint.json'
+      production: 'scripts/**/*.coffee'
 
   grunt.registerTask 'default',['watch']
   grunt.registerTask 'files',['filerev','filerev_assets']
@@ -84,3 +104,5 @@ module.exports = (grunt)->
 
     grunt.file.write './filerev.json',JSON.stringify(filerev)
     grunt.task.run 'usemin'
+
+  grunt.registerTask 'test',['jshint','coffeelint']

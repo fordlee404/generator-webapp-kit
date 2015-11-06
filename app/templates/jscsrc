@@ -1,0 +1,13 @@
+{
+  "disallowEmptyBlocks": true,
+  "disallowFunctionDeclarations": true,
+  "disallowMixedSpacesAndTabs": true,
+  "disallowMultiLineTernary": true,
+  "disallowMultipleLineStrings": true,
+  "disallowSpacesInCallExpression": true,
+  "disallowTabs": true,
+  "requireDollarBeforejQueryAssignment": "ignoreProperties",
+  "requireCommaBeforeLineBreak": true,
+  "requireSemicolons": true,
+  "validateIndentation": 2
+}

@@ -125,13 +125,6 @@ module.exports = yeoman.generators.Base.extend {
               installer: 'npm'
             }
           }
-          {
-            name: 'Modernizr'
-            value: {
-              name: 'modernizr'
-              installer: 'npm'
-            }
-          }
         ].sort sortPrompts
       ]
       @prompt prompt, ((props) ->
@@ -167,9 +160,17 @@ module.exports = yeoman.generators.Base.extend {
       @fs.copy @templatePath('jshintrc'), @destinationPath('.jshintrc')
       return
 
+    jscsrcFile: ->
+      @fs.copy @templatePath('jscsrc'), @destinationPath('.jscsrc')
+      return
+
     gitFile: ->
       @fs.copy @templatePath('gitignore'), @destinationPath('.gitignore')
       @fs.copy @templatePath('gitattributes'), @destinationPath('.gitattributes')
+      return
+
+    coffeelint: ->
+      @fs.copy @templatePath('_coffeelint.json'), @destinationPath('coffeelint.json')
       return
 
   # If the method name doesn't match a priority, it is pushed in the default group
@@ -240,6 +241,9 @@ module.exports = yeoman.generators.Base.extend {
         'grunt-usemin'
         'grunt-filerev'
         'grunt-filerev-assets'
+        'grunt-cwebp'
+        'grunt-contrib-jshint'
+        'grunt-coffeelint'
       ]
 
       @npmInstall list,
@@ -252,6 +256,7 @@ module.exports = yeoman.generators.Base.extend {
         'webpack'
         'webpack-dev-server'
         'coffee-loader'
+        'script-loader'
         'babel-loader'
         'extract-text-webpack-plugin'
         'style-loader'
@@ -261,7 +266,16 @@ module.exports = yeoman.generators.Base.extend {
         'less-loader'
         'sass-loader'
         'assets-webpack-plugin'
-        'autoprefixer-loader'
+        'postcss-loader'
+        'autoprefixer'
+        'postcss-color-rgba-fallback'
+        'postcss-opacity'
+        'postcss-pseudoelements'
+        'postcss-sprites'
+        'webpcss'
+        'jshint-loader'
+        'jscs-loader'
+        'coffeelint-loader'
       ]
 
       @npmInstall list,
