@@ -143,3 +143,7 @@ If you'd like to get to know Yeoman better and meet some of his friends, [Grunt]
 ## License
 
 MIT
+
+## Release History
+
+* 2.1.0 - add webp support, postcss and codelint
