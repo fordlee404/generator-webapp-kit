@@ -75,6 +75,7 @@ module.exports = {
   },
   resolve:{
     root: [__dirname],
+    modulesDirectories: ['node_modules','bower_components'],
     alias: {
       styles: __dirname+'/stylesheets',
       images: __dirname+'/images',
@@ -87,6 +88,9 @@ module.exports = {
       name: 'bundle',
       filename: 'bundle.js',
       minChunks: 3
-    })
+    }),
+    new webpack.ResolverPlugin(
+      new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin("bower.json", ["main"])
+    )
   ]
 }
