@@ -149,7 +149,6 @@ module.exports = yeoman.generators.Base.extend {
       @fs.copyTpl @templatePath('_bower.json'), @destinationPath('bower.json'),
         appName: @config.get('appName')
 
-      @fs.copy @templatePath('bowerrc'), @destinationPath('.bowerrc')
       return
 
     editorconfigFile: ->

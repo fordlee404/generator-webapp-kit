@@ -159,7 +159,6 @@ module.exports = yeoman.generators.Base.extend({
       this.fs.copyTpl(this.templatePath('_bower.json'), this.destinationPath('bower.json'), {
         appName: this.config.get('appName')
       });
-      this.fs.copy(this.templatePath('bowerrc'), this.destinationPath('.bowerrc'));
     },
     editorconfigFile: function() {
       this.fs.copy(this.templatePath('editorconfig'), this.destinationPath('.editorconfig'));
