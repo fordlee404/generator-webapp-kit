@@ -107,9 +107,15 @@ module.exports = yeoman.generators.Base.extend {
           {
             name: 'Pure.css'
             value: {
-              name: 'pure'
-              installer: 'bower'
+              name: 'purecss'
+              installer: 'npm'
             }
+          }
+          {
+            name: 'Modernizr'
+            value:
+              name: 'modernizr'
+              installer: 'npm'
           }
           {
             name: 'Normalize.css'
@@ -122,6 +128,20 @@ module.exports = yeoman.generators.Base.extend {
             name: 'jQuery'
             value: {
               name: 'jquery'
+              installer: 'npm'
+            }
+          }
+          {
+            name: 'AngularJS'
+            value: {
+              name: 'angular'
+              installer: 'npm'
+            }
+          }
+          {
+            name: 'Vue.js'
+            value: {
+              name: 'vue'
               installer: 'npm'
             }
           }
