@@ -6,9 +6,13 @@
 
 This yeoman generator helps you to write front-end code (HTML, CSS, Javascript etc) fast, orignize your files and build your code to production. It defines a dev workflow and build process.
 
-It generator a basic front-end develop environment. Includes a basic directory structure, a develop server and build tools for production environment (compile language and compress files and images). It's all based on [Webpack](http://webpack.github.io) and [Grunt](http://gruntjs.com).
+It generate a basic front-end develop environment. Includes a basic directory structure, a develop server and build tools for production environment (compile language and compress files and images). It's all based on [Webpack](http://webpack.github.io) and [Grunt](http://gruntjs.com). You can also use [Gulp](http://gulpjs.com) to instead of [Grunt](http://gruntjs.com).
+
+You should follow some rules if you use this generator. But if you know much about these tools (Webpack, Grunt, Gulp, NPM etc), you will understand these rules easily, and you can change some rules to make you comfortable.
 
 ## Getting Started
+
+This is a yeoman generator, so you must use [Yeoman](http://yeoman.io).
 
 ### Directory structure
 
@@ -19,26 +23,25 @@ project
   |-- fake-response
     |-- // Put your ajax fake response files, like json
   |-- HTML
-    |-- // The generated HTML file, you don't need to edit the files in this folder, it's generated from srcHTML folder
+    |-- // Put your HTML files
   |-- images
     |-- // Put your images
   |-- node_modules
-    |-- // npm install folder
-  |-- plugins
+    |-- // NPM install folder
+  |-- bower_components
     |-- // Bower install folder
+  |-- plugins
+    |-- // plugins who can not use bower and npm to install
   |-- scripts // Put your scripts, like .js files, .coffee files and others
     |-- common
       |-- // common script files
     |-- pages
       |-- // pages script files
-  |-- srcHTML
-    |-- // Put your .html files
   |-- stylesheets // Put your style files, .css/.less/.scss etc
     |-- common
       |-- // common style
     |-- pages
       |-- // pages style
-  |-- .bowerrc
   |-- .editorconfig
   |-- .gitattributes
   |-- .gitignore
@@ -46,7 +49,7 @@ project
   |-- .yo-rc.json
   |-- app-entry.js // webpack entry
   |-- bower.json
-  |-- Gruntfile.coffee
+  |-- Gruntfile.coffee // Grunt config
   |-- package.json
   |-- Readme.md
   |-- webpack.config.js // webpack config for dev
@@ -57,31 +60,15 @@ Now you can write your codes!
 
 ### Develop
 
-Before coding, start server to host files and compile something.
+Before coding, start server to host files and compile something. Start a terminal window and run:
 
-1. Start a terminal window and run:
+```
+$ npm start
+```
 
-  ```
-  $ grunt
-  ```
+It will start a server which fork from [webpack-dev-server](http://webpack.github.io/docs/webpack-dev-server.html). It's a http server, host the html files and other static resources.
 
-  It will start a server to compile your HTML snippet to complete HTML file, [how to write HTML](#user-content-HTML).
-
-2. Start a new terminal window and run:
-
-  ```
-  $ npm start
-  ```
-
-  It will start a [webpack-dev-server](http://webpack.github.io/docs/webpack-dev-server.html). It's a http server, host the html files and other static resources.
-
-3. Start your browser and open `http://localhost:1024/HTML/`. Now you can start write codes, really!
-
-<h4 id="HTML">How to write HTML</h4>
-
-In the past, when we develop a website, we must write the common page header and footer in each html file again and again. If something in the common header and footer has changed, we have to modify each file. It's terrible!
-
-We want the static HTML file dynamically, like php and jsp template. Fortunately, we can do this with [Grunt](http://gruntjs.com). Use the grunt plugin [grunt-include-replace](https://github.com/alanshaw/grunt-include-replace), we can import html snippet in a html file and replace variables. You can write your html in `srcHTML` folder, the grunt will compile the html file in `HTML` folder. If you don't want the file to compile into `HTML` folder, you can name it start with `_`.
+Start your browser and open `http://localhost:1024/HTML/`. Now you can start write codes, really!
 
 #### How to write style
 
