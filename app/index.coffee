@@ -214,8 +214,7 @@ module.exports = yeoman.generators.Base.extend {
       return
 
     folders: ->
-      @fs.write @destinationPath('srcHTML/Readme.md'), '#HTML开发目录'
-      @fs.write @destinationPath('HTML/Readme.md'), '#编译后HTML目录'
+      @fs.write @destinationPath('HTML/Readme.md'), '#HTML开发目录'
       @fs.write @destinationPath('scripts/Readme.md'), '#脚本开发目录'
       @fs.write @destinationPath('fake-response/Readme.md'), '#模拟响应目录'
       @fs.write @destinationPath('images/Readme.md'), '#图片目录'
@@ -225,8 +224,8 @@ module.exports = yeoman.generators.Base.extend {
       return
 
     commonHTML: ->
-      @fs.copy @templatePath('__page-head.html'),@destinationPath('srcHTML/common/_page-head.html')
-      @fs.copy @templatePath('__page-foot.html'),@destinationPath('srcHTML/common/_page-foot.html')
+      @fs.copy @templatePath('__page-head.html'),@destinationPath('HTML/common/_page-head.html')
+      @fs.copy @templatePath('__page-foot.html'),@destinationPath('HTML/common/_page-foot.html')
 
       return
 
@@ -235,8 +234,7 @@ module.exports = yeoman.generators.Base.extend {
       @fs.write @destinationPath('stylesheets/common/common.css'), '/* common style */'
 
     indexTemplate: ->
-      @fs.copy @templatePath('_index.html'),@destinationPath('srcHTML/index.html')
-      @fs.copy @templatePath('_indexHTML.html'),@destinationPath('HTML/index.html')
+      @fs.copy @templatePath('_index.html'),@destinationPath('HTML/index.html')
       @fs.write @destinationPath('stylesheets/pages/website-index.css'),'/* Stuff your style */'
 
       @fs.write @destinationPath('scripts/pages/website-index.js'),'(function(){ /* Stuff your codes */ })();'
