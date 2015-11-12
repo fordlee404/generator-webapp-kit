@@ -271,7 +271,7 @@ module.exports = yeoman.generators.Base.extend {
     webpack: ->
       list = [
         'webpack'
-        'webpack-dev-server'
+        'dev-server-fe'
         'coffee-loader'
         'script-loader'
         'babel-loader'
