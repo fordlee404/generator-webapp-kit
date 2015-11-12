@@ -15,7 +15,13 @@ module.exports = {
     contentBase: '.',
     colors: true,
     port: 1024,
-    host: '0.0.0.0'
+    host: '0.0.0.0',
+    includeReplace: {
+      includesDir: './HTML',
+      globals: {
+        ASSETS: ''
+      }
+    }
   },
   watchOptions: {
     poll: true
