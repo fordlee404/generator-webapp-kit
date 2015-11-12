@@ -112,12 +112,6 @@ module.exports = yeoman.generators.Base.extend {
             }
           }
           {
-            name: 'Modernizr'
-            value:
-              name: 'modernizr'
-              installer: 'npm'
-          }
-          {
             name: 'Normalize.css'
             value: {
               name: 'normalize.css'
