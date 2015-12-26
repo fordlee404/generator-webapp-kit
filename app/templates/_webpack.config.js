@@ -42,9 +42,19 @@ module.exports = {
       }
     ],
     loaders: [
+      { test: /\.vue$/, loader: 'vue' },
       { test: /\.coffee$/, loader: "coffee-loader" },
       { test: /\.(coffee\.md|litcoffee)$/, loader: "coffee-loader?literate" },
-      { test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader','css-loader!postcss-loader') },
+      {
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract('style-loader','css-loader'),
+        exclude: path.resolve(__dirname, 'stylesheets')
+      },
+      {
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract('style-loader','css-loader!postcss-loader'),
+        include: path.resolve(__dirname, 'stylesheets')
+      },
       { test: /\.less$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!postcss-loader!less-loader") },
       { test: /(\.scss)|(\.sass)$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!postcss-loader!sass-loader?sourceMap") },
       { test: /\.(woff|ttf|eot|svg|png|jpg|jpeg|gif|webp)/, loader: "file-loader"},
@@ -83,9 +93,14 @@ module.exports = {
     root: [__dirname],
     modulesDirectories: ['node_modules','bower_components'],
     alias: {
-      styles: __dirname+'/stylesheets',
+      stylesheets: __dirname+'/stylesheets',
       images: __dirname+'/images',
-      plugins: __dirname+'/plugins'
+      plugins: __dirname+'/plugins',
+      bower: __dirname+'/bower_components',
+      components: __dirname+'/components',
+      scripts: __dirname+'/scripts',
+      amazeuicss: __dirname+'/bower_components/amazeui/dist/css/amazeui.min.css',
+      amazeuijs: __dirname+'/bower_components/amazeui/dist/js/amazeui.min.js'
     }
   },
   plugins: [
@@ -97,6 +112,9 @@ module.exports = {
     }),
     new webpack.ResolverPlugin(
       new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin("bower.json", ["main"])
-    )
+    ),
+    new webpack.DefinePlugin({
+      PRODUCTION: false
+    })
   ]
 }

@@ -3,6 +3,7 @@ var webpackConfig = require('./webpack.config.js');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var AssetsPlugin = require('assets-webpack-plugin');
 
+webpackConfig.output.path = __dirname+'/build/assets'
 webpackConfig.output.filename = '[name].[chunkhash].js';
 webpackConfig.output.publicPath = './';
 
@@ -20,9 +21,18 @@ webpackConfig.plugins = [
   new webpack.optimize.OccurenceOrderPlugin(),
   new webpack.optimize.DedupePlugin(),
   new webpack.optimize.UglifyJsPlugin({
-    mangle: false
+    mangle: false,
+    compress: {
+      warnings: false
+    }
   }),
-  new AssetsPlugin()
+  new AssetsPlugin(),
+  new webpack.DefinePlugin({
+    PRODUCTION: true,
+    'process.env': {
+      NODE_ENV: '"production"'
+    }
+  })
 ]
 
 module.exports = webpackConfig;
