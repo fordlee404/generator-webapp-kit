@@ -238,7 +238,7 @@ module.exports = yeoman.generators.Base.extend({
     },
     webpack: function() {
       var list;
-      list = ['webpack', 'dev-server-fe', 'coffee-loader', 'script-loader', 'babel-loader', 'extract-text-webpack-plugin', 'style-loader', 'css-loader', 'file-loader', 'url-loader', 'less-loader', 'sass-loader', 'assets-webpack-plugin', 'postcss-loader', 'autoprefixer', 'postcss-color-rgba-fallback', 'postcss-opacity', 'postcss-pseudoelements', 'postcss-sprites', 'webpcss', 'jshint-loader', 'jscs-loader', 'coffeelint-loader'];
+      list = ['webpack', 'dev-server-fe', 'coffee-loader', 'script-loader', 'babel-loader', 'extract-text-webpack-plugin', 'style-loader', 'css-loader', 'file-loader', 'url-loader', 'less-loader', 'sass-loader', 'assets-webpack-plugin', 'postcss-loader', 'autoprefixer', 'postcss-color-rgba-fallback', 'postcss-opacity', 'postcss-pseudoelements', 'postcss-sprites', 'webpcss', 'jshint-loader', 'jscs-loader', 'coffeelint-loader', 'vue-loader'];
       this.npmInstall(list, {
         saveDev: true
       });

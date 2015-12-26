@@ -287,6 +287,7 @@ module.exports = yeoman.generators.Base.extend {
         'jshint-loader'
         'jscs-loader'
         'coffeelint-loader'
+        'vue-loader'
       ]
 
       @npmInstall list,
