@@ -223,7 +223,7 @@ module.exports = yeoman.generators.Base.extend({
     indexTemplate: function() {
       this.fs.copy(this.templatePath('_index.html'), this.destinationPath('HTML/index.html'));
       this.fs.write(this.destinationPath('stylesheets/pages/website-index.css'), '/* Stuff your style */');
-      this.fs.write(this.destinationPath('scripts/pages/website-index.js'), '(function(){ \'use strict\';require(\'styles/pages/website-index.css\'); })();');
+      this.fs.write(this.destinationPath('scripts/pages/website-index.js'), '(function(){ \'use strict\';require(\'stylesheets/pages/website-index.css\'); })();');
       return this.fs.write(this.destinationPath('app-entry.js'), 'module.exports = { "website-index": "./website-index" }');
     }
   },

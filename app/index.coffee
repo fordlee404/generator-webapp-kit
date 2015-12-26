@@ -231,7 +231,7 @@ module.exports = yeoman.generators.Base.extend {
       @fs.copy @templatePath('_index.html'),@destinationPath('HTML/index.html')
       @fs.write @destinationPath('stylesheets/pages/website-index.css'),'/* Stuff your style */'
 
-      @fs.write @destinationPath('scripts/pages/website-index.js'),'(function(){ \'use strict\';require(\'styles/pages/website-index.css\'); })();'
+      @fs.write @destinationPath('scripts/pages/website-index.js'),'(function(){ \'use strict\';require(\'stylesheets/pages/website-index.css\'); })();'
 
       @fs.write @destinationPath('app-entry.js'),'module.exports = { "website-index": "./website-index" }'
 
